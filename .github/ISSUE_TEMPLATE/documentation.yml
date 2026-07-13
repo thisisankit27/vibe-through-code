@@ -1,0 +1,23 @@
+name: Documentation
+description: Suggest documentation improvements.
+title: "[Docs]: "
+labels:
+  - documentation
+
+body:
+  - type: textarea
+    id: improvement
+    attributes:
+      label: Documentation Issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Improvement
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
