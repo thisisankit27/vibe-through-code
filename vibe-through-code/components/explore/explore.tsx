@@ -10,6 +10,8 @@ import {
     ArrowUpRight,
 } from "lucide-react";
 
+import { site } from "@/data/site";
+
 const items = [
     {
         title: "Projects",
@@ -29,21 +31,21 @@ const items = [
         title: "Archive",
         description:
             "Engineering notes, backend, architecture and Responsible AI.",
-        href: "https://archive.vibethroughcode.com",
+        href: site.links.archive,
         icon: BookOpen,
         external: true,
     },
     {
         title: "GitHub",
         description: "Open source repositories.",
-        href: "https://github.com/thisisankit27/vibe-through-code",
+        href: site.links.github,
         icon: ArrowRight,
         external: true,
     },
     {
         title: "YouTube",
         description: "Daily livestreams.",
-        href: "https://youtube.com/@VibeThroughCode",
+        href: site.links.youtube,
         icon: Play,
         external: true,
     },
