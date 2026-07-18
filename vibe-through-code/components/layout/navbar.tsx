@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import Container from "./container";
+import { ArrowUpRight } from "lucide-react";
 
 export default function Navbar() {
     return (
@@ -17,6 +18,15 @@ export default function Navbar() {
                     <Link href="/">Home</Link>
                     <Link href="/projects">Projects</Link>
                     <Link href="/journey">Journey</Link>
+                    <Link
+                        href="https://archive.vibethroughcode.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1"
+                    >
+                        Archive
+                        <ArrowUpRight className="h-3.5 w-3.5" />
+                    </Link>
                     <Link href="/about">About</Link>
                 </nav>
             </Container>
