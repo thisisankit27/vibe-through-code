@@ -1,7 +1,89 @@
 export const journey = {
     currentDay: 5,
-
     currentGoal: "Build the Vibe Through Code platform.",
-
     currentMilestone: "Centralize website content.",
+
+    // ── NEW ──────────────────────────────────────────────────
+    startDate: "2026-07-15",
+    revenue: 0,
+    streak: 5,
+    totalCommits: 47,
+    totalStreams: 5,
+    isLive: false,
+
+    // Events feed the <JourneyTimeline /> directly.
+    // Prepend new events at the top (newest first).
+    events: [
+        {
+            id: "evt-005",
+            type: "livestream" as const,
+            title: "Day 5 of vibe coding until I make $1,000,000",
+            description:
+                "Centralizing all website content into a single data layer. Refactoring the Journey page to consume real static data instead of hard-coded demo props.",
+            date: "2026-07-19",
+            time: "20:00",
+            href: "https://youtube.com/live/R8ufSlVFC4Y",
+            meta: [
+                { label: "Day", value: "5" },
+                { label: "Revenue", value: "$0" },
+                { label: "Commits", value: "12" },
+            ],
+        },
+        {
+            id: "evt-004",
+            type: "pr_merge" as const,
+            title: "Merge: Projects page with real data",
+            description:
+                "Shipped the Projects catalog page. Data-driven cards with emerald glow, hover lift, and status badges. All project metadata now lives in /data/projects.ts.",
+            date: "2026-07-18",
+            time: "17:30",
+            href: "https://github.com/thisisankit27/vibe-through-code/pull/4",
+            meta: [
+                { label: "Files", value: "8" },
+                { label: "+/-", value: "+420 / -31" },
+                { label: "Reviewers", value: "1" },
+            ],
+        },
+        {
+            id: "evt-003",
+            type: "livestream" as const,
+            title: "Day 4: Designing the Journey timeline",
+            description:
+                "Pair-programmed the Journey page UX with an AI product designer. Settled on a vertical timeline with type-specific nodes, meta grids, and an emerald glow treatment.",
+            date: "2026-07-18",
+            time: "14:00",
+            href: "https://youtube.com/live/...", // update me
+            meta: [
+                { label: "Day", value: "4" },
+                { label: "Revenue", value: "$0" },
+                { label: "Commits", value: "9" },
+            ],
+        },
+        {
+            id: "evt-002",
+            type: "website_launch" as const,
+            title: "vibethroughcode.com goes live",
+            description:
+                "Public launch of the site. Dark theme, emerald accent, no analytics, no cookies. Just a journal and a mission.",
+            date: "2026-07-15",
+            badge: "Launch",
+            meta: [
+                { label: "Stack", value: "Next.js 15" },
+                { label: "Deploy", value: "Vercel" },
+            ],
+        },
+        {
+            id: "evt-001",
+            type: "project_start" as const,
+            title: "Project: Vibe Through Code Platform",
+            description:
+                "Kicking off the public platform that documents every project, livestream, and engineering lesson on the journey to $1,000,000.",
+            date: "2026-07-15",
+            href: "/projects/vibe-through-code",
+            meta: [
+                { label: "Stack", value: "Next.js + Tailwind" },
+                { label: "Repo", value: "GitHub" },
+            ],
+        },
+    ],
 };

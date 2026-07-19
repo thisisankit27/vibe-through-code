@@ -9,8 +9,11 @@ interface CurrentStatusProps {
 
 export function CurrentStatus({ status }: CurrentStatusProps) {
   return (
-    <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
-      <div className="flex items-start justify-between gap-4">
+    <div className="relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+      {/* Emerald glow */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-emerald-500/9 blur-3xl" />
+
+      <div className="relative z-10 flex items-start justify-between gap-4">
         <div className="flex-1">
           <div className="flex items-center gap-2.5">
             {status.isLive ? (
@@ -54,7 +57,7 @@ export function CurrentStatus({ status }: CurrentStatusProps) {
 
       {/* Mobile meta */}
       {status.meta && status.meta.length > 0 && (
-        <div className="mt-4 flex flex-wrap gap-3 sm:hidden">
+        <div className="relative z-10 mt-4 flex flex-wrap gap-3 sm:hidden">
           {status.meta.map((m) => (
             <div
               key={m.label}
