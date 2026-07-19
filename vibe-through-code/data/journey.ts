@@ -1,5 +1,5 @@
 export const journey = {
-    currentDay: 7,
+    currentDay: 8,
     currentGoal: "Build the Vibe Through Code platform.",
     currentMilestone: "Centralize website content.",
 
@@ -7,13 +7,28 @@ export const journey = {
     startDate: "2026-07-13",
     revenue: 0,
     streak: 7,
-    totalCommits: 18,
+    totalCommits: 20,
     totalStreams: 7,
     isLive: false,
 
     // Events feed the <JourneyTimeline /> directly.
     // Prepend new events at the top (newest first).
     events: [
+        {
+            id: "evt-20260720-blo-432",
+            type: "blog_post" as const,
+            title: "Thinking Like a Senior Engineer",
+            description:
+                "Lessons learned while designing the Knowledge Assistant project.",
+            date: "2026-07-20",
+            time: "03:50",
+            href: "https://archive.vibethroughcode.com/stage-1/Engineering%20Mindset/week-1-AI-Assistant/#pr-3-discussion-chunking-engine",
+            meta: [
+                { label: "Read Time", value: "8min" },
+                { label: "Topic", value: "Engineering Mindset" },
+                { label: "Stage", value: "Stage 1, Week 1, PR 4" },
+            ]
+        },
         {
             id: "evt-008",
             type: "pr_merge" as const,
