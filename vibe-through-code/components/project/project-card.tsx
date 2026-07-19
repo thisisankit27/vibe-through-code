@@ -28,7 +28,7 @@ function getStatusLabel(status: Project["status"]) {
 export function ProjectCard({ project }: ProjectCardProps) {
     return (
         <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-zinc-950 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/40">
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-emerald-500/12 blur-3xl" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-emerald-500/15 blur-3xl" />
             <header className="mb-4 flex items-center justify-between">
                 <span
                     className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${getStatusColor(project.status)}`}
