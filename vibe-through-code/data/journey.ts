@@ -1,21 +1,81 @@
 export const journey = {
-    currentDay: 5,
+    currentDay: 7,
     currentGoal: "Build the Vibe Through Code platform.",
     currentMilestone: "Centralize website content.",
 
     // ── NEW ──────────────────────────────────────────────────
-    startDate: "2026-07-15",
+    startDate: "2026-07-13",
     revenue: 0,
-    streak: 5,
-    totalCommits: 47,
-    totalStreams: 5,
+    streak: 7,
+    totalCommits: 18,
+    totalStreams: 7,
     isLive: false,
 
     // Events feed the <JourneyTimeline /> directly.
     // Prepend new events at the top (newest first).
     events: [
         {
+            id: "evt-008",
+            type: "pr_merge" as const,
+            title: "Merge: Journey page with real data",
+            description:
+                "Shipped the Journey page. Data-driven cards with emerald glow, hover lift, and status badges. All project metadata now lives in /data/journey.ts.",
+            date: "2026-07-19",
+            time: "23:47",
+            href: "https://github.com/thisisankit27/vibe-through-code/pull/6",
+            meta: [
+                { label: "Files", value: "12" },
+                { label: "+/-", value: "+1,171 / -4" },
+                { label: "Reviewers", value: "0" },
+            ],
+        },
+        {
+            id: "evt-007",
+            type: "livestream" as const,
+            title: "KIMI K3 AI | Day 7 of vibe coding with Until I Make $1,000,000",
+            description:
+                "Centralizing all website content into a single data layer. Refactoring the Journey page to consume real static data.",
+            date: "2026-07-19",
+            time: "21:00",
+            href: "https://youtube.com/live/PaWCxpe1USQ",
+            meta: [
+                { label: "Day", value: "7" },
+                { label: "Revenue", value: "$0" },
+                { label: "Commits", value: "3" },
+            ],
+        },
+        {
+            id: "evt-006",
+            type: "pr_merge" as const,
+            title: "Merge: Journey page with real data",
+            description:
+                "Shipped the Journey page. Data-driven cards with emerald glow, hover lift, and status badges. All project metadata now lives in /data/journey.ts.",
+            date: "2026-07-19",
+            time: "23:47",
+            href: "https://github.com/thisisankit27/vibe-through-code/pull/5",
+            meta: [
+                { label: "Files", value: "3" },
+                { label: "+/-", value: "+120 / -0" },
+                { label: "Reviewers", value: "0" },
+            ],
+        },
+        {
             id: "evt-005",
+            type: "livestream" as const,
+            title: "KIMI K3 AI | Day 6 of vibe coding with Until I Make $1,000,000",
+            description:
+                "Centralizing all website content into a single data layer. Refactoring the Project Catalog page to consume real static data.",
+            date: "2026-07-18",
+            time: "20:00",
+            href: "https://youtube.com/live/Mn1gB_S8RgA",
+            meta: [
+                { label: "Day", value: "6" },
+                { label: "Revenue", value: "$0" },
+                { label: "Commits", value: "3" },
+            ],
+        },
+        {
+            id: "evt-004",
             type: "livestream" as const,
             title: "Day 5 of vibe coding until I make $1,000,000",
             description:
@@ -30,7 +90,7 @@ export const journey = {
             ],
         },
         {
-            id: "evt-004",
+            id: "evt-003",
             type: "pr_merge" as const,
             title: "Merge: Projects page with real data",
             description:
@@ -45,7 +105,7 @@ export const journey = {
             ],
         },
         {
-            id: "evt-003",
+            id: "evt-002",
             type: "livestream" as const,
             title: "Day 4: Designing the Journey timeline",
             description:
@@ -60,7 +120,7 @@ export const journey = {
             ],
         },
         {
-            id: "evt-002",
+            id: "evt-001",
             type: "website_launch" as const,
             title: "vibethroughcode.com goes live",
             description:
@@ -73,7 +133,7 @@ export const journey = {
             ],
         },
         {
-            id: "evt-001",
+            id: "evt-000",
             type: "project_start" as const,
             title: "Project: Vibe Through Code Platform",
             description:

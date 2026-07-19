@@ -211,7 +211,7 @@ interface JourneyEventProps {
 
 export function JourneyEvent({ event, isLast = false }: JourneyEventProps) {
   const config = eventTypeConfig[event.type];
-  const Wrapper = event.href ? "a" : "div";
+  const isExternal = event.href?.startsWith("http") ?? false;
 
   return (
     <div className="group relative flex gap-5">
@@ -234,54 +234,71 @@ export function JourneyEvent({ event, isLast = false }: JourneyEventProps) {
 
       {/* Card */}
       <div className="flex-1 pb-10">
-        <Wrapper
-          href={event.href}
-          className={cn(
-            "relative block overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.02] p-5",
-            "transition-all duration-200",
-            event.href && "hover:border-white/10 hover:bg-white/[0.04] cursor-pointer"
-          )}
-        >
-          {/* Emerald glow */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-emerald-500/15 blur-3xl" />
-
-          <div className="relative z-10">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2.5">
-                <span className={cn(
-                  "inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider",
-                  config.bgClass, config.accentClass
-                )}>
-                  {config.label}
-                </span>
-                {event.badge && (
-                  <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-emerald-400">
-                    {event.badge}
-                  </span>
-                )}
-              </div>
-              <time className="text-xs text-neutral-500 tabular-nums">
-                {formatDate(event.date)}
-                {event.time && <span className="ml-1.5 text-neutral-600">{event.time}</span>}
-              </time>
-            </div>
-
-            <h3 className="mt-3 text-base font-semibold text-neutral-100">{event.title}</h3>
-            <p className="mt-1.5 text-sm leading-relaxed text-neutral-400">{event.description}</p>
-
-            {event.meta && event.meta.length > 0 && (
-              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {event.meta.map((m) => (
-                  <div key={m.label} className="rounded-lg border border-white/[0.04] bg-white/[0.02] px-3 py-2">
-                    <p className="text-[10px] font-medium uppercase tracking-wider text-neutral-600">{m.label}</p>
-                    <p className="mt-0.5 text-sm font-medium text-neutral-200 tabular-nums">{m.value}</p>
-                  </div>
-                ))}
-              </div>
+        {event.href ? (
+          <a
+            href={event.href}
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noopener noreferrer" : undefined}
+            className={cn(
+              "relative block overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.02] p-5",
+              "transition-all duration-200",
+              "hover:border-white/10 hover:bg-white/[0.04] cursor-pointer"
             )}
+          >
+            <CardContent event={event} config={config} />
+          </a>
+        ) : (
+          <div className="relative block overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
+            <CardContent event={event} config={config} />
           </div>
-        </Wrapper>
+        )}
       </div>
     </div>
+  );
+}
+
+// Extract the inner content so we don't duplicate it
+function CardContent({ event, config }: { event: JourneyEventData; config: typeof eventTypeConfig[EventType] }) {
+  return (
+    <>
+      {/* Emerald glow */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-emerald-500/15 blur-3xl" />
+
+      <div className="relative z-10">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <span className={cn(
+              "inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider",
+              config.bgClass, config.accentClass
+            )}>
+              {config.label}
+            </span>
+            {event.badge && (
+              <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-emerald-400">
+                {event.badge}
+              </span>
+            )}
+          </div>
+          <time className="text-xs text-neutral-500 tabular-nums">
+            {formatDate(event.date)}
+            {event.time && <span className="ml-1.5 text-neutral-600">{event.time}</span>}
+          </time>
+        </div>
+
+        <h3 className="mt-3 text-base font-semibold text-neutral-100">{event.title}</h3>
+        <p className="mt-1.5 text-sm leading-relaxed text-neutral-400">{event.description}</p>
+
+        {event.meta && event.meta.length > 0 && (
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {event.meta.map((m) => (
+              <div key={m.label} className="rounded-lg border border-white/[0.04] bg-white/[0.02] px-3 py-2">
+                <p className="text-[10px] font-medium uppercase tracking-wider text-neutral-600">{m.label}</p>
+                <p className="mt-0.5 text-sm font-medium text-neutral-200 tabular-nums">{m.value}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 }
