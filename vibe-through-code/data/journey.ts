@@ -1,5 +1,5 @@
 export const journey = {
-    currentDay: 8,
+    currentDay: 9,
     currentGoal: "Build the Vibe Through Code platform.",
     currentMilestone: "Centralize website content.",
 
@@ -9,11 +9,27 @@ export const journey = {
     streak: 7,
     totalCommits: 20,
     totalStreams: 7,
-    isLive: false,
+    isLive: true,
 
     // Events feed the <JourneyTimeline /> directly.
     // Prepend new events at the top (newest first).
     events: [
+        {
+            id: "evt-20260720-liv-789",
+            type: "livestream" as const,
+            title: "KIMI K3 AI | Day 8 of vibe coding with Until I Make $1,000,000",
+            description:
+                "Centralizing all website content into a single data layer. Refactoring the About page to consume real static data.",
+            date: "2026-07-20",
+            time: "19:10",
+            href: "https://youtube.com/live/a_QMcfKXG6Y",
+            badge: "Live",
+            meta: [
+                { label: "Day", value: "8" },
+                { label: "Revenue", value: "$0" },
+                { label: "Commits", value: "20" },
+            ]
+        },
         {
             id: "evt-20260720-blo-432",
             type: "blog_post" as const,
