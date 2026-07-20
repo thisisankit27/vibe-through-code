@@ -1,10 +1,22 @@
 export const latestStream = {
-    title: "KIMI K3 AI | Day 7 of vibe coding with Until I Make $1,000,000",
-    url: "https://youtube.com/live/PaWCxpe1USQ",
+    title: "KIMI K3 AI | Day 8 of vibe coding with Until I Make $1,000,000",
+    url: "https://youtube.com/live/a_QMcfKXG6Y",
 };
 
 // ── NEW ──────────────────────────────────────────────────────
 export const streamHistory = [
+    {
+        id: "stream-008",
+        day: 8,
+        title: "KIMI K3 AI | Day 8 of vibe coding with Until I Make $1,000,000",
+        url: "https://youtube.com/live/a_QMcfKXG6Y",
+        date: "2026-07-20",
+        duration: "1h 30m",
+        viewers: 0,
+        revenue: 0,
+        commits: 0,
+        focus: "About Page of vibethroughcode.com",
+    },
     {
         id: "stream-007",
         day: 7,
