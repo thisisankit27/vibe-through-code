@@ -37,7 +37,7 @@ export function ContributionCTA() {
                         <span>Contribute on GitHub</span>
                     </a>
                     <a
-                        href="mailto:hello@vibethroughcode.com"
+                        href="#"
                         className={cn(
                             "inline-flex items-center gap-2 rounded-xl border border-white/[0.08]",
                             "bg-white/[0.03] px-5 py-3 text-sm font-medium text-neutral-300",

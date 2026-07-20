@@ -82,7 +82,7 @@ export function PersonCard({ person, featured = false }: PersonCardProps) {
                             </svg>
                         </a>
                     )}
-                    {person.linkedin && (
+                    {/* {person.linkedin && (
                         <a
                             href={person.linkedin}
                             target="_blank"
@@ -95,7 +95,7 @@ export function PersonCard({ person, featured = false }: PersonCardProps) {
                                 <rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" />
                             </svg>
                         </a>
-                    )}
+                    )} */}
                     {person.website && (
                         <a
                             href={person.website}

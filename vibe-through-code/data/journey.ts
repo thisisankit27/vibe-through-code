@@ -1,19 +1,34 @@
 export const journey = {
-    currentDay: 9,
+    currentDay: 8,
     currentGoal: "Build the Vibe Through Code platform.",
     currentMilestone: "Centralize website content.",
 
     // ── NEW ──────────────────────────────────────────────────
     startDate: "2026-07-13",
     revenue: 0,
-    streak: 7,
-    totalCommits: 20,
-    totalStreams: 7,
-    isLive: true,
+    streak: 8,
+    totalCommits: 25,
+    totalStreams: 8,
+    isLive: false,
 
     // Events feed the <JourneyTimeline /> directly.
     // Prepend new events at the top (newest first).
     events: [
+        {
+            id: "evt-20260720-pr_-457",
+            type: "pr_merge" as const,
+            title: "feat: About Page of Vibe Through Code Platform",
+            description:
+                "Shipped the About page. Data-driven cards with emerald glow, hover lift, and status badges.",
+            date: "2026-07-20",
+            time: "21:46",
+            href: "https://github.com/thisisankit27/vibe-through-code/pull/9",
+            meta: [
+                { label: "Files", value: "7" },
+                { label: "+/-", value: "+273 / -0" },
+                { label: "Commits", value: "3" },
+            ]
+        },
         {
             id: "evt-20260720-liv-789",
             type: "livestream" as const,
@@ -23,11 +38,11 @@ export const journey = {
             date: "2026-07-20",
             time: "19:10",
             href: "https://youtube.com/live/a_QMcfKXG6Y",
-            badge: "Live",
+            badge: "Ended",
             meta: [
                 { label: "Day", value: "8" },
                 { label: "Revenue", value: "$0" },
-                { label: "Commits", value: "20" },
+                { label: "Commits", value: "3" },
             ]
         },
         {
