@@ -37,8 +37,8 @@ export function SupportChapter({ tier, index, total, onSelect }: SupportChapterP
                 {/* Left: Capsule (mobile) / Conduit + Capsule (desktop) */}
                 <div className="flex justify-center md:block">
                     <div className="flex flex-col items-center md:sticky md:top-1/3">
-                        {/* Capsule: centered on mobile, absolute overlay on desktop */}
-                        <div className="md:absolute md:left-1/2 md:top-0 md:-translate-x-1/2 md:pt-8">
+                        {/* Capsule wrapper: explicit min-height prevents Safari flex collapse */}
+                        <div className="flex shrink-0 items-center justify-center md:absolute md:left-1/2 md:top-0 md:-translate-x-1/2 md:pt-8">
                             <CapsuleComponent progress={progress} />
                         </div>
                         {/* Conduit: hidden on mobile, visible rail on desktop */}
