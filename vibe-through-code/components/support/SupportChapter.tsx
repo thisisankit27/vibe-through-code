@@ -32,14 +32,18 @@ export function SupportChapter({ tier, index, total, onSelect }: SupportChapterP
                 : BuildCapsule;
 
     return (
-        <section ref={ref} className="relative min-h-[100dvh] md:min-h-0">
+        <section ref={ref} className="relative">
             <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 py-20 md:grid-cols-[260px_1fr] md:gap-12">
-                {/* Left: Conduit + Capsule */}
-                <div className="relative flex justify-center md:block">
+                {/* Left: Capsule (mobile) / Conduit + Capsule (desktop) */}
+                <div className="flex justify-center md:block">
                     <div className="flex flex-col items-center md:sticky md:top-1/3">
-                        <Conduit isFirst={isFirst} isLast={isLast} progress={progress} />
-                        <div className="relative pt-8 md:absolute md:left-1/2 md:top-0 md:-translate-x-1/2">
+                        {/* Capsule: centered on mobile, absolute overlay on desktop */}
+                        <div className="md:absolute md:left-1/2 md:top-0 md:-translate-x-1/2 md:pt-8">
                             <CapsuleComponent progress={progress} />
+                        </div>
+                        {/* Conduit: hidden on mobile, visible rail on desktop */}
+                        <div className="hidden md:block">
+                            <Conduit isFirst={isFirst} isLast={isLast} progress={progress} />
                         </div>
                     </div>
                 </div>

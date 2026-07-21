@@ -10,7 +10,7 @@ interface ConduitProps {
 
 export function Conduit({ isFirst = false, isLast = false, progress }: ConduitProps) {
     return (
-        <div className="relative h-full w-6 md:w-10">
+        <div className="relative h-32 w-6 md:h-full md:w-10">
             {/* Rail */}
             <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-white/20" />
 
