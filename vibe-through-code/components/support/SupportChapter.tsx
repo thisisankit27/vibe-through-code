@@ -32,13 +32,13 @@ export function SupportChapter({ tier, index, total, onSelect }: SupportChapterP
                 : BuildCapsule;
 
     return (
-        <section ref={ref} className="relative">
+        <section ref={ref} className="relative min-h-[100dvh] md:min-h-0">
             <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 py-20 md:grid-cols-[260px_1fr] md:gap-12">
                 {/* Left: Conduit + Capsule */}
                 <div className="relative flex justify-center md:block">
-                    <div className="sticky top-1/3 flex flex-col items-center">
+                    <div className="flex flex-col items-center md:sticky md:top-1/3">
                         <Conduit isFirst={isFirst} isLast={isLast} progress={progress} />
-                        <div className="absolute left-1/2 top-0 -translate-x-1/2 pt-8">
+                        <div className="relative pt-8 md:absolute md:left-1/2 md:top-0 md:-translate-x-1/2">
                             <CapsuleComponent progress={progress} />
                         </div>
                     </div>
@@ -56,7 +56,7 @@ export function SupportChapter({ tier, index, total, onSelect }: SupportChapterP
                         {tier.description}
                     </p>
 
-                    {/* Narrative lines — brighter, no opacity fade */}
+                    {/* Narrative lines */}
                     <div className="mt-8 space-y-4">
                         {tier.narrative.map((line, i) => (
                             <p
