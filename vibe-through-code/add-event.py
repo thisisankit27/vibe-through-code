@@ -19,6 +19,7 @@ DATA_DIR = Path("data")
 JOURNEY_FILE = DATA_DIR / "journey.ts"
 STREAMS_FILE = DATA_DIR / "streams.ts"
 PROJECTS_FILE = DATA_DIR / "projects.ts"
+PEOPLE_FILE = DATA_DIR / "people.ts"
 
 EVENT_TYPES = {
     "1": ("livestream", "YouTube Livestream"),
@@ -90,13 +91,18 @@ def prepend_event_to_journey(ts, event_ts):
     return ts[:insert_pos] + "\n        " + event_ts + "," + ts[insert_pos:]
 
 def update_journey_scalar(ts, key, value):
+    """
+    Update a top-level scalar in journey.ts.
+    FIX: uses ^\s* so it matches indented lines (e.g. '    totalCommits: 25,').
+    """
     if isinstance(value, bool):
         replacement = f"{key}: {str(value).lower()}"
     elif isinstance(value, str):
         replacement = f'{key}: "{value}"'
     else:
         replacement = f"{key}: {value}"
-    pattern = rf"^{re.escape(key)}:\s*.+$"
+    # FIX: ^\s* instead of ^ to handle indentation
+    pattern = rf"^\s*{re.escape(key)}:\s*.+$"
     new_ts, count = re.subn(pattern, replacement, ts, count=1, flags=re.MULTILINE)
     if count == 0:
         print(f"  ⚠ Could not find '{key}' in journey.ts — skipping")
@@ -132,6 +138,52 @@ def update_latest_stream(ts, title, url):
         ts, count=1,
     )
     return ts
+
+# ── People.ts operations ──────────────────────────────────────
+
+def build_person_object(person_id, name, role, bio, avatar, github, linkedin, website, is_founder):
+    lines = ["    {"]
+    lines.append(f'        id: "{person_id}",')
+    lines.append(f'        name: "{name}",')
+    lines.append(f'        role: "{role}",')
+    lines.append(f'        bio: "{bio}",')
+    lines.append(f'        avatar: "{avatar}",')
+    if github:
+        lines.append(f'        github: "{github}",')
+    if linkedin:
+        lines.append(f'        linkedin: "{linkedin}",')
+    if website:
+        lines.append(f'        website: "{website}",')
+    lines.append(f'        isFounder: {str(is_founder).lower()},')
+    lines.append("    }")
+    return "\n".join(lines)
+
+def append_person_to_people(ts, person_ts):
+    """
+    Insert a new person before the closing ]; of the people array.
+    Adds a trailing comma to the previous entry if missing.
+    """
+    # Find the ]; that closes the array
+    close_match = re.search(r"\n\s*\];", ts)
+    if not close_match:
+        print("ERROR: Could not find ]; in people.ts")
+        sys.exit(1)
+
+    close_pos = close_match.start()
+
+    # Find the last } before ];
+    last_brace = ts.rfind("}", 0, close_pos)
+    if last_brace == -1:
+        print("ERROR: Could not find } in people.ts")
+        sys.exit(1)
+
+    # Ensure the previous entry has a trailing comma
+    between = ts[last_brace + 1:close_pos].strip()
+    if not between.endswith(","):
+        ts = ts[:last_brace + 1] + "," + ts[last_brace + 1:]
+        close_pos += 1
+
+    return ts[:close_pos] + "\n" + person_ts + ts[close_pos:]
 
 # ── Event builders ───────────────────────────────────────────
 
@@ -239,6 +291,29 @@ def main():
             print("  • Set completedOn date")
             print("  • Update project.status to completed")
             print("  • Add milestone to project.milestones[]")
+
+    # ── NEW: Contributor support ───────────────────────────────
+    print()
+    if ask_bool("Add a contributor to people.ts?"):
+        people_ts = read_file(PEOPLE_FILE)
+        print("\nContributor details:")
+        person_id = ask("ID (e.g. contributor-2)")
+        name = ask("Name")
+        role = ask("Role", "Engineer")
+        bio = ask("Bio")
+        avatar = ask("Avatar path", "/images/avatar-default.png")
+        github = ask("GitHub URL (optional)")
+        linkedin = ask("LinkedIn URL (optional)")
+        website = ask("Website URL (optional)")
+        is_founder = ask_bool("Is founder?", default=False)
+        person_ts = build_person_object(
+            person_id, name, role, bio, avatar,
+            github or None, linkedin or None, website or None,
+            is_founder
+        )
+        people_ts = append_person_to_people(people_ts, person_ts)
+        write_file(PEOPLE_FILE, people_ts)
+
     print("\n" + "=" * 60)
     print("  ✅ Done! Run npm run dev to verify.")
     print("=" * 60)

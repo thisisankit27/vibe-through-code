@@ -1,19 +1,49 @@
 export const journey = {
-    currentDay: 8,
+    currentDay: 9,
     currentGoal: "Build the Vibe Through Code platform.",
     currentMilestone: "Centralize website content.",
 
     // ── NEW ──────────────────────────────────────────────────
     startDate: "2026-07-13",
     revenue: 0,
-    streak: 8,
-    totalCommits: 25,
-    totalStreams: 8,
+    streak: 9,
+    totalCommits: 32,
+    totalStreams: 9,
     isLive: false,
 
     // Events feed the <JourneyTimeline /> directly.
     // Prepend new events at the top (newest first).
     events: [
+        {
+            id: "evt-20260721-pr_-960",
+            type: "pr_merge" as const,
+            title: "Support Page for Vibe Through Code Platform",
+            description:
+                "Centralizing all website content into a single data layer. Refactoring the Support page to consume real static data.",
+            date: "2026-07-21",
+            time: "22:35",
+            href: "https://github.com/thisisankit27/vibe-through-code/pull/10",
+            meta: [
+                { label: "Files", value: "17" },
+                { label: "+/-", value: "+1063 / -1" },
+                { label: "Commits", value: "6" },
+            ]
+        },
+        {
+            id: "evt-20260721-liv-140",
+            type: "livestream" as const,
+            title: "KIMI K3 AI | Day 9 of vibe coding with Until I Make $1,000,000",
+            description:
+                "Centralizing all website content into a single data layer. Refactoring the Support page to consume real static data.",
+            date: "2026-07-21",
+            time: "06:55",
+            href: "https://youtube.com/live/BZciDY1ZraA",
+            meta: [
+                { label: "Day", value: "9" },
+                { label: "Revenue", value: "$0" },
+                { label: "Commits", value: "6" },
+            ]
+        },
         {
             id: "evt-20260720-pr_-457",
             type: "pr_merge" as const,
