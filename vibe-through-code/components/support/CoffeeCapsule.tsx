@@ -16,14 +16,21 @@ export function CoffeeCapsule({ progress }: CoffeeCapsuleProps) {
                 <path
                     d="M30 60 L35 130 Q35 140 45 140 L75 140 Q85 140 85 130 L90 60 Z"
                     fill="none"
-                    stroke="rgba(255,255,255,0.15)"
+                    stroke="rgba(255,255,255,0.35)"
                     strokeWidth="1.5"
+                />
+                {/* Cup rim highlight */}
+                <path
+                    d="M30 60 Q60 55 90 60"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.2)"
+                    strokeWidth="1"
                 />
                 {/* Cup handle */}
                 <path
                     d="M90 75 Q110 75 110 95 Q110 115 90 115"
                     fill="none"
-                    stroke="rgba(255,255,255,0.15)"
+                    stroke="rgba(255,255,255,0.35)"
                     strokeWidth="1.5"
                 />
                 {/* Liquid */}
@@ -37,9 +44,19 @@ export function CoffeeCapsule({ progress }: CoffeeCapsuleProps) {
                     y={140 - fillHeight * 0.78}
                     width="60"
                     height={fillHeight * 0.78}
-                    fill="rgba(139, 90, 60, 0.8)"
+                    fill="rgba(139, 90, 60, 0.9)"
                     clipPath="url(#cup-clip)"
                     style={{ transition: "y 0.1s linear, height 0.1s linear" }}
+                />
+                {/* Liquid surface highlight */}
+                <ellipse
+                    cx="60"
+                    cy={140 - fillHeight * 0.78}
+                    rx="26"
+                    ry="3"
+                    fill="rgba(160, 110, 70, 0.4)"
+                    clipPath="url(#cup-clip)"
+                    style={{ transition: "cy 0.1s linear" }}
                 />
                 {/* Pour stream */}
                 {isPouring && (
@@ -48,7 +65,7 @@ export function CoffeeCapsule({ progress }: CoffeeCapsuleProps) {
                         y="20"
                         width="8"
                         height={progress < 0.5 ? 40 + progress * 80 : 80}
-                        fill="rgba(139, 90, 60, 0.6)"
+                        fill="rgba(139, 90, 60, 0.8)"
                         rx="4"
                         style={{ opacity: isPouring ? 1 : 0, transition: "opacity 0.2s" }}
                     />
@@ -65,7 +82,7 @@ export function CoffeeCapsule({ progress }: CoffeeCapsuleProps) {
                     cy="142"
                     rx="20"
                     ry="4"
-                    fill="rgba(251, 191, 36, 0.15)"
+                    fill="rgba(251, 191, 36, 0.3)"
                     style={{
                         opacity: progress > 0.3 ? 0.3 + progress * 0.3 : 0,
                         transition: "opacity 0.3s",
@@ -78,7 +95,7 @@ export function CoffeeCapsule({ progress }: CoffeeCapsuleProps) {
 
 function SteamParticle({ cx, cy, delay }: { cx: string; cy: string; delay: string }) {
     return (
-        <circle cx={cx} cy={cy} r="3" fill="rgba(255,255,255,0.15)">
+        <circle cx={cx} cy={cy} r="3" fill="rgba(255,255,255,0.35)">
             <animate
                 attributeName="cy"
                 values={`${cy};${parseInt(cy) - 20}`}
@@ -88,7 +105,7 @@ function SteamParticle({ cx, cy, delay }: { cx: string; cy: string; delay: strin
             />
             <animate
                 attributeName="opacity"
-                values="0.15;0;0.15"
+                values="0.35;0;0.35"
                 dur="3s"
                 repeatCount="indefinite"
                 begin={delay}

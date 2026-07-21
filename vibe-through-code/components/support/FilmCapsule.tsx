@@ -21,22 +21,38 @@ export function FilmCapsule({ progress }: FilmCapsuleProps) {
                     height="55"
                     rx="6"
                     fill="none"
-                    stroke="rgba(255,255,255,0.15)"
+                    stroke="rgba(255,255,255,0.35)"
                     strokeWidth="1.5"
                 />
-                {/* Lens */}
+                {/* Body top highlight */}
+                <path
+                    d="M30 56 Q30 50 36 50 L104 50 Q110 50 110 56"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.15)"
+                    strokeWidth="1"
+                />
+                {/* Lens outer */}
                 <circle
                     cx="70"
                     cy="77"
                     r="18"
                     fill="none"
-                    stroke="rgba(255,255,255,0.15)"
+                    stroke="rgba(255,255,255,0.35)"
                     strokeWidth="1.5"
+                />
+                {/* Lens inner ring */}
+                <circle
+                    cx="70"
+                    cy="77"
+                    r="14"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.15)"
+                    strokeWidth="0.5"
                 />
                 {/* Aperture blades */}
                 <g style={{ opacity: apertureOpen, transition: "opacity 0.3s" }}>
                     <circle cx="70" cy="77" r="12" fill="rgba(0,0,0,0.5)" />
-                    <circle cx="70" cy="77" r="6" fill="rgba(255,255,255,0.05)" />
+                    <circle cx="70" cy="77" r="6" fill="rgba(255,255,255,0.1)" />
                 </g>
                 {/* Left reel */}
                 <g
@@ -46,10 +62,13 @@ export function FilmCapsule({ progress }: FilmCapsuleProps) {
                         transition: "transform 0.1s linear",
                     }}
                 >
-                    <circle cx="40" cy="40" r="16" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" />
-                    <circle cx="40" cy="40" r="4" fill="rgba(255,255,255,0.1)" />
-                    <line x1="40" y1="24" x2="40" y2="56" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
-                    <line x1="24" y1="40" x2="56" y2="40" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+                    <circle cx="40" cy="40" r="16" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" />
+                    <circle cx="40" cy="40" r="4" fill="rgba(255,255,255,0.2)" />
+                    <line x1="40" y1="24" x2="40" y2="56" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+                    <line x1="24" y1="40" x2="56" y2="40" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+                    {/* Cross spokes */}
+                    <line x1="28.7" y1="28.7" x2="51.3" y2="51.3" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" />
+                    <line x1="51.3" y1="28.7" x2="28.7" y2="51.3" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" />
                 </g>
                 {/* Right reel */}
                 <g
@@ -59,16 +78,19 @@ export function FilmCapsule({ progress }: FilmCapsuleProps) {
                         transition: "transform 0.1s linear",
                     }}
                 >
-                    <circle cx="100" cy="40" r="16" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" />
-                    <circle cx="100" cy="40" r="4" fill="rgba(255,255,255,0.1)" />
-                    <line x1="100" y1="24" x2="100" y2="56" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
-                    <line x1="84" y1="40" x2="116" y2="40" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+                    <circle cx="100" cy="40" r="16" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" />
+                    <circle cx="100" cy="40" r="4" fill="rgba(255,255,255,0.2)" />
+                    <line x1="100" y1="24" x2="100" y2="56" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+                    <line x1="84" y1="40" x2="116" y2="40" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+                    {/* Cross spokes */}
+                    <line x1="88.7" y1="28.7" x2="111.3" y2="51.3" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" />
+                    <line x1="111.3" y1="28.7" x2="88.7" y2="51.3" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" />
                 </g>
                 {/* Film strip between reels */}
                 <path
                     d="M40 56 Q55 65 70 60 Q85 55 100 56"
                     fill="none"
-                    stroke="rgba(255,255,255,0.1)"
+                    stroke="rgba(255,255,255,0.3)"
                     strokeWidth="2"
                     strokeDasharray="4 2"
                     style={{ opacity: filmVisible, transition: "opacity 0.3s" }}
@@ -78,9 +100,9 @@ export function FilmCapsule({ progress }: FilmCapsuleProps) {
                     cx="100"
                     cy="92"
                     r="4"
-                    fill={isRecording ? "#ef4444" : "rgba(255,255,255,0.1)"}
+                    fill={isRecording ? "#ef4444" : "rgba(255,255,255,0.2)"}
                     style={{
-                        opacity: isRecording ? undefined : 0.3,
+                        opacity: isRecording ? undefined : 0.4,
                         transition: "fill 0.3s",
                     }}
                 >
@@ -94,7 +116,7 @@ export function FilmCapsule({ progress }: FilmCapsuleProps) {
                     )}
                 </circle>
                 {/* Viewfinder bump */}
-                <rect x="55" y="42" width="30" height="8" rx="2" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+                <rect x="55" y="42" width="30" height="8" rx="2" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
             </svg>
         </div>
     );

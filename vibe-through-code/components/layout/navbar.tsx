@@ -34,6 +34,7 @@ export default function Navbar() {
                         Archive
                         <ArrowUpRight className="h-3.5 w-3.5" />
                     </Link>
+                    <Link href="/support" className="transition-colors hover:text-emerald-400">Support</Link>
                     <Link href="/about" className="transition-colors hover:text-emerald-400">About</Link>
                 </nav>
 
@@ -66,7 +67,7 @@ export default function Navbar() {
                                 Archive
                                 <ArrowUpRight className="h-3.5 w-3.5" />
                             </Link>
-                            <Link href="/support" className="transition-colors hover:text-emerald-400" onClick={closeMenu}>Support</Link>
+                            <Link href="/support" className="rounded-md px-3 py-3 transition-colors hover:bg-white/10 hover:text-emerald-400" onClick={closeMenu}>Support</Link>
                             <Link href="/about" className="rounded-md px-3 py-3 transition-colors hover:bg-white/10 hover:text-emerald-400" onClick={closeMenu}>About</Link>
                         </nav>
                     </Container>

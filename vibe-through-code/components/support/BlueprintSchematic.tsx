@@ -8,7 +8,8 @@ interface BlueprintSchematicProps {
 }
 
 export function BlueprintSchematic({ progress }: BlueprintSchematicProps) {
-    const thresholds = [0.25, 0.5, 0.75, 1.0];
+    // Lowered thresholds — everything lights up earlier
+    const thresholds = [0.08, 0.25, 0.45, 0.65];
 
     return (
         <div className="mt-8 rounded-lg border border-white/[0.06] bg-white/[0.02] p-5">
