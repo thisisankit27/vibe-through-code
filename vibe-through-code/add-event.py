@@ -91,18 +91,16 @@ def prepend_event_to_journey(ts, event_ts):
     return ts[:insert_pos] + "\n        " + event_ts + "," + ts[insert_pos:]
 
 def update_journey_scalar(ts, key, value):
-    """
-    Update a top-level scalar in journey.ts.
-    FIX: uses ^\s* so it matches indented lines (e.g. '    totalCommits: 25,').
-    """
     if isinstance(value, bool):
-        replacement = f"{key}: {str(value).lower()}"
+        val_str = str(value).lower()
     elif isinstance(value, str):
-        replacement = f'{key}: "{value}"'
+        val_str = f'"{value}"'
     else:
-        replacement = f"{key}: {value}"
-    # FIX: ^\s* instead of ^ to handle indentation
-    pattern = rf"^\s*{re.escape(key)}:\s*.+$"
+        val_str = str(value)
+    
+    # Capture leading whitespace, preserve it, and ensure trailing comma
+    pattern = rf"^(\s*{re.escape(key)}:\s*).+$"
+    replacement = rf"\g<1>{val_str},"
     new_ts, count = re.subn(pattern, replacement, ts, count=1, flags=re.MULTILINE)
     if count == 0:
         print(f"  ⚠ Could not find '{key}' in journey.ts — skipping")

@@ -63,3 +63,7 @@ coverage/
 # Misc
 # =========================
 *.log
+
+# sqlite
+*.db
+*.db-journal
