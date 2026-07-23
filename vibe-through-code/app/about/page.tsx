@@ -1,12 +1,23 @@
 import Container from "@/components/layout/container";
 import { PersonCard, ContributionCTA } from "@/components/about";
-import { people } from "@/data/people";
+import { sql } from "@/lib/db";
+import { Person } from "@/components/about/PersonCard";
 
-// export default function AboutPage() {
-//     return <div className="text-white p-20">About works</div>;
-// }
+export default async function AboutPage() {
+    const rows = await sql`SELECT * FROM people ORDER BY is_founder DESC, name ASC`;
 
-export default function AboutPage() {
+    const people: Person[] = rows.map((row: any) => ({
+        id: row.id,
+        name: row.name,
+        role: row.role,
+        bio: row.bio,
+        avatar: row.avatar,
+        github: row.github,
+        linkedin: row.linkedin,
+        website: row.website,
+        isFounder: row.is_founder,
+    }));
+
     const founder = people.find((p) => p.isFounder);
     const contributors = people.filter((p) => !p.isFounder);
 
