@@ -7,7 +7,7 @@ import { CoffeeCapsule } from "./CoffeeCapsule";
 import { FilmCapsule } from "./FilmCapsule";
 import { BuildCapsule } from "./BuildCapsule";
 import { BlueprintSchematic } from "./BlueprintSchematic";
-import { SupportTier } from "@/data/support";
+import { SupportTier } from "@/data/support2";
 import { cn } from "@/lib/utils";
 
 interface SupportChapterProps {

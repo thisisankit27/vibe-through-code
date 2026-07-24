@@ -6,7 +6,7 @@ import { journey } from "@/data/journey";
 import { people as peopleData } from "@/data/people2";
 import { projects as projectsData } from "@/data/projects";
 import { streamHistory } from "@/data/streams";
-import { supportTiers as supportTiersData } from "@/data/support";
+import { supportTiers as supportTiersData } from "@/data/support2";
 
 async function seed() {
   console.log("🌱 Seeding...");

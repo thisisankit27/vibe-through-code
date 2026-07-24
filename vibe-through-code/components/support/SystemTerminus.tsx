@@ -1,6 +1,6 @@
 "use client";
 
-import { sessionManifest } from "@/data/support";
+import { sessionManifest } from "@/data/support2";
 import { cn } from "@/lib/utils";
 
 export function SystemTerminus() {

@@ -1,6 +1,6 @@
 "use client";
 
-import { builderBenefits } from "@/data/support";
+import { builderBenefits } from "@/data/support2";
 import { cn } from "@/lib/utils";
 
 interface BlueprintSchematicProps {
