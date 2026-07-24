@@ -7,17 +7,27 @@ import { CoffeeCapsule } from "./CoffeeCapsule";
 import { FilmCapsule } from "./FilmCapsule";
 import { BuildCapsule } from "./BuildCapsule";
 import { BlueprintSchematic } from "./BlueprintSchematic";
-import { SupportTier } from "@/data/support";
+import type {
+    SupportTier,
+    BuilderBenefit,
+} from "@/types/support";
 import { cn } from "@/lib/utils";
 
 interface SupportChapterProps {
     tier: SupportTier;
     index: number;
     total: number;
+    builderBenefits: BuilderBenefit[];
     onSelect: (tier: SupportTier) => void;
 }
 
-export function SupportChapter({ tier, index, total, onSelect }: SupportChapterProps) {
+export function SupportChapter({
+    tier,
+    index,
+    total,
+    builderBenefits,
+    onSelect,
+}: SupportChapterProps) {
     const ref = useRef<HTMLElement>(null);
     const { progress } = useChapterProgress(ref);
 
@@ -78,7 +88,10 @@ export function SupportChapter({ tier, index, total, onSelect }: SupportChapterP
                     </div>
 
                     {/* Builder blueprint */}
-                    {tier.id === "builder" && <BlueprintSchematic progress={progress} />}
+                    {tier.id === "builder" && <BlueprintSchematic
+                        progress={progress}
+                        builderBenefits={builderBenefits}
+                    />}
 
                     {/* Inline CTA button */}
                     <button

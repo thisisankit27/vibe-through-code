@@ -13,7 +13,7 @@ export interface Person {
 export const people: Person[] = [
     {
         id: "ankit",
-        name: "Ankit Srivastava",
+        name: "Ankit Srivastava-23",
         role: "Human & Engineer",
         bio: "Building software in public, one livestream at a time. Passionate about clean architecture, responsible AI, and documenting every step of the journey from $0 to $1,000,000.",
         avatar: "/images/avatar-ankit.jpeg",

@@ -25,7 +25,7 @@ export const supportTiers: SupportTier[] = [
     {
         id: "coffee",
         title: "Support a Coffee",
-        price: 99,
+        price: 919,
         currency: "₹",
         label: "Fuel a session",
         description: "Fuel one of the building sessions.",
@@ -38,7 +38,7 @@ export const supportTiers: SupportTier[] = [
     {
         id: "stream",
         title: "Support Today's Stream",
-        price: 299,
+        price: 2199,
         currency: "₹",
         label: "Keep the camera rolling",
         description: "Help keep today's livestream running.",
@@ -51,7 +51,7 @@ export const supportTiers: SupportTier[] = [
     {
         id: "builder",
         title: "Become a Builder",
-        price: 999,
+        price: 4999,
         currency: "₹",
         frequency: "/month",
         label: "Build the journey together",
