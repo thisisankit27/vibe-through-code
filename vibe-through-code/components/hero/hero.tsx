@@ -7,12 +7,19 @@ import SectionHeading from "@/components/ui/section-heading";
 import CurrentProject from "@/components/project/current-project";
 
 import { site } from "@/data/site";
-import { currentProject } from "@/data/projects";
-import { journey } from "@/data/journey";
-
+import type { Project } from "@/types/project";
+import type { LatestStream } from "@/lib/streams";
 import { ArrowRight, Play } from "lucide-react";
 
-export default function Hero() {
+interface HeroProps {
+    project: Project;
+    latestStream: LatestStream;
+}
+
+export default function Hero({
+    project,
+    latestStream,
+}: HeroProps) {
     return (
         <section className="relative overflow-hidden">
             {/* Background Glow */}
@@ -56,7 +63,10 @@ export default function Hero() {
                     </Link>
                 </div>
 
-                <CurrentProject />
+                <CurrentProject
+                    project={project}
+                    latestStream={latestStream}
+                />
 
             </Container>
         </section>
