@@ -1,13 +1,17 @@
 "use client";
 
-import { builderBenefits } from "@/data/support2";
+import type { BuilderBenefit } from "@/types/support";
 import { cn } from "@/lib/utils";
 
 interface BlueprintSchematicProps {
     progress: number;
+    builderBenefits: BuilderBenefit[];
 }
 
-export function BlueprintSchematic({ progress }: BlueprintSchematicProps) {
+export function BlueprintSchematic({
+    progress,
+    builderBenefits,
+}: BlueprintSchematicProps) {
     // Lowered thresholds — everything lights up earlier
     const thresholds = [0.08, 0.25, 0.45, 0.65];
 

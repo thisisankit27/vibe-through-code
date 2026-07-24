@@ -1,5 +1,10 @@
 import { sql } from "@/lib/db";
-import { SupportTier } from "@/data/support2";
+import type {
+    SupportTier,
+    BuilderBenefit,
+    SessionManifest,
+} from "@/types/support";
+
 import SupportPageClient from "./SupportPageClient";
 
 export default async function SupportPage() {
@@ -18,5 +23,38 @@ export default async function SupportPage() {
             : JSON.parse(row.narrative ?? "[]"),
     }));
 
-    return <SupportPageClient supportTiers={supportTiers} />;
+    const builderBenefits: BuilderBenefit[] = [
+        {
+            id: "priority",
+            label: "PRIORITY QUEUE",
+            description: "Early project access",
+        },
+        {
+            id: "comm",
+            label: "COMM CHANNEL",
+            description: "Builder community / Discord",
+        },
+        {
+            id: "review",
+            label: "DESIGN REVIEW",
+            description: "Monthly architecture sessions",
+        },
+        {
+            id: "pipeline",
+            label: "FEATURE PIPELINE",
+            description: "Vote on upcoming projects",
+        },
+    ];
+
+    const sessionManifest: SessionManifest = {
+        coffee: 12,
+        stream: 3,
+        builders: 1,
+    };
+
+    return <SupportPageClient
+        supportTiers={supportTiers}
+        builderBenefits={builderBenefits}
+        sessionManifest={sessionManifest}
+    />;
 }

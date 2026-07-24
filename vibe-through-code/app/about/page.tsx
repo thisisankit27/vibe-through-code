@@ -1,7 +1,7 @@
 import Container from "@/components/layout/container";
 import { PersonCard, ContributionCTA } from "@/components/about";
 import { sql } from "@/lib/db";
-import { Person } from "@/components/about/PersonCard";
+import type { Person } from "@/types/person";
 
 export default async function AboutPage() {
     const rows = await sql`SELECT * FROM people ORDER BY is_founder DESC, name ASC`;

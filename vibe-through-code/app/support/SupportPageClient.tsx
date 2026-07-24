@@ -3,13 +3,23 @@
 import { useState } from "react";
 import Container from "@/components/layout/container";
 import { SupportChapter, SystemTerminus, ReceiptPanel } from "@/components/support";
-import { SupportTier } from "@/data/support2";
+import type {
+    SupportTier,
+    BuilderBenefit,
+    SessionManifest,
+} from "@/types/support";
 
 interface SupportPageClientProps {
     supportTiers: SupportTier[];
+    builderBenefits: BuilderBenefit[];
+    sessionManifest: SessionManifest;
 }
 
-export default function SupportPageClient({ supportTiers }: SupportPageClientProps) {
+export default function SupportPageClient({
+    supportTiers,
+    builderBenefits,
+    sessionManifest,
+}: SupportPageClientProps) {
     const [selectedTier, setSelectedTier] = useState<SupportTier | null>(null);
     const [isReceiptOpen, setIsReceiptOpen] = useState(false);
 
@@ -47,12 +57,13 @@ export default function SupportPageClient({ supportTiers }: SupportPageClientPro
                             index={index}
                             total={supportTiers.length}
                             onSelect={handleSelect}
+                            builderBenefits={builderBenefits}
                         />
                     ))}
                 </div>
 
                 {/* Terminus */}
-                <SystemTerminus />
+                <SystemTerminus sessionManifest={sessionManifest} />
             </Container>
 
             {/* Receipt panel */}

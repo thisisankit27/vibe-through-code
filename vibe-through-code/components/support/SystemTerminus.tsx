@@ -1,9 +1,15 @@
 "use client";
 
-import { sessionManifest } from "@/data/support2";
+import type { SessionManifest } from "@/types/support";
 import { cn } from "@/lib/utils";
 
-export function SystemTerminus() {
+interface SystemTerminusProps {
+    sessionManifest: SessionManifest;
+}
+
+export function SystemTerminus({
+    sessionManifest,
+}: SystemTerminusProps) {
     return (
         <section className="relative pb-24 pt-16 md:pb-32 md:pt-24">
             <div className="mx-auto max-w-2xl px-6 text-center">

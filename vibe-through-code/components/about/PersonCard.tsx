@@ -2,17 +2,7 @@
 
 import { cn } from "@/lib/utils";
 
-export interface Person {
-    id: string;
-    name: string;
-    role: string;
-    bio: string;
-    avatar: string;
-    github?: string;
-    linkedin?: string;
-    website?: string;
-    isFounder: boolean;
-}
+import type { Person } from "@/types/person";
 
 interface PersonCardProps {
     person: Person;
