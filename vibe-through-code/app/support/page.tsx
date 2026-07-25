@@ -7,6 +7,8 @@ import type {
 
 import SupportPageClient from "./SupportPageClient";
 
+export const dynamic = "force-dynamic";
+
 export default async function SupportPage() {
     const rows = await sql`SELECT * FROM support_tiers ORDER BY price`;
 

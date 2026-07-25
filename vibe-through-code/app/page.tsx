@@ -5,6 +5,8 @@ import Explore from "@/components/explore/explore";
 import { getCurrentProject } from "@/lib/projects";
 import { getLatestStream } from "@/lib/streams";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const project = await getCurrentProject();
 

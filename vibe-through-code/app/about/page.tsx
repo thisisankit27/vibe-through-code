@@ -3,6 +3,8 @@ import { PersonCard, ContributionCTA } from "@/components/about";
 import { sql } from "@/lib/db";
 import type { Person } from "@/types/person";
 
+export const dynamic = "force-dynamic";
+
 export default async function AboutPage() {
     const rows = await sql`SELECT * FROM people ORDER BY is_founder DESC, name ASC`;
 

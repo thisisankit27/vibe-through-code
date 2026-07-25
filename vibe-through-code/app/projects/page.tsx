@@ -2,6 +2,8 @@ import Container from "@/components/layout/container";
 import { ProjectCard } from "@/components/project/project-card";
 import { sql } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProjectsPage() {
     const rows = await sql`SELECT * FROM projects ORDER BY started_on DESC NULLS LAST`;
 
@@ -34,8 +36,8 @@ export default async function ProjectsPage() {
                 <div className="mx-auto flex max-w-7xl justify-center">
                     <div
                         className={`grid w-full gap-8 ${projects.length === 1
-                                ? "max-w-md grid-cols-1"
-                                : "max-w-md grid-cols-1 md:max-w-none md:grid-cols-2 xl:grid-cols-3"
+                            ? "max-w-md grid-cols-1"
+                            : "max-w-md grid-cols-1 md:max-w-none md:grid-cols-2 xl:grid-cols-3"
                             }`}
                     >
                         {projects.map((project) => (
