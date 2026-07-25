@@ -13,6 +13,8 @@ import {
 
 type Tab = "events" | "streams" | "people" | "projects" | "tiers" | "state";
 
+export const dynamic = "force-dynamic";
+
 export default function AdminPage() {
     const [tab, setTab] = useState<Tab>("events");
     const [data, setData] = useState<any[]>([]);

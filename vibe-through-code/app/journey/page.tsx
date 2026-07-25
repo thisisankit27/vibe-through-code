@@ -5,6 +5,7 @@ import {
     getJourneyStatus,
 } from "@/lib/journey";
 
+export const dynamic = "force-dynamic";
 export default async function JourneyPage() {
     const status = await getJourneyStatus();
     const events = await getJourneyEvents();

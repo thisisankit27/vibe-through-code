@@ -49,7 +49,7 @@ export async function getJourneyStatus(): Promise<CurrentStatusData> {
             },
             {
                 label: "Revenue",
-                value: `₹${(
+                value: `$${(
                     Number(state.total_revenue_paise) / 100
                 ).toLocaleString("en-IN")}`,
             },
