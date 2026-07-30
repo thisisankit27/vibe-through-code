@@ -20,12 +20,29 @@ function toISODate(value: unknown): string {
     return "";
 }
 
-export async function getJourneyEvents(): Promise<JourneyEventData[]> {
-    const rows = await sql`
-        SELECT *
-        FROM events
-        ORDER BY date DESC, time DESC NULLS LAST
-    `;
+/**
+ * @param limit Optional cap, for the homepage preview only.
+ *
+ *   The record itself is NEVER truncated — `/journey` calls this with no
+ *   limit. The homepage shows a preview that links through, and it slices
+ *   the QUERY rather than the render so the component never receives a
+ *   list it is quietly hiding part of.
+ */
+export async function getJourneyEvents(
+    limit?: number
+): Promise<JourneyEventData[]> {
+    const rows = limit
+        ? await sql`
+            SELECT *
+            FROM events
+            ORDER BY date DESC, time DESC NULLS LAST
+            LIMIT ${limit}
+        `
+        : await sql`
+            SELECT *
+            FROM events
+            ORDER BY date DESC, time DESC NULLS LAST
+        `;
 
     return rows.map((row) => ({
         id: row.id,
@@ -40,20 +57,49 @@ export async function getJourneyEvents(): Promise<JourneyEventData[]> {
     }));
 }
 
-export async function getJourneyStatus(): Promise<CurrentStatusData> {
-    const state = await getSiteState();
-
+/** Shared by both status shapes below. */
+function readCurrent(state: Record<string, string>) {
     const goal = (state.current_goal ?? "").trim().replace(/\.$/, "");
     const milestone = (state.current_milestone ?? "").trim();
 
     return {
-        label: state.is_live === "true"
-            ? "Streaming Live"
-            : "Currently Building",
-
+        label: state.is_live === "true" ? "Streaming Live" : "Currently Building",
         message: [goal, milestone].filter(Boolean).join(" — "),
-
         isLive: state.is_live === "true",
+    };
+}
+
+/**
+ * Homepage status.
+ *
+ * Carries Day / Streak / Commits rather than Revenue, because the counter
+ * below it owns money — showing `$0` twice on one screen would be noise,
+ * and `total_commits` was previously stored and read by nothing.
+ */
+export async function getHomeStatus(): Promise<{
+    status: CurrentStatusData;
+    revenueCents: number;
+}> {
+    const state = await getSiteState();
+
+    return {
+        status: {
+            ...readCurrent(state),
+            meta: [
+                { label: "Day", value: state.current_day ?? "0" },
+                { label: "Streak", value: state.streak_days ?? "0" },
+                { label: "Commits", value: state.total_commits ?? "0" },
+            ],
+        },
+        revenueCents: Number(state.total_revenue_paise ?? 0),
+    };
+}
+
+export async function getJourneyStatus(): Promise<CurrentStatusData> {
+    const state = await getSiteState();
+
+    return {
+        ...readCurrent(state),
 
         meta: [
             {

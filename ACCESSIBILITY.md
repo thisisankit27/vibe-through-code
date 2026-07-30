@@ -164,6 +164,7 @@ Applies to `ReceiptPanel` and the admin modal:
 - [ ] Keyboard-only pass: every control reachable, visible focus throughout
 - [ ] One `<h1>`, no skipped levels
 - [ ] New colors checked against the contrast table
+- [ ] **Text checked against the surface it actually sits on**, not just `--surface-base`. This has now failed twice: a navbar wrongly given `bg-scrim` dropped its links to **1.66:1**, and a tinted badge put `--ink-tertiary` on `--surface-sunk` at **4.44:1**. Verifying tokens against the page ground is necessary but not sufficient — any element that paints its own background creates a new pair that nothing has checked.
 - [ ] New animation respects `prefers-reduced-motion`
 - [ ] New SVG labelled or hidden
 - [ ] No non-functional focusable controls

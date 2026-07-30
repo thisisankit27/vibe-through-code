@@ -174,8 +174,16 @@
   --rule-standard: #d5d4ce;
   --rule-strong: #b8b7b0;
 
-  /* Text-safe ochre, 5.19:1. Bright amber fails badly on paper. */
-  --accent: #9a5b00;
+  /*
+    Signal orange, 4.96:1.
+
+    The first attempt here was #9a5b00 — amber darkened until it cleared
+    contrast. That is a mechanical derivation, not a designed one:
+    darkening amber desaturates it toward brown, and it read as mud.
+    Moving HUE rather than lightness keeps the chroma that makes it
+    legible as a signal, at the same contrast.
+  */
+  --accent: #c2410c;
   /*
     Non-text only: dots, rules, meter fills. Still 3.44:1 because these
     carry meaning (live state, meter fill) and must clear the 3:1 bar for
@@ -314,18 +322,43 @@
     --entry-pad-y: --spacing(3);
   }
 
-  /* Rows — the leading presentation. Scales to hundreds of entries. */
+  /*
+    Rows — the leading presentation. Scales to hundreds of entries.
+
+    The spine is the one thing the old card timeline did better: a rail
+    down the left gave the record continuity, so it read as one thread
+    rather than detached rows. Restored here as a hairline behind the
+    date column.
+  */
+  [data-ledger="rows"] {
+    position: relative;
+  }
+
+  @media (width >= 48rem) {
+    [data-ledger="rows"]::before {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      /* Sits between the date and type columns. */
+      left: 5.25rem;
+      width: 1px;
+      background-color: var(--color-rule-hairline);
+    }
+  }
+
   [data-ledger="rows"] .ledger-entry {
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: --spacing(1) --spacing(4);
+    gap: --spacing(1) --spacing(3);
     padding-block: var(--entry-pad-y);
     border-bottom: 1px solid var(--entry-rule);
   }
 
   @media (width >= 48rem) {
     [data-ledger="rows"] .ledger-entry {
-      grid-template-columns: 7.5rem 8.5rem 1fr auto;
+      /* Was 7.5rem 8.5rem — the type column was ~2x wider than a glyph
+         plus "STREAM" needs, which read as a gap. */
+      grid-template-columns: 5rem 6.5rem 1fr auto;
       align-items: baseline;
     }
   }
@@ -361,6 +394,23 @@
   /* The live edge is the only place the signal colour appears. */
   .ledger-entry[data-recency="live"] .ledger-entry__marker {
     color: var(--entry-signal);
+  }
+
+  /*
+    Type badge. The old card timeline used a filled pill, which was
+    easier to catch than a bare label — worth porting back. Tinted at
+    the lit end only, so the archive still gets denser with age rather
+    than carrying decoration it does not need.
+  */
+  .ledger-entry__type {
+    border-radius: var(--radius-sm);
+  }
+
+  .ledger-entry:is([data-recency="live"], [data-recency="today"], [data-recency="recent"])
+    .ledger-entry__type {
+    background-color: var(--color-surface-sunk);
+    padding-inline: --spacing(1.5);
+    padding-block: --spacing(0.5);
   }
 }
 

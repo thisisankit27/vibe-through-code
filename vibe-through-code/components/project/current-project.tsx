@@ -53,7 +53,7 @@ export default function CurrentProject({
                 {project.technologies.map((tech) => (
                     <span
                         key={tech}
-                        className="rounded-md border border-rule-standard bg-scrim px-3 py-2 text-sm text-ink-secondary"
+                        className="rounded-md border border-rule-standard bg-surface-sunk px-3 py-2 text-sm text-ink-secondary"
                     >
                         {tech}
                     </span>

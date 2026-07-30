@@ -51,11 +51,14 @@ export function LedgerEntry({ event, recency }: LedgerEntryProps) {
             </time>
 
             {/* Type — glyph plus terse label. Never a hue. */}
-            <span className="flex items-center gap-1.5">
+            <span className="ledger-entry__type flex w-fit items-center gap-1.5">
                 <span className={cn("ledger-entry__marker shrink-0", toneClass)}>
                     <EventGlyph type={event.type} />
                 </span>
-                <span className="text-micro font-medium uppercase tracking-wider text-ink-tertiary">
+                {/* ink-secondary, not tertiary: tertiary lands at 4.44:1
+                    on the tinted badge surface. Recency dimming comes
+                    from --entry-ink and the absent tint, not from here. */}
+                <span className="text-micro font-medium uppercase tracking-wider text-ink-secondary">
                     {eventLabel(event.type)}
                 </span>
             </span>
