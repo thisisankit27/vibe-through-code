@@ -47,7 +47,7 @@ export default async function HomePage() {
 
                 <p className="mt-5 text-body text-ink-secondary">
                     <span className="text-ink-primary">
-                        A software company, built in public.
+                        A software journey, built in public.
                     </span>{" "}
                     Every project is developed live on stream. Every number
                     below is real — including the ones that aren&rsquo;t
