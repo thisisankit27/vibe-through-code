@@ -12,12 +12,14 @@ import type {
 interface SupportPageClientProps {
     supportTiers: SupportTier[];
     builderBenefits: BuilderBenefit[];
-    sessionManifest: SessionManifest;
+    currentDay: number;
+    sessionManifest?: SessionManifest;
 }
 
 export default function SupportPageClient({
     supportTiers,
     builderBenefits,
+    currentDay,
     sessionManifest,
 }: SupportPageClientProps) {
     const [selectedTier, setSelectedTier] = useState<SupportTier | null>(null);
@@ -63,7 +65,10 @@ export default function SupportPageClient({
                 </div>
 
                 {/* Terminus */}
-                <SystemTerminus sessionManifest={sessionManifest} />
+                <SystemTerminus
+                    currentDay={currentDay}
+                    sessionManifest={sessionManifest}
+                />
             </Container>
 
             {/* Receipt panel */}

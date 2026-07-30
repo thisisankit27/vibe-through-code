@@ -185,12 +185,46 @@ function formatCell(row: any, col: string) {
 
 /* ── Meta Builder ────────────────────────────────────────── */
 
-function MetaBuilder({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-    const pairs: { label: string; value: string }[] = (() => {
-        try { return JSON.parse(value || "[]"); } catch { return []; }
-    })();
+interface MetaPair {
+    label: string;
+    value: string;
+}
 
-    const update = (next: typeof pairs) => onChange(JSON.stringify(next));
+/**
+ * `meta` is a JSON column, so a row loaded for editing arrives already parsed
+ * as an array, while `getDefaults` supplies JSON text. Accept either, and
+ * coerce each pair to strings — a malformed row then degrades to editable
+ * fields rather than silently rendering nothing.
+ */
+function parseMetaPairs(value: string | MetaPair[] | null | undefined): MetaPair[] {
+    let raw: unknown = value;
+
+    if (typeof value === "string") {
+        if (value.trim() === "") return [];
+        try {
+            raw = JSON.parse(value);
+        } catch {
+            return [];
+        }
+    }
+
+    if (!Array.isArray(raw)) return [];
+
+    return raw
+        .filter((p): p is Record<string, unknown> => typeof p === "object" && p !== null)
+        .map((p) => ({
+            label: String(p.label ?? ""),
+            value: String(p.value ?? ""),
+        }));
+}
+
+function MetaBuilder({ value, onChange }: {
+    value: string | MetaPair[] | null | undefined;
+    onChange: (v: string) => void;
+}) {
+    const pairs = parseMetaPairs(value);
+
+    const update = (next: MetaPair[]) => onChange(JSON.stringify(next));
     const add = () => update([...pairs, { label: "", value: "" }]);
     const remove = (i: number) => update(pairs.filter((_, idx) => idx !== i));
     const setLabel = (i: number, label: string) => {
@@ -242,7 +276,7 @@ function Modal({ tab, editing, onClose, onSaved }: {
     tab: Tab; editing: any; onClose: () => void; onSaved: () => void;
 }) {
     const [saving, setSaving] = useState(false);
-    const [form, setForm] = useState<any>(editing ?? getDefaults(tab));
+    const [form, setForm] = useState<any>(() => toFormState(tab, editing));
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -250,15 +284,43 @@ function Modal({ tab, editing, onClose, onSaved }: {
         try {
             const payload = { ...form };
 
-            // Parse JSON fields
-            if (payload.meta && typeof payload.meta === "string" && tab === "events") {
-                payload.meta = JSON.parse(payload.meta);
+            // JSON columns are held as text in the form — parse them back.
+            for (const key of JSON_FIELDS) {
+                const val = payload[key];
+                if (typeof val !== "string") continue;
+
+                if (val.trim() === "") {
+                    payload[key] = null;
+                    continue;
+                }
+
+                try {
+                    payload[key] = JSON.parse(val);
+                } catch {
+                    throw new Error(
+                        `"${key}" is not valid JSON. Fix the field and try again.`
+                    );
+                }
             }
-            if (payload.technologies && typeof payload.technologies === "string") {
-                payload.technologies = JSON.parse(payload.technologies);
-            }
-            if (payload.narrative && typeof payload.narrative === "string") {
-                payload.narrative = JSON.parse(payload.narrative);
+
+            // Number inputs hand back strings — coerce so integer columns
+            // receive integers rather than relying on Postgres to cast.
+            for (const field of getFormFields(tab)) {
+                if (field.type !== "number") continue;
+
+                const val = payload[field.name];
+                if (typeof val !== "string") continue;
+
+                if (val.trim() === "") {
+                    payload[field.name] = null;
+                    continue;
+                }
+
+                const num = Number(val);
+                if (Number.isNaN(num)) {
+                    throw new Error(`"${field.label}" must be a number.`);
+                }
+                payload[field.name] = num;
             }
 
             // Auto-generate event ID
@@ -317,6 +379,18 @@ function Modal({ tab, editing, onClose, onSaved }: {
                                         onChange={(v) => setForm({ ...form, [f.name]: v })}
                                     />
                                 </div>
+                            ) : f.type === "boolean" ? (
+                                <label className="mt-1 flex cursor-pointer items-center gap-2">
+                                    <input
+                                        type="checkbox"
+                                        checked={form[f.name] === true}
+                                        onChange={(e) => setForm({ ...form, [f.name]: e.target.checked })}
+                                        className="h-4 w-4 cursor-pointer accent-emerald-500"
+                                    />
+                                    <span className="text-sm text-neutral-300">
+                                        {form[f.name] === true ? "Yes" : "No"}
+                                    </span>
+                                </label>
                             ) : f.type === "textarea" ? (
                                 <textarea
                                     value={form[f.name] ?? ""}
@@ -368,6 +442,35 @@ function Modal({ tab, editing, onClose, onSaved }: {
     );
 }
 
+/** Columns stored as JSON in Postgres. The form holds them as JSON text. */
+const JSON_FIELDS = ["meta", "technologies", "narrative"] as const;
+
+/**
+ * Seeds form state from a table row.
+ *
+ * The driver returns JSON columns already parsed, but the form edits them as
+ * text: `MetaBuilder` parses a string, and the "… JSON" textareas need real
+ * JSON. Passing an array straight to a textarea renders `String(array)` —
+ * comma-joined values, not JSON — which then fails to parse on save.
+ * Normalising here keeps rows, `getDefaults`, and both editors on one shape.
+ */
+function toFormState(tab: Tab, row: Record<string, unknown> | null): Record<string, unknown> {
+    if (!row) return getDefaults(tab);
+
+    const next: Record<string, unknown> = { ...row };
+
+    for (const key of JSON_FIELDS) {
+        const val = next[key];
+
+        if (val != null && typeof val !== "string") {
+            // Pretty-print the textarea fields; MetaBuilder ignores whitespace.
+            next[key] = JSON.stringify(val, null, key === "meta" ? 0 : 2);
+        }
+    }
+
+    return next;
+}
+
 function getDefaults(tab: Tab): any {
     switch (tab) {
         case "events": return { type: "livestream", title: "", description: "", date: "", time: "", href: "", badge: "", meta: "[]", source: "manual" };
@@ -400,7 +503,9 @@ function getFormFields(tab: Tab): { name: string; label: string; type: string; o
             { name: "duration", label: "Duration", type: "text" },
             { name: "viewers", label: "Viewers", type: "number" },
             { name: "commits", label: "Commits", type: "number" },
+            { name: "revenue", label: "Revenue (cents)", type: "number" },
             { name: "focus", label: "Focus", type: "text" },
+            { name: "isLive", label: "Streaming live", type: "boolean" },
         ];
         case "people": return [
             { name: "id", label: "ID", type: "text" },
@@ -411,6 +516,7 @@ function getFormFields(tab: Tab): { name: string; label: string; type: string; o
             { name: "github", label: "GitHub", type: "text" },
             { name: "linkedin", label: "LinkedIn", type: "text" },
             { name: "website", label: "Website", type: "text" },
+            { name: "isFounder", label: "Founder", type: "boolean" },
         ];
         case "projects": return [
             { name: "id", label: "ID", type: "text" },

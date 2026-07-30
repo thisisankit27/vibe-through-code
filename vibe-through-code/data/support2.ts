@@ -43,8 +43,8 @@ export const supportTiers: SupportTier[] = [
         label: "Keep the camera rolling",
         description: "Help keep today's livestream running.",
         narrative: [
-            "Today's session: refactoring the auth layer.",
-            "312 people watching. 47 commits.",
+            "Every session is streamed start to finish.",
+            "Nothing edited out. Nothing rehearsed.",
             "Your support keeps the camera rolling.",
         ],
     },
@@ -71,8 +71,12 @@ export const builderBenefits: BuilderBenefit[] = [
     { id: "pipeline", label: "FEATURE PIPELINE", description: "Vote on upcoming projects" },
 ];
 
+/**
+ * Supporter counts. Zero until a `payments` table exists and these can be
+ * derived by query — see DATA-INTEGRITY.md. Never populate these by hand.
+ */
 export const sessionManifest: SessionManifest = {
-    coffee: 12,
-    stream: 3,
-    builders: 1,
+    coffee: 0,
+    stream: 0,
+    builders: 0,
 };

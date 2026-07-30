@@ -11,8 +11,6 @@ export function JourneyTimeline({
   cta,
   className,
 }: JourneyTimelineProps) {
-  const visibleEvents = events.slice(0, 3);
-
   return (
     <section className={cn("mx-auto w-full max-w-2xl px-4 py-16 sm:px-6 lg:px-8", className)}>
       {/* Header — matches Projects page heading style */}
@@ -20,9 +18,9 @@ export function JourneyTimeline({
         <p className="text-sm uppercase tracking-[0.3em] text-emerald-400">
           Engineering Journal
         </p>
-        <h2 className="mt-3 text-5xl font-bold tracking-tight text-neutral-100">
+        <h1 className="mt-3 text-5xl font-bold tracking-tight text-neutral-100">
           Journey
-        </h2>
+        </h1>
         <p className="mt-6 text-neutral-400">
           Building in public, one commit at a time.
         </p>
@@ -33,11 +31,17 @@ export function JourneyTimeline({
         <CurrentStatus status={status} />
       </div>
 
-      {/* Timeline */}
+      {/* Timeline — the record is never truncated */}
       <div className="relative">
-        {visibleEvents.map((event, index) => (
-          <JourneyEvent key={event.id} event={event} isLast={index === visibleEvents.length - 1} />
-        ))}
+        {events.length === 0 ? (
+          <p className="py-8 text-center text-sm text-neutral-500">
+            Nothing logged yet.
+          </p>
+        ) : (
+          events.map((event, index) => (
+            <JourneyEvent key={event.id} event={event} isLast={index === events.length - 1} />
+          ))
+        )}
       </div>
 
       {/* CTA */}

@@ -1,4 +1,5 @@
 import { sql } from "@/lib/db";
+import { formatUsd } from "@/lib/utils";
 import { getSiteState } from "./site";
 
 import type {
@@ -29,12 +30,15 @@ export async function getJourneyEvents(): Promise<JourneyEventData[]> {
 export async function getJourneyStatus(): Promise<CurrentStatusData> {
     const state = await getSiteState();
 
+    const goal = (state.current_goal ?? "").trim().replace(/\.$/, "");
+    const milestone = (state.current_milestone ?? "").trim();
+
     return {
         label: state.is_live === "true"
             ? "Streaming Live"
             : "Currently Building",
 
-        message: `${state.current_goal} — ${state.current_milestone}`,
+        message: [goal, milestone].filter(Boolean).join(" — "),
 
         isLive: state.is_live === "true",
 
@@ -48,10 +52,12 @@ export async function getJourneyStatus(): Promise<CurrentStatusData> {
                 value: state.streak_days,
             },
             {
+                // NOTE: the column is still named `total_revenue_paise` but is
+                // read as USD cents per the currency decision in PRINCIPLES.md.
+                // Safe while the value is 0; the rename is tracked in
+                // MIGRATION-CHECKLIST.md and lands with the M2 counter work.
                 label: "Revenue",
-                value: `$${(
-                    Number(state.total_revenue_paise) / 100
-                ).toLocaleString("en-IN")}`,
+                value: formatUsd(Number(state.total_revenue_paise ?? 0)),
             },
         ],
     };

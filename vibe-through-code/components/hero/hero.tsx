@@ -12,7 +12,11 @@ import type { LatestStream } from "@/lib/streams";
 import { ArrowRight, Play } from "lucide-react";
 
 interface HeroProps {
-    project: Project;
+    /**
+     * The active project, when one exists. The hero renders without it —
+     * the front door must never depend on a database row.
+     */
+    project?: Project | null;
     latestStream: LatestStream;
 }
 
@@ -23,7 +27,7 @@ export default function Hero({
     return (
         <section className="relative overflow-hidden">
             {/* Background Glow */}
-            <div className="absolute inset-x-0 bottom-0 h-40 bg-emerald-500/10 blur-3xl" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-emerald-500/10 blur-3xl" />
 
             <Container className="flex min-h-[90vh] flex-col items-center justify-center text-center">
 
@@ -39,6 +43,7 @@ export default function Hero({
                 <StatusBadge label="Building in Public" />
 
                 <SectionHeading
+                    as="h1"
                     title={site.tagline}
                     description={site.hero.title}
                 />
@@ -63,10 +68,12 @@ export default function Hero({
                     </Link>
                 </div>
 
-                <CurrentProject
-                    project={project}
-                    latestStream={latestStream}
-                />
+                {project && (
+                    <CurrentProject
+                        project={project}
+                        latestStream={latestStream}
+                    />
+                )}
 
             </Container>
         </section>

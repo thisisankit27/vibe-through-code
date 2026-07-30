@@ -8,18 +8,12 @@ import { getLatestStream } from "@/lib/streams";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const project = await getCurrentProject();
-
-  if (!project) {
-    return (
-      <>
-        <Mission />
-        <Explore />
-      </>
-    );
-  }
-
-  const latestStream = await getLatestStream();
+  // The hero renders unconditionally — an absent active project hides the
+  // project card, never the front door.
+  const [project, latestStream] = await Promise.all([
+    getCurrentProject(),
+    getLatestStream(),
+  ]);
 
   return (
     <>
