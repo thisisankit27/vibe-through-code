@@ -37,8 +37,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+    // Font variables live on <html> so they resolve at :root, where
+    // globals.css maps them onto the semantic --face-* tokens.
+    //
+    // The ground defaults to dark (see globals.css) while ~215 component
+    // usages still hardcode it. Adding "theme-paper" to this className
+    // flips the site to the paper ground — that one-word change IS the
+    // H1 test, valid once components consume tokens. See DESIGN.md.
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable}`}
+    >
+      <body>
         <Navbar />
 
         <main>{children}</main>
