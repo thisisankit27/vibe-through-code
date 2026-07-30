@@ -7,9 +7,12 @@ import { Counter } from "@/components/home/counter";
 import { Ledger } from "@/components/ledger";
 import CurrentProject from "@/components/project/current-project";
 
-import { getHomeStatus, getJourneyEvents } from "@/lib/journey";
+import {
+    getHomeStatus,
+    getJourneyEvents,
+    getLatestLivestream,
+} from "@/lib/journey";
 import { getCurrentProject } from "@/lib/projects";
-import { getLatestStream } from "@/lib/streams";
 import { site } from "@/data/site";
 
 export const dynamic = "force-dynamic";
@@ -35,7 +38,7 @@ export default async function HomePage() {
             getHomeStatus(),
             getJourneyEvents(PREVIEW_ENTRIES),
             getCurrentProject(),
-            getLatestStream(),
+            getLatestLivestream(),
         ]);
 
     return (

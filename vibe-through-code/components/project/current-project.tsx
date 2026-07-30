@@ -2,15 +2,17 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
 import type { Project } from "@/types/project";
+import type { LatestLivestream } from "@/lib/journey";
 import { capitalize } from "@/lib/utils";
-
-interface LatestStream {
-    url: string;
-}
 
 interface CurrentProjectProps {
     project: Project;
-    latestStream: LatestStream;
+    /**
+     * Newest livestream from the events record. Null when none has a
+     * usable URL — the link is then omitted rather than pointing at a
+     * placeholder.
+     */
+    latestStream: LatestLivestream | null;
 }
 
 export default function CurrentProject({
@@ -20,72 +22,69 @@ export default function CurrentProject({
     if (!project) return null;
 
     return (
-        <div className="mt-20 w-full max-w-3xl rounded-2xl border border-rule-standard bg-surface-hover p-8 backdrop-blur">
+        // The section heading lives on the page, not in here — this
+        // component previously carried its own "Building Right Now"
+        // eyebrow, which rendered twice once the homepage added one.
+        <div className="rounded-md border border-rule-standard bg-surface-raised p-6 md:p-8">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
+                <h3 className="text-section font-bold text-ink-primary">
+                    {project.title}
+                </h3>
 
-            <p className="text-sm font-medium uppercase tracking-[0.3em] text-accent">
-                Building Right Now
-            </p>
+                <span className="inline-flex items-center gap-2 text-micro font-medium uppercase tracking-wider text-accent">
+                    <span className="h-1.5 w-1.5 rounded-full bg-accent-signal" />
+                    {capitalize(project.status)}
+                </span>
+            </div>
 
-            <h2 className="mt-4 text-3xl font-bold">
-                {project.title}
-            </h2>
-
-            <p className="mt-4 max-w-2xl text-ink-secondary">
+            <p className="mt-3 max-w-2xl text-meta text-ink-secondary">
                 {project.description}
             </p>
 
-            {/* Status */}
-            <div className="mt-8">
+            {project.technologies.length > 0 && (
+                <ul className="mt-5 flex flex-wrap gap-2">
+                    {project.technologies.map((tech) => (
+                        <li
+                            key={tech}
+                            className="rounded-sm border border-rule-hairline bg-surface-sunk px-2 py-1 text-micro text-ink-secondary"
+                        >
+                            {tech}
+                        </li>
+                    ))}
+                </ul>
+            )}
 
-                <span className="inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-4 py-2 text-sm font-medium text-accent">
-
-                    <span className="mr-2 h-2 w-2 rounded-full bg-accent" />
-
-                    {capitalize(project.status)}
-
-                </span>
-
-            </div>
-
-            {/* Tech Stack */}
-            <div className="mt-6 mx-auto flex max-w-xl flex-wrap justify-center gap-3">
-
-                {project.technologies.map((tech) => (
-                    <span
-                        key={tech}
-                        className="rounded-md border border-rule-standard bg-surface-sunk px-3 py-2 text-sm text-ink-secondary"
+            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
+                {project.repository && (
+                    <Link
+                        href={project.repository}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-meta font-medium text-ink-secondary underline-offset-4 transition-colors duration-100 ease-out hover:text-accent hover:underline"
                     >
-                        {tech}
-                    </span>
-                ))}
+                        Repository
+                        <ArrowUpRight className="h-3.5 w-3.5" />
+                    </Link>
+                )}
 
+                {latestStream && (
+                    <Link
+                        href={latestStream.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-meta font-medium text-ink-secondary underline-offset-4 transition-colors duration-100 ease-out hover:text-accent hover:underline"
+                    >
+                        Latest stream
+                        <time
+                            dateTime={latestStream.date}
+                            className="text-micro tabular-nums text-ink-tertiary"
+                        >
+                            {latestStream.date}
+                        </time>
+                        <ArrowUpRight className="h-3.5 w-3.5" />
+                    </Link>
+                )}
             </div>
-
-            {/* Repository */}
-
-            {/* Actions */}
-            <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-6">
-
-                <Link
-                    href={project.repository}
-                    target="_blank"
-                    className="inline-flex items-center font-medium text-accent transition hover:text-accent"
-                >
-                    Repository
-                    <ArrowUpRight className="ml-2 h-4 w-4" />
-                </Link>
-
-                <Link
-                    href={latestStream.url}
-                    target="_blank"
-                    className="inline-flex items-center font-medium text-accent transition hover:text-accent"
-                >
-                    Latest Stream
-                    <ArrowUpRight className="ml-2 h-4 w-4" />
-                </Link>
-
-            </div>
-
         </div>
     );
 }

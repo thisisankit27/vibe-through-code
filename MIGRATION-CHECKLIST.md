@@ -159,6 +159,8 @@ The core visual debt. Do not resolve by hand — resolve by building the token l
 
 ## 7. Obsolete tooling
 
+- [x] **[verified]** `lib/streams.ts` and the `streams` table on the public site — **removed 2026-07-31**. The whole table fed exactly one thing: a single `url` for one link, while carrying nine columns nothing rendered. It had also drifted — its newest row was day 9 while the events record was at day 16, so the homepage "latest stream" link pointed eight days and seven streams into the past. The link now reads the newest `type='livestream'` event. Admin retains its CRUD tab; **the table itself can be dropped whenever you want** — nothing public reads it.
+
 - [ ] **[verified]** `repo_tree.py` — `ROOT` is hardcoded to a Windows path (`C:\Users\thisi\OneDrive\...`). Cannot run on this machine. No argument parsing, no `__main__` guard. A personal convenience script; delete.
 - [ ] **[verified]** `add-event.py` — 321 lines. Writes events by regex-splicing `data/*.ts` files **that the site no longer reads** (the site reads Postgres). Also points at `data/people.ts`, which does not exist — the file is `data/people2.ts` — so the contributor path exits with an error. Fully superseded by `/admin`. `PLATFORM_EVOLUTION_ROADMAP.md` calls for updating it to write to the DB; deleting is the better call.
 - [ ] **[verified]** `data/*.ts` are labelled "legacy, being phased out" in **[root]** `OPERATIONS.md`, but `data/site.ts` is still the live source for the entire hero and Explore grid. **[decision]** finish the migration: move `site.ts` content into `site_state` or accept it as permanent config and relabel.
