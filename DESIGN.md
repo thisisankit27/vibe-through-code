@@ -136,7 +136,21 @@ Recency must be **computed from a timestamp, never hand-applied.** If a componen
 |---|---|---|
 | **H1** ground polarity | Light differentiates and enforces honesty better than dark | **Paper.** Validated on the rebuilt Journey page. Dark ships as a designed theme via `.theme-dark`. |
 | **H3** entry container | Ruled rows scale where cards do not | **Rows.** Note the scale review found rows and cards produce *byte-identical* HTML — the entry owns no container — so this was a design judgement, not a performance one. `presentation="cards"` stays in `Ledger` as the documented counterfactual. |
-| **H2** prose face | A text serif signals *document* rather than *product page* | **Open, and untested.** `--face-prose` is still Geist Sans. No serif has been rendered. Do not treat as settled. |
+| **H2** prose face | A text serif signals *document* rather than *product page* | **Implemented, awaiting review.** Source Serif 4 — drawn by Adobe for reading interfaces rather than books, variable, and legible at `text-meta` (14px), which matters because the ledger is dense. Compare against the sans control at `/lab/ledger?face=sans`. |
+
+### Dark is designed, not inverted
+
+The governing image is the same workshop after the lights are turned off — a bench under one warm lamp at night. That drives every value:
+
+- The ground is **warm** near-black (`#121110`), not neutral `#000`. A workshop at night is dim, not void.
+- Ink is warm off-white, never pure `#fff`, which glares on a dark field.
+- **Amber stops being an accent and becomes the light source.** Lit things read as lit because the lamp is on — not because they glow.
+- Revenue green is **deepened** from the paper value rather than brightened. Neon green reads as a crypto ticker; this has to read as money that was earned.
+- **No glow, no bloom, no neon.** Depth is rules and surface steps in both themes, which is also what keeps the two feeling like one product.
+
+Hierarchy, spacing, type, recency and semantics are identical across the two by construction — they are theme-independent tokens. Only the light changes.
+
+Both grounds are explicit selectors; neither is "the absence of the other". Dark is declared *after* paper because the two have equal specificity and the class must be able to override the default ground.
 
 **What the scale review actually showed** (25 / 250 / 800 synthetic entries, via `/lab/ledger`):
 

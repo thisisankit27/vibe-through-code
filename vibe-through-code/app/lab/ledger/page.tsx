@@ -36,12 +36,21 @@ export default async function LedgerLabPage({
 
     const count = Math.min(5000, Math.max(0, Number(read("n") ?? 25) || 0));
     const presentation = read("presentation") === "cards" ? "cards" : "rows";
-    const theme = read("theme") === "paper" ? "paper" : "dark";
+    const theme = read("theme") === "dark" ? "dark" : "paper";
+    const face = read("face") === "sans" ? "sans" : "serif";
 
     const events = generateEvents(count);
 
     return (
-        <div className={theme === "paper" ? "theme-paper bg-surface-base" : undefined}>
+        <div
+            className={[
+                theme === "dark" ? "theme-dark" : "theme-paper",
+                face === "sans" ? "face-sans" : "",
+                "bg-surface-base",
+            ]
+                .filter(Boolean)
+                .join(" ")}
+        >
             <main className="min-h-screen">
                 <Container className="max-w-5xl pb-24 pt-14 md:pb-32 md:pt-20">
                     <header>
@@ -52,7 +61,8 @@ export default async function LedgerLabPage({
                             Journey
                         </h1>
                         <p className="mt-4 max-w-xl text-body text-ink-secondary">
-                            {count} synthetic entries · {presentation} · {theme}
+                            {count} synthetic entries · {presentation} · {theme} ·{" "}
+                            {face}
                         </p>
                     </header>
 

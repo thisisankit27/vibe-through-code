@@ -26,8 +26,6 @@ export default function Hero({
 }: HeroProps) {
     return (
         <section className="relative overflow-hidden">
-            {/* Background Glow */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-accent/10 blur-3xl" />
 
             <Container className="flex min-h-[90vh] flex-col items-center justify-center text-center">
 

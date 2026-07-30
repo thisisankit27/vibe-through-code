@@ -18,8 +18,6 @@ export function PersonCard({ person, featured = false }: PersonCardProps) {
                 featured && "md:p-8"
             )}
         >
-            {/* Emerald glow */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-accent/15 blur-3xl" />
 
             <div className="relative z-10 flex flex-col items-center text-center">
                 {/* Avatar */}

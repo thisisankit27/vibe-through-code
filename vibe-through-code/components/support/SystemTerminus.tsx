@@ -30,12 +30,16 @@ export function SystemTerminus({
     return (
         <section className="relative pb-24 pt-16 md:pb-32 md:pt-24">
             <div className="mx-auto max-w-2xl px-6 text-center">
-                {/* Glowing endpoint */}
+                {/*
+                    The endpoint. A ringed marker rather than a bloom —
+                    depth is rules and surface steps in both themes, so
+                    this reads the same with the lights on or off.
+                */}
                 <div className="relative mx-auto mb-10 flex h-16 w-16 items-center justify-center">
-                    <div className="absolute inset-0 rounded-full bg-accent/20 blur-xl" />
-                    <div className="absolute inset-2 rounded-full bg-accent/30 blur-md" />
-                    <div className="relative h-4 w-4 rounded-full bg-accent-signal">
-                        <div className="absolute inset-0 animate-ping rounded-full bg-accent-signal opacity-30" />
+                    <div className="absolute inset-0 rounded-full border border-rule-hairline" />
+                    <div className="absolute inset-4 rounded-full border border-rule-standard" />
+                    <div className="relative h-2.5 w-2.5 rounded-full bg-accent-signal">
+                        <div className="absolute inset-0 animate-ping rounded-full bg-accent-signal opacity-40" />
                     </div>
                 </div>
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import Container from "./container";
+import { ThemeToggle } from "./theme-toggle";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 
 export default function Navbar() {
@@ -38,16 +39,20 @@ export default function Navbar() {
                     <Link href="/about" className="transition-colors hover:text-accent">About</Link>
                 </nav>
 
-                <button
-                    type="button"
-                    className="rounded-md p-2 text-ink-primary transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent md:hidden"
-                    aria-expanded={isOpen}
-                    aria-controls="mobile-navigation"
-                    aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
-                    onClick={() => setIsOpen((open) => !open)}
-                >
-                    {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-                </button>
+                <div className="flex items-center gap-1">
+                    <ThemeToggle />
+
+                    <button
+                        type="button"
+                        className="rounded-md p-2 text-ink-primary transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent md:hidden"
+                        aria-expanded={isOpen}
+                        aria-controls="mobile-navigation"
+                        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+                        onClick={() => setIsOpen((open) => !open)}
+                    >
+                        {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                    </button>
+                </div>
             </Container>
 
             {isOpen && (

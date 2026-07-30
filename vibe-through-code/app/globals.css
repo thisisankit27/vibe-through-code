@@ -109,49 +109,49 @@
   consume tokens. See DESIGN.md, "Under test".
 */
 
-/* Dark — designed, not inverted. Currently the default; see above. */
+/*
+  Dark — the same workshop after the lights are turned off.
+
+  Designed, not inverted. The governing image is a bench under one warm
+  lamp at night, which drives every value here:
+
+  - The ground is warm near-black, not neutral #000. A workshop at night
+    is dim, not void.
+  - Ink is warm off-white, never pure #fff, which glares on a dark field.
+  - Amber stops being an accent and becomes the LIGHT SOURCE. Lit things
+    read as lit because the lamp is on, not because they glow.
+  - Revenue green is deepened from the paper value rather than
+    brightened. Neon green would read as a crypto ticker; this has to
+    read as money that was earned.
+  - No glow, no bloom, no neon. Depth is rules and surface steps in both
+    themes, which is also what keeps the two feeling like one product.
+
+  Hierarchy, spacing, type, recency and semantics are identical to paper
+  by construction — they are theme-independent tokens. Only the light
+  changes.
+*/
+/* Theme-independent. Faces belong to the product, not to the light. */
 :root {
-  --face-prose: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --face-prose: var(--font-prose-serif), ui-serif, Georgia, serif;
   --face-fact: var(--font-geist-mono), ui-monospace, monospace;
+}
 
-  --surface-base: #0b0b0d;
-  --surface-raised: #141417;
-  --surface-sunk: #08080a;
-  /* One step more prominent than raised — on dark that means lighter. */
-  --surface-hover: #1e1e22;
 
-  --ink-primary: #f4f4f2;
-  --ink-secondary: #a8a8a4;
-  --ink-tertiary: #868682;
-  /* Sits on --accent. Bright amber needs dark ink. */
-  --ink-on-accent: #0b0b0d;
-
-  --scrim: rgb(0 0 0 / 0.7);
-
-  --rule-hairline: #1f1f23;
-  --rule-standard: #2c2c31;
-  --rule-strong: #43434a;
-
-  /* On dark, bright amber is text-safe. */
-  --accent: #f0a020;
-  --accent-signal: #ffb020;
-
-  --revenue: #2ed47a;
-  --failure: #f0503a;
-  --info: #6ba5f5;
+/*
+  H2 control — the sans counterfactual, for comparing prose faces in the
+  lab. Delete along with the Geist Sans import once H2 is settled.
+*/
+.face-sans {
+  --face-prose: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 /*
-  Paper — the intended identity ground.
-
-  Applied by putting `theme-paper` on <html>. Note this is a class, not
-  a data attribute: Next 16 drops `data-theme` from the server-rendered
-  <html>, while className survives (the font variables ride on it).
-  `[data-theme="light"]` is kept so a future client-side toggle can set
-  it from localStorage per the Next "preventing flash" guide.
-
-  Running H1 = adding one class to app/layout.tsx.
+  Paper is the default ground, so it sits on :root as well as on its own
+  class. Both themes are explicit selectors — neither is "the absence of
+  the other", which is what keeps the toggle honest and makes it obvious
+  that dark is designed rather than fallen-back-to.
 */
+:root,
 .theme-paper,
 :root[data-theme="light"] {
   --surface-base: #fafaf8;
@@ -187,6 +187,43 @@
   --revenue: #0f6e3d;
   --failure: #a32a1c;
   --info: #1f5faf;
+}
+
+/*
+  Dark comes after paper deliberately. `:root` and `.theme-dark` have the
+  same specificity, so source order decides — dark must be able to
+  override the default ground when the class is applied.
+
+  Note both grounds are classes, not data attributes: Next 16 drops
+  `data-theme` from the server-rendered <html>, while className survives.
+  The `[data-theme]` selectors are kept only for a future consumer.
+*/
+.theme-dark,
+:root[data-theme="dark"] {
+  --surface-base: #121110;
+  --surface-raised: #1a1917;
+  --surface-sunk: #0c0b0a;
+  /* More prominent than raised — under lamplight that means warmer. */
+  --surface-hover: #242220;
+
+  --ink-primary: #f2efe9;
+  --ink-secondary: #a8a39a;
+  --ink-tertiary: #8a857c;
+  --ink-on-accent: #12110f;
+
+  --scrim: rgb(0 0 0 / 0.7);
+
+  --rule-hairline: #24221f;
+  --rule-standard: #322f2b;
+  --rule-strong: #4a453e;
+
+  /* The lamp. Text-safe on this ground; the signal is its filament. */
+  --accent: #f0a545;
+  --accent-signal: #ffb64d;
+
+  --revenue: #57b486;
+  --failure: #e5614a;
+  --info: #7fa3d1;
 }
 
 /*

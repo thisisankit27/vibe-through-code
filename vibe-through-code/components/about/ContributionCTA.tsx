@@ -5,8 +5,6 @@ import { cn } from "@/lib/utils";
 export function ContributionCTA() {
     return (
         <div className="relative overflow-hidden rounded-2xl border border-rule-hairline bg-surface-raised px-6 py-12 text-center md:px-12 md:py-16">
-            {/* Emerald glow */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-accent/10 blur-3xl" />
 
             <div className="relative z-10">
                 <p className="text-sm uppercase tracking-[0.3em] text-accent">
