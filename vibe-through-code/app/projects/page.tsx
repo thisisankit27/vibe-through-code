@@ -22,13 +22,13 @@ export default async function ProjectsPage() {
         <Container>
             <section className="pt-14 pb-24 md:pt-20 md:pb-28">
                 <div className="mb-12 text-center">
-                    <p className="text-sm uppercase tracking-[0.3em] text-emerald-400">
+                    <p className="text-sm uppercase tracking-[0.3em] text-accent">
                         Project Catalog
                     </p>
                     <h1 className="mt-3 text-5xl font-bold tracking-tight">
                         Projects
                     </h1>
-                    <p className="mt-6 text-zinc-400">
+                    <p className="mt-6 text-ink-secondary">
                         Every project built throughout the journey.
                     </p>
                 </div>

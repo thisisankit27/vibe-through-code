@@ -142,6 +142,9 @@ Recorded here so they aren't relitigated each session.
 |---|---|---|
 | Currency | USD everywhere. Mission is `$1,000,000`. Store cents. | 2026-07-30 |
 | Primary site goal | Return visits — make the site feel alive | 2026-07-30 |
-| Visual identity direction | **Open.** Three directions in `DESIGN.md`; foundation work is direction-independent | pending |
+| Visual identity direction | **Direction D — The Workbench.** Recency encodes visual temperature: what is happening now is lit, what has happened is recorded. See `DESIGN.md`. | 2026-07-30 |
+| — H1 ground polarity | **Resolved: paper.** Validated on the rebuilt Journey page — "exceeded expectations… feels more like a software product than a developer portfolio." Dark ships as a designed theme via `.theme-dark`. | 2026-07-31 |
+| — H3 entry container | **Resolved: ruled rows.** Reviewed and approved on Journey. Rows and cards produce byte-identical HTML, so this was a design judgement, not a performance one. `presentation="cards"` remains in `Ledger` as the documented counterfactual. | 2026-07-31 |
+| — H2 prose face | **Still open — and untested.** `--face-prose` is still Geist Sans; no serif has been tried. The swap is one line in `globals.css`. Do not record this as settled until a serif has actually been rendered and compared. | under test |
 | ORM | None. Raw SQL via `@neondatabase/serverless`. | pre-existing |
 | Payments provider | Stripe (follows from USD-first) | 2026-07-30 |

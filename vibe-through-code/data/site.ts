@@ -3,11 +3,9 @@ export const site = {
 
     tagline: "Building to $1,000,000",
 
-    hero: {
-        title: "One Livestream.\nOne Commit.\nOne Project at a Time.",
-        description:
-            "Follow the public journey of building software, learning engineering, and documenting every step.",
-    },
+    // The `hero` block went with the old centred hero. Its three-beat
+    // line ("One Livestream. One Commit. One Project at a Time.") lives
+    // in the footer; its `description` was never rendered anywhere.
 
     links: {
         github: "https://github.com/thisisankit27",

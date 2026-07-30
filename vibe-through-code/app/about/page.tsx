@@ -28,13 +28,13 @@ export default async function AboutPage() {
             <section className="pt-14 pb-24 md:pt-20 md:pb-28">
                 {/* Header */}
                 <div className="mb-16 text-center">
-                    <p className="text-sm uppercase tracking-[0.3em] text-emerald-400">
+                    <p className="text-sm uppercase tracking-[0.3em] text-accent">
                         Who is building this
                     </p>
-                    <h1 className="mt-3 text-5xl font-bold tracking-tight text-white">
+                    <h1 className="mt-3 text-5xl font-bold tracking-tight text-ink-primary">
                         About
                     </h1>
-                    <p className="mt-6 text-neutral-400">
+                    <p className="mt-6 text-ink-secondary">
                         One engineer. One mission. Building in public.
                     </p>
                 </div>
@@ -50,10 +50,10 @@ export default async function AboutPage() {
                 {contributors.length > 0 && (
                     <div className="mt-20">
                         <div className="mb-10 text-center">
-                            <p className="text-sm uppercase tracking-[0.3em] text-emerald-400">
+                            <p className="text-sm uppercase tracking-[0.3em] text-accent">
                                 Contributors
                             </p>
-                            <h2 className="mt-3 text-3xl font-bold tracking-tight text-white">
+                            <h2 className="mt-3 text-3xl font-bold tracking-tight text-ink-primary">
                                 Building alongside
                             </h2>
                         </div>

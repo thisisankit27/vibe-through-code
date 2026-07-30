@@ -20,7 +20,7 @@ export default function SectionHeading({
     return (
         <div className={centered ? "text-center" : "text-left"}>
             {eyebrow && (
-                <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-emerald-400">
+                <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-accent">
                     {eyebrow}
                 </p>
             )}
@@ -30,7 +30,7 @@ export default function SectionHeading({
             </Heading>
 
             {description && (
-                <p className="mx-auto mt-5 max-w-2xl whitespace-pre-line text-lg leading-8 text-zinc-400">
+                <p className="mx-auto mt-5 max-w-2xl whitespace-pre-line text-lg leading-8 text-ink-secondary">
                     {description}
                 </p>
             )}

@@ -64,13 +64,13 @@ export default function AdminPage() {
     const openEdit = (row: any) => { setEditing(row); setModalOpen(true); };
 
     return (
-        <main className="min-h-screen bg-[#0A0A0A] text-neutral-200">
+        <main className="min-h-screen bg-surface-base text-ink-primary">
             <div className="mx-auto max-w-7xl px-4 py-10">
-                <h1 className="text-3xl font-bold tracking-tight text-white">Admin</h1>
-                <p className="mt-1 text-sm text-neutral-500">Manage journey data</p>
+                <h1 className="text-3xl font-bold tracking-tight text-ink-primary">Admin</h1>
+                <p className="mt-1 text-sm text-ink-tertiary">Manage journey data</p>
 
                 {/* Tabs */}
-                <div className="mt-8 flex flex-wrap gap-2 border-b border-white/[0.06] pb-3">
+                <div className="mt-8 flex flex-wrap gap-2 border-b border-rule-hairline pb-3">
                     {tabs.map((t) => (
                         <button
                             key={t.key}
@@ -78,8 +78,8 @@ export default function AdminPage() {
                             className={cn(
                                 "rounded-lg px-4 py-2 text-sm font-medium transition-all",
                                 tab === t.key
-                                    ? "bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20"
-                                    : "text-neutral-400 hover:bg-white/[0.03] hover:text-neutral-200"
+                                    ? "bg-accent/10 text-accent ring-1 ring-accent/20"
+                                    : "text-ink-secondary hover:bg-surface-raised hover:text-ink-primary"
                             )}
                         >
                             {t.label}
@@ -92,7 +92,7 @@ export default function AdminPage() {
                     <div className="mt-6 flex justify-end">
                         <button
                             onClick={openAdd}
-                            className="rounded-lg bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 ring-1 ring-emerald-500/20 transition-all hover:bg-emerald-500/20"
+                            className="rounded-lg bg-accent/10 px-4 py-2 text-sm font-medium text-accent ring-1 ring-accent/20 transition-all hover:bg-accent/20"
                         >
                             + Add {tabs.find((t) => t.key === tab)?.label}
                         </button>
@@ -100,9 +100,9 @@ export default function AdminPage() {
                 )}
 
                 {/* Table */}
-                <div className="mt-4 overflow-hidden rounded-xl border border-white/[0.06]">
+                <div className="mt-4 overflow-hidden rounded-xl border border-rule-hairline">
                     <table className="w-full text-left text-sm">
-                        <thead className="bg-white/[0.02] text-xs uppercase tracking-wider text-neutral-500">
+                        <thead className="bg-surface-raised text-xs uppercase tracking-wider text-ink-tertiary">
                             <tr>
                                 {getColumns(tab).map((col) => (
                                     <th key={col} className="px-4 py-3 font-medium">{col}</th>
@@ -110,16 +110,16 @@ export default function AdminPage() {
                                 <th className="px-4 py-3 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-white/[0.04]">
+                        <tbody className="divide-y divide-rule-hairline">
                             {loading ? (
-                                <tr><td colSpan={99} className="px-4 py-8 text-center text-neutral-500">Loading…</td></tr>
+                                <tr><td colSpan={99} className="px-4 py-8 text-center text-ink-tertiary">Loading…</td></tr>
                             ) : data.length === 0 ? (
-                                <tr><td colSpan={99} className="px-4 py-8 text-center text-neutral-500">No records</td></tr>
+                                <tr><td colSpan={99} className="px-4 py-8 text-center text-ink-tertiary">No records</td></tr>
                             ) : (
                                 data.map((row) => (
-                                    <tr key={row.id ?? row.key} className="transition-colors hover:bg-white/[0.02]">
+                                    <tr key={row.id ?? row.key} className="transition-colors hover:bg-surface-raised">
                                         {getColumns(tab).map((col) => (
-                                            <td key={col} className="px-4 py-3 font-mono text-xs text-neutral-300">
+                                            <td key={col} className="px-4 py-3 font-mono text-xs text-ink-secondary">
                                                 {formatCell(row, col)}
                                             </td>
                                         ))}
@@ -127,13 +127,13 @@ export default function AdminPage() {
                                             <div className="flex justify-end gap-2">
                                                 <button
                                                     onClick={() => openEdit(row)}
-                                                    className="rounded px-2 py-1 text-xs text-neutral-400 transition-colors hover:bg-white/[0.04] hover:text-white"
+                                                    className="rounded px-2 py-1 text-xs text-ink-secondary transition-colors hover:bg-surface-hover hover:text-ink-primary"
                                                 >
                                                     Edit
                                                 </button>
                                                 <button
                                                     onClick={() => handleDelete(row.id ?? row.key)}
-                                                    className="rounded px-2 py-1 text-xs text-red-400/70 transition-colors hover:bg-red-500/10 hover:text-red-400"
+                                                    className="rounded px-2 py-1 text-xs text-failure/70 transition-colors hover:bg-failure/10 hover:text-failure"
                                                 >
                                                     Del
                                                 </button>
@@ -242,18 +242,18 @@ function MetaBuilder({ value, onChange }: {
                         placeholder="Label"
                         value={p.label}
                         onChange={(e) => setLabel(i, e.target.value)}
-                        className="flex-1 rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-2 text-sm text-white placeholder:text-neutral-700 focus:border-emerald-500/30 focus:outline-none"
+                        className="flex-1 rounded-lg border border-rule-standard bg-surface-raised px-3 py-2 text-sm text-ink-primary placeholder:text-ink-tertiary focus:border-accent/30 focus:outline-none"
                     />
                     <input
                         placeholder="Value"
                         value={p.value}
                         onChange={(e) => setValue(i, e.target.value)}
-                        className="flex-1 rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-2 text-sm text-white placeholder:text-neutral-700 focus:border-emerald-500/30 focus:outline-none"
+                        className="flex-1 rounded-lg border border-rule-standard bg-surface-raised px-3 py-2 text-sm text-ink-primary placeholder:text-ink-tertiary focus:border-accent/30 focus:outline-none"
                     />
                     <button
                         type="button"
                         onClick={() => remove(i)}
-                        className="rounded-lg px-2 text-xs text-red-400/70 hover:bg-red-500/10 hover:text-red-400"
+                        className="rounded-lg px-2 text-xs text-failure/70 hover:bg-failure/10 hover:text-failure"
                     >
                         ✕
                     </button>
@@ -262,7 +262,7 @@ function MetaBuilder({ value, onChange }: {
             <button
                 type="button"
                 onClick={add}
-                className="rounded-lg border border-white/[0.08] px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:bg-white/[0.03] hover:text-white"
+                className="rounded-lg border border-rule-standard px-3 py-1.5 text-xs text-ink-secondary transition-colors hover:bg-surface-raised hover:text-ink-primary"
             >
                 + Add pair
             </button>
@@ -361,15 +361,15 @@ function Modal({ tab, editing, onClose, onSaved }: {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-            <div className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-white/[0.08] bg-[#0A0A0A] p-6 shadow-2xl">
-                <h2 className="text-lg font-semibold text-white">
+            <div className="absolute inset-0 bg-scrim backdrop-blur-sm" onClick={onClose} />
+            <div className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-rule-standard bg-surface-base p-6 shadow-2xl">
+                <h2 className="text-lg font-semibold text-ink-primary">
                     {editing ? "Edit" : "Add"} {tab}
                 </h2>
                 <form onSubmit={handleSubmit} className="mt-4 space-y-4">
                     {fields.map((f) => (
                         <div key={f.name}>
-                            <label className="block text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
+                            <label className="block text-micro font-semibold uppercase tracking-wider text-ink-tertiary">
                                 {f.label}
                             </label>
                             {f.name === "meta" && tab === "events" ? (
@@ -387,7 +387,7 @@ function Modal({ tab, editing, onClose, onSaved }: {
                                         onChange={(e) => setForm({ ...form, [f.name]: e.target.checked })}
                                         className="h-4 w-4 cursor-pointer accent-emerald-500"
                                     />
-                                    <span className="text-sm text-neutral-300">
+                                    <span className="text-sm text-ink-secondary">
                                         {form[f.name] === true ? "Yes" : "No"}
                                     </span>
                                 </label>
@@ -396,16 +396,16 @@ function Modal({ tab, editing, onClose, onSaved }: {
                                     value={form[f.name] ?? ""}
                                     onChange={(e) => setForm({ ...form, [f.name]: e.target.value })}
                                     rows={3}
-                                    className="mt-1 w-full rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-2 text-sm text-white placeholder:text-neutral-700 focus:border-emerald-500/30 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
+                                    className="mt-1 w-full rounded-lg border border-rule-standard bg-surface-raised px-3 py-2 text-sm text-ink-primary placeholder:text-ink-tertiary focus:border-accent/30 focus:outline-none focus:ring-1 focus:ring-accent/20"
                                 />
                             ) : f.type === "select" ? (
                                 <select
                                     value={form[f.name] ?? ""}
                                     onChange={(e) => setForm({ ...form, [f.name]: e.target.value })}
-                                    className="mt-1 w-full rounded-lg border border-white/[0.08] bg-[#0A0A0A] px-3 py-2 text-sm text-white focus:border-emerald-500/30 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
+                                    className="mt-1 w-full rounded-lg border border-rule-standard bg-surface-base px-3 py-2 text-sm text-ink-primary focus:border-accent/30 focus:outline-none focus:ring-1 focus:ring-accent/20"
                                 >
                                     {f.options?.map((o) => (
-                                        <option key={o} value={o} className="bg-[#0A0A0A] text-white">
+                                        <option key={o} value={o} className="bg-surface-base text-ink-primary">
                                             {o}
                                         </option>
                                     ))}
@@ -415,7 +415,7 @@ function Modal({ tab, editing, onClose, onSaved }: {
                                     type={f.type}
                                     value={form[f.name] ?? ""}
                                     onChange={(e) => setForm({ ...form, [f.name]: e.target.value })}
-                                    className="mt-1 w-full rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-2 text-sm text-white placeholder:text-neutral-700 focus:border-emerald-500/30 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
+                                    className="mt-1 w-full rounded-lg border border-rule-standard bg-surface-raised px-3 py-2 text-sm text-ink-primary placeholder:text-ink-tertiary focus:border-accent/30 focus:outline-none focus:ring-1 focus:ring-accent/20"
                                 />
                             )}
                         </div>
@@ -424,14 +424,14 @@ function Modal({ tab, editing, onClose, onSaved }: {
                         <button
                             type="button"
                             onClick={onClose}
-                            className="rounded-lg border border-white/[0.08] px-4 py-2 text-sm text-neutral-400 transition-colors hover:bg-white/[0.03] hover:text-white"
+                            className="rounded-lg border border-rule-standard px-4 py-2 text-sm text-ink-secondary transition-colors hover:bg-surface-raised hover:text-ink-primary"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
                             disabled={saving}
-                            className="rounded-lg bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 ring-1 ring-emerald-500/20 transition-all hover:bg-emerald-500/20 disabled:opacity-50"
+                            className="rounded-lg bg-accent/10 px-4 py-2 text-sm font-medium text-accent ring-1 ring-accent/20 transition-all hover:bg-accent/20 disabled:opacity-50"
                         >
                             {saving ? "Saving…" : "Save"}
                         </button>

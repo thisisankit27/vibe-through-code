@@ -320,6 +320,8 @@ Run before declaring UI work done.
 - [ ] Keyboard-only pass, visible focus throughout
 - [ ] One `<h1>`, no skipped levels
 - [ ] New colors meet the contrast table
+- [ ] Text checked against **the surface it sits on**, not just the page ground — anything that paints its own background creates an unchecked pair. See `ACCESSIBILITY.md`; this rule exists because it has failed twice.
+- [ ] `--scrim` used only to dim behind a true overlay. It is not a surface, and using it as one paints the ground black.
 - [ ] SVG labelled or `aria-hidden`
 - [ ] No focusable control without a handler
 

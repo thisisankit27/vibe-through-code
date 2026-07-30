@@ -13,19 +13,17 @@ export function PersonCard({ person, featured = false }: PersonCardProps) {
     return (
         <article
             className={cn(
-                "group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-zinc-950 p-6 transition-all duration-300",
-                "hover:-translate-y-1 hover:border-emerald-500/40",
+                "group relative flex flex-col overflow-hidden rounded-2xl border border-rule-standard bg-surface-raised p-6 transition-all duration-300",
+                "hover:-translate-y-1 hover:border-accent/40",
                 featured && "md:p-8"
             )}
         >
-            {/* Emerald glow */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-emerald-500/15 blur-3xl" />
 
             <div className="relative z-10 flex flex-col items-center text-center">
                 {/* Avatar */}
                 <div
                     className={cn(
-                        "relative overflow-hidden rounded-full border-2 border-white/10 bg-neutral-800",
+                        "relative overflow-hidden rounded-full border-2 border-rule-standard bg-surface-hover",
                         featured ? "h-24 w-24 md:h-28 md:w-28" : "h-20 w-20"
                     )}
                 >
@@ -36,7 +34,7 @@ export function PersonCard({ person, featured = false }: PersonCardProps) {
                             className="h-full w-full object-cover"
                         />
                     ) : (
-                        <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-neutral-600">
+                        <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-ink-tertiary">
                             {person.name.charAt(0)}
                         </div>
                     )}
@@ -44,7 +42,7 @@ export function PersonCard({ person, featured = false }: PersonCardProps) {
 
                 {/* Founder badge */}
                 {person.isFounder && (
-                    <span className="mt-4 inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-400">
+                    <span className="mt-4 inline-flex items-center rounded-full border border-accent/30 bg-accent/10 px-2.5 py-0.5 text-xs font-medium text-accent">
                         Youtube Face
                     </span>
                 )}
@@ -52,7 +50,7 @@ export function PersonCard({ person, featured = false }: PersonCardProps) {
                 {/* Name */}
                 <h3
                     className={cn(
-                        "mt-4 font-bold tracking-tight text-white",
+                        "mt-4 font-bold tracking-tight text-ink-primary",
                         featured ? "text-2xl md:text-3xl" : "text-xl"
                     )}
                 >
@@ -60,10 +58,10 @@ export function PersonCard({ person, featured = false }: PersonCardProps) {
                 </h3>
 
                 {/* Role */}
-                <p className="mt-1 text-sm text-emerald-400">{person.role}</p>
+                <p className="mt-1 text-sm text-accent">{person.role}</p>
 
                 {/* Bio */}
-                <p className="mt-4 text-sm leading-relaxed text-neutral-400">
+                <p className="mt-4 text-sm leading-relaxed text-ink-secondary">
                     {person.bio}
                 </p>
 
@@ -74,7 +72,7 @@ export function PersonCard({ person, featured = false }: PersonCardProps) {
                             href={person.github}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5 text-neutral-400 transition-colors hover:border-white/10 hover:text-white"
+                            className="rounded-lg border border-rule-hairline bg-surface-raised p-2.5 text-ink-secondary transition-colors hover:border-rule-standard hover:text-ink-primary"
                             aria-label="GitHub"
                         >
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -88,7 +86,7 @@ export function PersonCard({ person, featured = false }: PersonCardProps) {
                             href={person.website}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5 text-neutral-400 transition-colors hover:border-white/10 hover:text-white"
+                            className="rounded-lg border border-rule-hairline bg-surface-raised p-2.5 text-ink-secondary transition-colors hover:border-rule-standard hover:text-ink-primary"
                             aria-label="Website"
                         >
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

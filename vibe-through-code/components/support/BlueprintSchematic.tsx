@@ -16,8 +16,8 @@ export function BlueprintSchematic({
     const thresholds = [0.08, 0.25, 0.45, 0.65];
 
     return (
-        <div className="mt-8 rounded-lg border border-white/[0.06] bg-white/[0.02] p-5">
-            <p className="mb-4 text-[10px] font-semibold uppercase tracking-wider text-neutral-600">
+        <div className="mt-8 rounded-lg border border-rule-hairline bg-surface-raised p-5">
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-wider text-ink-tertiary">
                 Builder Ecosystem Schematic
             </p>
             <div className="space-y-3">
@@ -27,21 +27,21 @@ export function BlueprintSchematic({
                         <div key={benefit.id} className="relative flex items-center gap-4">
                             {/* Connection line */}
                             {index > 0 && (
-                                <div className="absolute -top-3 left-[7px] h-3 w-px bg-white/[0.06]" />
+                                <div className="absolute -top-3 left-[7px] h-3 w-px bg-surface-hover" />
                             )}
                             {/* Node */}
                             <div
                                 className={cn(
                                     "relative z-10 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition-all duration-500",
                                     isLit
-                                        ? "border-emerald-500/50 bg-emerald-500/20 shadow-[0_0_8px_rgba(0,230,118,0.3)]"
-                                        : "border-white/10 bg-white/[0.02]"
+                                        ? "border-accent/50 bg-accent/20"
+                                        : "border-rule-standard bg-surface-raised"
                                 )}
                             >
                                 <div
                                     className={cn(
                                         "h-1.5 w-1.5 rounded-full transition-all duration-500",
-                                        isLit ? "bg-emerald-400" : "bg-neutral-700"
+                                        isLit ? "bg-accent" : "bg-surface-hover"
                                     )}
                                 />
                             </div>
@@ -50,14 +50,14 @@ export function BlueprintSchematic({
                                 className={cn(
                                     "flex-1 rounded border px-3 py-2 transition-all duration-500",
                                     isLit
-                                        ? "border-emerald-500/20 bg-emerald-500/[0.03]"
-                                        : "border-white/[0.04] bg-white/[0.01]"
+                                        ? "border-accent/20 bg-accent/3"
+                                        : "border-rule-hairline bg-surface-raised"
                                 )}
                             >
                                 <p
                                     className={cn(
                                         "font-mono text-[10px] font-semibold uppercase tracking-wider transition-colors duration-500",
-                                        isLit ? "text-emerald-400" : "text-neutral-600"
+                                        isLit ? "text-accent" : "text-ink-tertiary"
                                     )}
                                 >
                                     {benefit.label}
@@ -65,7 +65,7 @@ export function BlueprintSchematic({
                                 <p
                                     className={cn(
                                         "mt-0.5 text-xs transition-colors duration-500",
-                                        isLit ? "text-neutral-200" : "text-neutral-600"
+                                        isLit ? "text-ink-primary" : "text-ink-tertiary"
                                     )}
                                 >
                                     {benefit.description}

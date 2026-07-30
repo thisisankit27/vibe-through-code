@@ -4,18 +4,16 @@ import { cn } from "@/lib/utils";
 
 export function ContributionCTA() {
     return (
-        <div className="relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] px-6 py-12 text-center md:px-12 md:py-16">
-            {/* Emerald glow */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-emerald-500/10 blur-3xl" />
+        <div className="relative overflow-hidden rounded-2xl border border-rule-hairline bg-surface-raised px-6 py-12 text-center md:px-12 md:py-16">
 
             <div className="relative z-10">
-                <p className="text-sm uppercase tracking-[0.3em] text-emerald-400">
+                <p className="text-sm uppercase tracking-[0.3em] text-accent">
                     Open Journey
                 </p>
-                <h3 className="mt-3 text-3xl font-bold tracking-tight text-white md:text-4xl">
+                <h3 className="mt-3 text-3xl font-bold tracking-tight text-ink-primary md:text-4xl">
                     Become part of the journey.
                 </h3>
-                <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-neutral-400">
+                <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-ink-secondary">
                     This is a public build. Contributions, collaborations, and conversations are always welcome. If you are building something interesting, let us vibe through code together.
                 </p>
                 <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -24,10 +22,10 @@ export function ContributionCTA() {
                         target="_blank"
                         rel="noopener noreferrer"
                         className={cn(
-                            "inline-flex items-center gap-2 rounded-xl border border-white/[0.08]",
-                            "bg-white/[0.03] px-5 py-3 text-sm font-medium text-neutral-300",
+                            "inline-flex items-center gap-2 rounded-xl border border-rule-standard",
+                            "bg-surface-raised px-5 py-3 text-sm font-medium text-ink-secondary",
                             "transition-all duration-200",
-                            "hover:border-emerald-500/30 hover:bg-emerald-500/5 hover:text-emerald-400"
+                            "hover:border-accent/30 hover:bg-accent/5 hover:text-accent"
                         )}
                     >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -39,10 +37,10 @@ export function ContributionCTA() {
                     <a
                         href="#"
                         className={cn(
-                            "inline-flex items-center gap-2 rounded-xl border border-white/[0.08]",
-                            "bg-white/[0.03] px-5 py-3 text-sm font-medium text-neutral-300",
+                            "inline-flex items-center gap-2 rounded-xl border border-rule-standard",
+                            "bg-surface-raised px-5 py-3 text-sm font-medium text-ink-secondary",
                             "transition-all duration-200",
-                            "hover:border-white/10 hover:bg-white/[0.04] hover:text-white"
+                            "hover:border-rule-standard hover:bg-surface-hover hover:text-ink-primary"
                         )}
                     >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

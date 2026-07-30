@@ -1,149 +1,454 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+/*
+  Design tokens — Direction D, "The Workbench".
+  See DESIGN.md. Rules that matter when editing this file:
+
+  1. Tokens name ROLES, never polarity, hue, or a font family.
+     `--surface-base`, never `--paper`. Flipping the ground (H1) must
+     stay a value change in this file, not a rename across the app.
+  2. Every colour is defined once per theme. Components reference the
+     semantic name only — no raw hex, no rgba, no white/* or black/*.
+  3. Signal amber is derived PER GROUND. On paper the text-safe accent
+     is a dark ochre and bright amber is signal-only; on dark it is the
+     reverse. Same token names, different values.
+*/
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-geist-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
+  /* ── Type faces — semantic. H2 swaps these in ONE place. ───────── */
+  --font-prose: var(--face-prose);
+  --font-fact: var(--face-fact);
+
+  /* ── Surfaces ──────────────────────────────────────────────────── */
+  --color-surface-base: var(--surface-base);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunk: var(--surface-sunk);
+  --color-surface-hover: var(--surface-hover);
+
+  /* ── Ink ───────────────────────────────────────────────────────── */
+  --color-ink-primary: var(--ink-primary);
+  --color-ink-secondary: var(--ink-secondary);
+  --color-ink-tertiary: var(--ink-tertiary);
+  --color-ink-on-accent: var(--ink-on-accent);
+
+  /* ── Scrim — dims the page behind an overlay on either ground ──── */
+  --color-scrim: var(--scrim);
+
+  /* ── Rules — the primary structural device ─────────────────────── */
+  --color-rule-hairline: var(--rule-hairline);
+  --color-rule-standard: var(--rule-standard);
+  --color-rule-strong: var(--rule-strong);
+
+  /* ── Semantic signal ───────────────────────────────────────────── */
   --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --color-accent-signal: var(--accent-signal);
+  --color-revenue: var(--revenue);
+  --color-failure: var(--failure);
+  --color-info: var(--info);
+
+  /* ── Recency — set by [data-recency], never by a prop ──────────── */
+  --color-entry-ink: var(--entry-ink);
+  --color-entry-rule: var(--entry-rule);
+  --color-entry-signal: var(--entry-signal);
+
+  /* ── Type scale — six steps. Line height is explicit per step so
+       the scale is metric-independent and an H2 face swap cannot
+       break vertical rhythm. ─────────────────────────────────────── */
+  --text-display: clamp(2.75rem, 6vw, 4.5rem);
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.02em;
+
+  --text-title: clamp(2rem, 4vw, 2.5rem);
+  --text-title--line-height: 1.15;
+  --text-title--letter-spacing: -0.02em;
+
+  --text-section: 1.5rem;
+  --text-section--line-height: 1.25;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.6;
+
+  --text-meta: 0.875rem;
+  --text-meta--line-height: 1.5;
+
+  --text-micro: 0.6875rem;
+  --text-micro--line-height: 1.4;
+  --text-micro--letter-spacing: 0.05em;
+
+  /* ── Radius — three values ─────────────────────────────────────── */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+
+  /* ── Easing. Motion decelerating into place reads as arriving. ─── */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── Tracking ──────────────────────────────────────────────────── */
+  --tracking-eyebrow: 0.3em;
 }
 
+/*
+  Durations map onto Tailwind's native numeric utilities — there is no
+  `--duration-*` theme namespace in v4, and arbitrary values are banned
+  by AGENTS.md. Only these four are permitted:
+
+    duration-100  instant  hover, focus, active
+    duration-200  quick    state changes, disclosure
+    duration-300  settle   drawers, modals, entrances
+    duration-700  report   a real data change announcing itself
+*/
+
+/*
+  ── Grounds ───────────────────────────────────────────────────────
+
+  H1 IS RUN FROM HERE. Each ground is defined exactly once. Dark is the
+  default *today* only because ~215 component usages still hardcode a
+  dark ground (text-white, text-neutral-*, white/*). Paper is the
+  intended identity and becomes the default the moment those components
+  consume tokens. See DESIGN.md, "Under test".
+*/
+
+/*
+  Dark — the same workshop after the lights are turned off.
+
+  Designed, not inverted. The governing image is a bench under one warm
+  lamp at night, which drives every value here:
+
+  - The ground is warm near-black, not neutral #000. A workshop at night
+    is dim, not void.
+  - Ink is warm off-white, never pure #fff, which glares on a dark field.
+  - Amber stops being an accent and becomes the LIGHT SOURCE. Lit things
+    read as lit because the lamp is on, not because they glow.
+  - Revenue green is deepened from the paper value rather than
+    brightened. Neon green would read as a crypto ticker; this has to
+    read as money that was earned.
+  - No glow, no bloom, no neon. Depth is rules and surface steps in both
+    themes, which is also what keeps the two feeling like one product.
+
+  Hierarchy, spacing, type, recency and semantics are identical to paper
+  by construction — they are theme-independent tokens. Only the light
+  changes.
+*/
+/* Theme-independent. Faces belong to the product, not to the light. */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --face-prose: var(--font-prose-serif), ui-serif, Georgia, serif;
+  --face-fact: var(--font-geist-mono), ui-monospace, monospace;
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+
+/*
+  H2 control — the sans counterfactual, for comparing prose faces in the
+  lab. Delete along with the Geist Sans import once H2 is settled.
+*/
+.face-sans {
+  --face-prose: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+  Paper is the default ground, so it sits on :root as well as on its own
+  class. Both themes are explicit selectors — neither is "the absence of
+  the other", which is what keeps the toggle honest and makes it obvious
+  that dark is designed rather than fallen-back-to.
+*/
+:root,
+.theme-paper,
+:root[data-theme="light"] {
+  --surface-base: #fafaf8;
+  --surface-raised: #ffffff;
+  --surface-sunk: #f1f0ec;
+  /* Designed, not inverted: on paper "more prominent" reads as a tint,
+     not as lighter — there is nowhere lighter to go than white. */
+  --surface-hover: #f2f1ec;
+
+  --ink-primary: #16161a;
+  --ink-secondary: #5a5a5f;
+  /* 4.85:1 — #74747a read nicer but landed at 4.44:1. */
+  --ink-tertiary: #6e6e74;
+  /* Sits on --accent. Dark ochre needs light ink. */
+  --ink-on-accent: #fafaf8;
+
+  --scrim: rgb(0 0 0 / 0.5);
+
+  --rule-hairline: #e4e3de;
+  --rule-standard: #d5d4ce;
+  --rule-strong: #b8b7b0;
+
+  /*
+    Signal orange, 4.96:1.
+
+    The first attempt here was #9a5b00 — amber darkened until it cleared
+    contrast. That is a mechanical derivation, not a designed one:
+    darkening amber desaturates it toward brown, and it read as mud.
+    Moving HUE rather than lightness keeps the chroma that makes it
+    legible as a signal, at the same contrast.
+  */
+  --accent: #c2410c;
+  /*
+    Non-text only: dots, rules, meter fills. Still 3.44:1 because these
+    carry meaning (live state, meter fill) and must clear the 3:1 bar for
+    graphics. Dark's #ffb020 measures 2.06:1 here — hence per-ground
+    derivation rather than one shared amber.
+  */
+  --accent-signal: #c47400;
+
+  --revenue: #0f6e3d;
+  --failure: #a32a1c;
+  --info: #1f5faf;
+}
+
+/*
+  Dark comes after paper deliberately. `:root` and `.theme-dark` have the
+  same specificity, so source order decides — dark must be able to
+  override the default ground when the class is applied.
+
+  Note both grounds are classes, not data attributes: Next 16 drops
+  `data-theme` from the server-rendered <html>, while className survives.
+  The `[data-theme]` selectors are kept only for a future consumer.
+*/
+.theme-dark,
+:root[data-theme="dark"] {
+  --surface-base: #121110;
+  --surface-raised: #1a1917;
+  --surface-sunk: #0c0b0a;
+  /* More prominent than raised — under lamplight that means warmer. */
+  --surface-hover: #242220;
+
+  --ink-primary: #f2efe9;
+  --ink-secondary: #a8a39a;
+  --ink-tertiary: #8a857c;
+  --ink-on-accent: #12110f;
+
+  --scrim: rgb(0 0 0 / 0.7);
+
+  --rule-hairline: #24221f;
+  --rule-standard: #322f2b;
+  --rule-strong: #4a453e;
+
+  /* The lamp. Text-safe on this ground; the signal is its filament. */
+  --accent: #f0a545;
+  --accent-signal: #ffb64d;
+
+  --revenue: #57b486;
+  --failure: #e5614a;
+  --info: #7fa3d1;
+}
+
+/*
+  ── SVG illustration palette ──────────────────────────────────────
+
+  The support capsules are hand-drawn SVG and cannot use Tailwind
+  utilities. This is the documented token set AGENTS.md exempts — the
+  only place raw colour is permitted, and only here.
+
+  Line work derives from --ink-primary so the drawings invert with the
+  ground; previously they were rgba(255,255,255,…), which would have
+  rendered them invisible on paper.
+
+  Object colours (coffee, heat) are deliberately literal: coffee is
+  brown on any ground. They are named rather than inlined so they are
+  greppable and reviewable.
+*/
+:root,
+.theme-paper {
+  --svg-line-10: color-mix(in srgb, var(--ink-primary) 10%, transparent);
+  --svg-line-15: color-mix(in srgb, var(--ink-primary) 15%, transparent);
+  --svg-line-20: color-mix(in srgb, var(--ink-primary) 20%, transparent);
+  --svg-line-25: color-mix(in srgb, var(--ink-primary) 25%, transparent);
+  --svg-line-30: color-mix(in srgb, var(--ink-primary) 30%, transparent);
+  --svg-line-35: color-mix(in srgb, var(--ink-primary) 35%, transparent);
+  --svg-line-50: color-mix(in srgb, var(--ink-primary) 50%, transparent);
+
+  --svg-signal-10: color-mix(in srgb, var(--accent-signal) 10%, transparent);
+  --svg-signal-25: color-mix(in srgb, var(--accent-signal) 25%, transparent);
+  --svg-signal-40: color-mix(in srgb, var(--accent-signal) 40%, transparent);
+  --svg-signal-50: color-mix(in srgb, var(--accent-signal) 50%, transparent);
+  --svg-signal-80: color-mix(in srgb, var(--accent-signal) 80%, transparent);
+
+  --svg-scrim-50: color-mix(in srgb, var(--surface-base) 50%, transparent);
+
+  /* Object colours — not themed. */
+  --svg-coffee: rgb(139 90 60 / 0.9);
+  --svg-coffee-dim: rgb(139 90 60 / 0.8);
+  --svg-coffee-light: rgb(160 110 70 / 0.4);
+  --svg-heat: rgb(251 191 36 / 0.3);
+}
+
+/*
+  Recency — the organizing rule of Direction D.
+
+  Set `data-recency` from the utility in lib/recency.ts. Never compute
+  emphasis inside a component and never accept an `isHighlighted` prop:
+  the moment recency is hand-applied, the system has failed.
+*/
+[data-recency="live"] {
+  --entry-ink: var(--ink-primary);
+  --entry-rule: var(--rule-standard);
+  --entry-signal: var(--accent-signal);
+}
+
+[data-recency="today"] {
+  --entry-ink: var(--ink-primary);
+  --entry-rule: var(--rule-standard);
+  --entry-signal: transparent;
+}
+
+[data-recency="recent"] {
+  --entry-ink: var(--ink-primary);
+  --entry-rule: var(--rule-hairline);
+  --entry-signal: transparent;
+}
+
+[data-recency="archive"] {
+  --entry-ink: var(--ink-secondary);
+  --entry-rule: var(--rule-hairline);
+  --entry-signal: transparent;
+}
+
+/*
+  ── The ledger ────────────────────────────────────────────────────
+
+  H3 IS RUN FROM HERE. `LedgerEntry` renders content only — it groups
+  date / type / body / meta and owns none of its container. Both
+  presentations are defined below, and switching is one word on the
+  parent: <Ledger presentation="rows" | "cards">.
+
+  Density is a function of recency, which is the identity in miniature:
+  archive rows drop their description and tighten, so a long record
+  stays scannable while the live edge stays generous.
+*/
+@layer components {
+  .ledger-entry {
+    --entry-pad-y: --spacing(3);
+  }
+
+  /*
+    Rows — the leading presentation. Scales to hundreds of entries.
+
+    The spine is the one thing the old card timeline did better: a rail
+    down the left gave the record continuity, so it read as one thread
+    rather than detached rows. Restored here as a hairline behind the
+    date column.
+  */
+  [data-ledger="rows"] {
+    position: relative;
+  }
+
+  @media (width >= 48rem) {
+    [data-ledger="rows"]::before {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      /* Sits between the date and type columns. */
+      left: 5.25rem;
+      width: 1px;
+      background-color: var(--color-rule-hairline);
+    }
+  }
+
+  [data-ledger="rows"] .ledger-entry {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: --spacing(1) --spacing(3);
+    padding-block: var(--entry-pad-y);
+    border-bottom: 1px solid var(--entry-rule);
+  }
+
+  @media (width >= 48rem) {
+    [data-ledger="rows"] .ledger-entry {
+      /* Was 7.5rem 8.5rem — the type column was ~2x wider than a glyph
+         plus "STREAM" needs, which read as a gap. */
+      grid-template-columns: 5rem 6.5rem 1fr auto;
+      align-items: baseline;
+    }
+  }
+
+  /* Cards — the H3 counterfactual. */
+  [data-ledger="cards"] .ledger-entry {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(2);
+    padding: --spacing(5);
+    border: 1px solid var(--entry-rule);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface-raised);
+  }
+
+  [data-ledger="cards"] {
+    display: grid;
+    gap: --spacing(4);
+  }
+
+  @media (width >= 48rem) {
+    [data-ledger="cards"] {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* Archive is denser — the record compacts as it ages. The description
+     is omitted in the component, not hidden here; see LedgerEntry. */
+  .ledger-entry[data-recency="archive"] {
+    --entry-pad-y: --spacing(2);
+  }
+
+  /* The live edge is the only place the signal colour appears. */
+  .ledger-entry[data-recency="live"] .ledger-entry__marker {
+    color: var(--entry-signal);
+  }
+
+  /*
+    Type badge. The old card timeline used a filled pill, which was
+    easier to catch than a bare label — worth porting back. Tinted at
+    the lit end only, so the archive still gets denser with age rather
+    than carrying decoration it does not need.
+  */
+  .ledger-entry__type {
+    border-radius: var(--radius-sm);
+  }
+
+  .ledger-entry:is([data-recency="live"], [data-recency="today"], [data-recency="recent"])
+    .ledger-entry__type {
+    background-color: var(--color-surface-sunk);
+    padding-inline: --spacing(1.5);
+    padding-block: --spacing(0.5);
+  }
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+  html {
+    font-family: var(--font-prose);
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--color-surface-base);
+    color: var(--color-ink-primary);
   }
 
-  html {
-    @apply font-sans;
+  /* Every figure on this site is mono and tabular. */
+  [data-figure],
+  time,
+  code,
+  kbd,
+  samp {
+    font-family: var(--font-fact);
+    font-variant-numeric: tabular-nums;
   }
-}
 
-html {
-  scroll-behavior: smooth;
-}
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
 
-body {
-  background: #050505;
-  color: white;
-}
-
-.hero-grid {
-  background-image:
-    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
-
-  background-size: 48px 48px;
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
