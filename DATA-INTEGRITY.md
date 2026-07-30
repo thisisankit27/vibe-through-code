@@ -32,6 +32,12 @@ No placeholders. No demo values. No "illustrative" figures. No "we'll wire it la
 
 **Unused fake data is still a liability.** `components/journey/demo-data.ts` is imported nowhere and contains `$847` revenue, `$1,024 MRR`, `34 customers`, `0% churn`. One careless import ships all of it. Delete rather than quarantine.
 
+**A real number entered wrongly is as damaging as an invented one.** The rule above governs where values come from; it does not by itself keep them true. An event was once entered with the date `22026-07-30` — one extra keystroke in a free-text field, accepted by Postgres as a valid year-22026 date. It sorted above every real entry and led both `/journey` and the homepage for as long as it existed. Nothing was fabricated and the rule was not broken, yet the record lied.
+
+So: **validate at the point of entry, and bound anything a key or a sort order is derived from.** The admin date fields are now native date inputs bounded by `DATE_MIN` and today, re-checked in `handleSubmit` because constraint validation is bypassable. The check runs *before* the event id is generated — the id is built from the date string, so an unvalidated date becomes an unvalidated primary key.
+
+**The write path deserves the same scrutiny as the read path.** `/admin` is the only way data enters this system and has now produced four defects — invisible `meta`, missing `revenue`/`is_live` fields, a snake_case/camelCase mismatch that silently wiped columns on save, and this one. Each was invisible from the public pages and each corrupted real data. When auditing integrity, read the form, not only the query.
+
 ---
 
 ## What may and may not be hardcoded

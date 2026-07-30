@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { cn } from "@/lib/utils";
+import { cn, toISODateString } from "@/lib/utils";
 import {
     getEvents, createEvent, updateEvent, deleteEvent,
     getStreams, createStream, updateStream, deleteStream,
@@ -323,6 +323,18 @@ function Modal({ tab, editing, onClose, onSaved }: {
                 payload[field.name] = num;
             }
 
+            // Dates are validated before anything is derived from them —
+            // the event id below is built from this string, so an unchecked
+            // date becomes an unchecked primary key.
+            for (const field of getFormFields(tab)) {
+                if (field.type !== "date") continue;
+
+                const val = payload[field.name];
+                if (typeof val !== "string" || val.trim() === "") continue;
+
+                assertPlausibleDate(val, field.label);
+            }
+
             // Auto-generate event ID
             if (tab === "events" && !editing) {
                 const rand = Math.floor(Math.random() * 900) + 100;
@@ -413,6 +425,15 @@ function Modal({ tab, editing, onClose, onSaved }: {
                             ) : (
                                 <input
                                     type={f.type}
+                                    // Bounds make the browser reject an
+                                    // implausible year before submit fires.
+                                    // `handleSubmit` re-checks — a native
+                                    // date input still accepts a five-digit
+                                    // year, and constraint validation is
+                                    // trivially bypassed.
+                                    {...(f.type === "date"
+                                        ? { min: DATE_MIN, max: dateMax() }
+                                        : {})}
                                     value={form[f.name] ?? ""}
                                     onChange={(e) => setForm({ ...form, [f.name]: e.target.value })}
                                     className="mt-1 w-full rounded-lg border border-rule-standard bg-surface-raised px-3 py-2 text-sm text-ink-primary placeholder:text-ink-tertiary focus:border-accent/30 focus:outline-none focus:ring-1 focus:ring-accent/20"
@@ -445,6 +466,54 @@ function Modal({ tab, editing, onClose, onSaved }: {
 /** Columns stored as JSON in Postgres. The form holds them as JSON text. */
 const JSON_FIELDS = ["meta", "technologies", "narrative"] as const;
 
+/** Columns stored as Postgres DATE. The form holds them as `YYYY-MM-DD`. */
+const DATE_FIELDS = ["date", "startedOn"] as const;
+
+/**
+ * Bounds for every date input, and for the guard in `handleSubmit`.
+ *
+ * A free-text date field let `22026-07-30` into the record — one keystroke,
+ * and Postgres accepted it as a valid year-22026 date. Because the event id
+ * is derived from the date string, the typo propagated into the primary key
+ * too, and `ORDER BY date DESC` then pinned that row to the top of /journey
+ * for the next twenty thousand years.
+ *
+ * The floor is loose enough to backfill real history but still catches a
+ * dropped or doubled digit. The ceiling is today: the record is a log of
+ * what has happened, not a schedule.
+ */
+const DATE_MIN = "2020-01-01";
+const dateMax = () => toISODateString(new Date());
+
+/**
+ * Rejects a date the record cannot plausibly hold.
+ *
+ * Throws rather than returning a flag so it joins the existing `handleSubmit`
+ * failure path — the message surfaces in the same alert as a JSON parse
+ * error, and nothing is written.
+ */
+function assertPlausibleDate(value: string, label: string): void {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        throw new Error(
+            `"${label}" must be a date in YYYY-MM-DD form. Got "${value}".`
+        );
+    }
+
+    // Parsed as UTC by the `YYYY-MM-DD` form, then compared against bounds
+    // parsed the same way — no local/UTC mismatch between the two sides.
+    const parsed = Date.parse(value);
+    if (Number.isNaN(parsed)) {
+        throw new Error(`"${label}" is not a real date. Got "${value}".`);
+    }
+
+    const max = dateMax();
+    if (value < DATE_MIN || value > max) {
+        throw new Error(
+            `"${label}" must fall between ${DATE_MIN} and ${max}. Got "${value}" — check for a mistyped year.`
+        );
+    }
+}
+
 /**
  * Seeds form state from a table row.
  *
@@ -468,6 +537,16 @@ function toFormState(tab: Tab, row: Record<string, unknown> | null): Record<stri
         }
     }
 
+    // A Postgres DATE column arrives as a JS `Date` and survives the server
+    // action boundary as one, so an unnormalised value reached the input as
+    // an object — React stringified it to "Thu Jul 30 2026 00:00:00 GMT+0530
+    // (India Standard Time)" and the operator had to retype the date by hand
+    // on every edit. Same class as the `meta` and `technologies` defects: the
+    // form assumed a string the driver never sends.
+    for (const key of DATE_FIELDS) {
+        if (next[key] != null) next[key] = toISODateString(next[key]);
+    }
+
     return next;
 }
 
@@ -488,8 +567,8 @@ function getFormFields(tab: Tab): { name: string; label: string; type: string; o
             { name: "type", label: "Type", type: "select", options: ["livestream", "pr_merge", "project_start", "project_complete", "website_launch", "revenue", "first_sale", "milestone", "community", "blog_post", "bug_fix", "architecture_decision", "learning_moment", "deployment", "partnership"] },
             { name: "title", label: "Title", type: "text" },
             { name: "description", label: "Description", type: "textarea" },
-            { name: "date", label: "Date (YYYY-MM-DD)", type: "text" },
-            { name: "time", label: "Time (HH:MM)", type: "text" },
+            { name: "date", label: "Date", type: "date" },
+            { name: "time", label: "Time", type: "time" },
             { name: "href", label: "URL", type: "text" },
             { name: "badge", label: "Badge", type: "text" },
             { name: "meta", label: "Meta", type: "custom" },
@@ -499,7 +578,7 @@ function getFormFields(tab: Tab): { name: string; label: string; type: string; o
             { name: "day", label: "Day", type: "number" },
             { name: "title", label: "Title", type: "text" },
             { name: "url", label: "URL", type: "text" },
-            { name: "date", label: "Date", type: "text" },
+            { name: "date", label: "Date", type: "date" },
             { name: "duration", label: "Duration", type: "text" },
             { name: "viewers", label: "Viewers", type: "number" },
             { name: "commits", label: "Commits", type: "number" },
@@ -526,7 +605,7 @@ function getFormFields(tab: Tab): { name: string; label: string; type: string; o
             { name: "status", label: "Status", type: "select", options: ["active", "planned", "completed"] },
             { name: "repository", label: "Repository", type: "text" },
             { name: "technologies", label: "Technologies JSON", type: "textarea" },
-            { name: "startedOn", label: "Started On", type: "text" },
+            { name: "startedOn", label: "Started On", type: "date" },
         ];
         case "tiers": return [
             { name: "id", label: "ID", type: "text" },

@@ -1,5 +1,5 @@
 import { sql } from "@/lib/db";
-import { formatUsd } from "@/lib/utils";
+import { formatUsd, toISODateString as toISODate } from "@/lib/utils";
 import { getSiteState } from "./site";
 
 import type {
@@ -7,28 +7,11 @@ import type {
     JourneyEventData,
 } from "@/components/journey";
 
-/**
- * A Postgres DATE column arrives from the driver as a JS `Date`, but
- * `JourneyEventData.date` is typed `string` and is rendered directly.
- * Normalising here keeps the type honest — rendering the raw value threw
- * "Objects are not valid as a React child" at runtime while type-checking
- * cleanly, because the type was lying about the shape.
- */
-function toISODate(value: unknown): string {
-    if (value instanceof Date) {
-        // Local components, NOT toISOString(). A Postgres DATE arrives as
-        // local midnight, and toISOString() converts to UTC — which moves
-        // it back a day in every timezone east of UTC. In Asia/Calcutta
-        // that rendered 2026-07-29 as "2026-07-28", so every date in the
-        // record was showing one day early.
-        const y = value.getFullYear();
-        const m = String(value.getMonth() + 1).padStart(2, "0");
-        const d = String(value.getDate()).padStart(2, "0");
-        return `${y}-${m}-${d}`;
-    }
-    if (typeof value === "string") return value.slice(0, 10);
-    return "";
-}
+// `toISODate` normalises the Postgres DATE the driver hands back as a JS
+// `Date`, keeping `JourneyEventData.date` honest about being a string —
+// rendering the raw value threw "Objects are not valid as a React child"
+// at runtime while type-checking cleanly. See `lib/utils.ts` for why it
+// reads local components rather than calling toISOString().
 
 /**
  * @param limit Optional cap, for the homepage preview only.
