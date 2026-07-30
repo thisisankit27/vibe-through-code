@@ -33,7 +33,7 @@ The site should read like a well-kept internal tool rather than a marketing page
 
 ### The architecture
 
-Tokens are **semantic, not literal**. `--surface-base`, never `--black`. This is deliberate: the identity direction is still open (see below), and a semantic layer means switching direction is a value change in one file rather than a rename across thirty.
+Tokens are **semantic, not literal**. `--surface-base`, never `--black`. This is deliberate and now load-bearing: three identity choices are held as reversible hypotheses (see below), and a semantic layer means flipping any of them is a value change in one file rather than a rename across thirty. Never encode polarity, hue, or a family name in a token name.
 
 Never reference a Tailwind palette color (`emerald-400`, `neutral-500`, `zinc-950`) in a component. Reference the semantic token.
 
@@ -74,7 +74,7 @@ Valid today and compatible with directions A and B. Direction C inverts them; th
 --rule-hairline   ink @ 6%
 --rule-standard   ink @ 10%
 --rule-strong     ink @ 20%
---accent          pending direction
+--accent          signal amber — derived per ground, see identity section
 --revenue         #00E676
 --failure         #F0503A
 --info            #4C8DF5
@@ -102,23 +102,63 @@ Color carries meaning or it is absent. In the journey timeline: `--revenue` for 
 
 ---
 
-## The identity direction — open decision
+## The identity — Direction D, The Workbench
 
-Three complete directions were developed. The choice is pending. **All foundation work (tokens, type scale, spacing, motion system, component primitives) is direction-independent** — do it now, decide later.
+Decided 2026-07-30. Full evaluation of the four candidate directions is in the M1.5 decision document.
 
-### A — Refined Emerald · *The Terminal, Disciplined*
-Keep green-on-black; earn it through rigor. `--accent: #00E676`. Mono display face, terminal register, bracketed text buttons, 4px maximum radius.
-**Psychology:** phosphor CRT, passing builds, system-nominal. **Risk:** indistinguishable from every build-in-public site; also the color of crypto hype. **Effort:** ~3–4 streams. **Reuses ~90% of existing work.**
+> **A workbench with an open logbook.** What is happening now is lit; what has happened is recorded. The site is a large calm archive with a small bright edge, and that edge is why people come back.
 
-### B — Signal Amber · *Mission Control*
-`--accent: #FFB020`. Amber is attention without alarm — instrument backlighting, safelights, tungsten. It means *in progress*, which is honest for Day 9. Essentially unclaimed in developer tooling.
-**The mechanic:** amber is the brand; `--revenue` green appears nowhere until real money arrives. The first green pixel on the site is the first sale, and returning visitors will notice because it will be the only one. **Effort:** ~5–6 streams. **Reuses ~70%.**
+### The organizing rule
 
-### C — The Open Ledger · *Public Books* — recommended
-Invert to paper. `--surface-base: #FAFAF8`, `--ink-primary: #16161A`, `--accent: #C8412F` (stamp red, under 1% of pixels), `--revenue: #0F6E3D`. Serif for prose, mono doing most of the work. Almost no cards — ruled rows in columns, like a statement.
-**Psychology:** dark mode is the aesthetic of private work; publishing is a daylight act. Light carries institutional trust — filings, lab notebooks, audit reports. Critically, **the form enforces the ethics**: an invented figure in a ruled column beside a date and a source looks exactly like what it is.
-Already latent in the codebase — `components/support/ReceiptPanel.tsx` (thermal paper, dashed tear lines, right-aligned amounts) is the best visual instinct in the repo and the only element that doesn't read as a template.
-**Risks:** invalidates the support capsules' dark treatment (they move to a rare dark "projection room" inversion or get redrawn as blueprint line art); light is unforgiving of the spacing inconsistency that must therefore be fixed first; some engineers reflexively prefer dark, so ship an excellent dark inversion but keep light as the identity. **Effort:** ~8–10 streams. **Reuses ~35%.**
+**Visual temperature encodes recency.** This is the direction — not a palette. Every element renders according to how recent it is:
+
+| State | Treatment |
+|---|---|
+| **Live now** | Signal amber, full contrast, motion permitted, generous space |
+| **Today** | Warm ink, full weight, instrument framing |
+| **Recent** | Full ink, neutral, ruled rows |
+| **Archive** | Cooler and lighter ink, denser rows, no motion, no accent |
+
+Recency must be **computed from a timestamp, never hand-applied.** If a component ever takes an `isHighlighted` prop, the system has failed — that is how the codebase accumulated two unmerged design generations before.
+
+### Settled
+
+- Recency encodes visual temperature
+- `--revenue` green means real recorded money, only — never a UI colour, never a success state
+- Numbers are mono and tabular, everywhere
+- The record is never truncated
+- Motion reports state; the counter never animates upward on load
+- Colour is semantic — time and money are the only things hue exists to show
+
+### Under test — reversible until the first homepage review
+
+The leading configuration is **paper ground, text serif for prose, ruled rows.** These are hypotheses, not commitments. The recency rule is orthogonal to all three, so none of them can invalidate the direction.
+
+| | Claim | If wrong |
+|---|---|---|
+| **H1** ground polarity | Light differentiates and enforces honesty better than dark | Flip polarity; everything else survives |
+| **H2** prose face | A text serif signals *document* rather than *product page* | Keep a sans; the mono/prose split survives |
+| **H3** entry container | Ruled rows scale to ~800 entries where cards do not | Render entries as cards; the hierarchy survives |
+
+**Reversibility is a requirement on the token system, not a hope.** Three rules make it cheap:
+
+1. **Tokens name roles, never polarity.** `--surface-base`, not `--paper`. **No `white/*` or `black/*` opacity literals anywhere** — they bake polarity into every component that touches them, and the audit found 18 such steps. Depth comes from rules, not glows: a blur glow only reads on dark, a hairline reads on both.
+2. **Font tokens are semantic** — `--font-prose`, `--font-fact`. Family names appear in exactly one file. The type scale sets line-height explicitly per step so it is metric-independent and a face swap cannot break rhythm.
+3. **Entry components render content, not container.** They group semantically (date / body / delta); the parent supplies layout. Do not use `<table>` for the ledger — a chronological feed is a list, so an ordered list with grid layout is both semantically correct and card-reversible. (Genuinely tabular data, i.e. `/admin`, still uses real `<table>` markup per `ACCESSIBILITY.md`.)
+
+Each hypothesis is settled by a **single-variable comparison** against a built homepage, run at **two data volumes** — today's ~25 events and ~800 seeded ones. At 25 entries cards look fine; testing only at current volume would answer the wrong question.
+
+### Palette anchors
+
+Provisional values for the leading configuration. Note that **signal amber must be derived separately per ground** — `#FFB020` is unusable for text on paper, so anything textual uses a darker burnt ochre and bright amber is restricted to dots, rules and meter fills.
+
+```
+--surface-base   #FAFAF8   warm paper (H1 — reversible)
+--ink-primary    #16161A   near-black, never pure
+--accent         amber     present tense; per-ground derivation required
+--revenue        #0F6E3D   real recorded money, only
+--failure        #A32A1C   bugs, failures, corrections
+```
 
 ---
 

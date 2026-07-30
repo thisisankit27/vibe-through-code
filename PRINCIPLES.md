@@ -142,6 +142,9 @@ Recorded here so they aren't relitigated each session.
 |---|---|---|
 | Currency | USD everywhere. Mission is `$1,000,000`. Store cents. | 2026-07-30 |
 | Primary site goal | Return visits — make the site feel alive | 2026-07-30 |
-| Visual identity direction | **Open.** Three directions in `DESIGN.md`; foundation work is direction-independent | pending |
+| Visual identity direction | **Direction D — The Workbench.** Recency encodes visual temperature: what is happening now is lit, what has happened is recorded. See `DESIGN.md`. | 2026-07-30 |
+| — H1 ground polarity | **Hypothesis:** paper-first, with a designed dark theme. Reversible until the first homepage review. | under test |
+| — H2 prose face | **Hypothesis:** a text serif replaces Geist for prose. Reversible until the first homepage review. | under test |
+| — H3 entry container | **Hypothesis:** ruled rows replace cards. Reversible until the first homepage review. | under test |
 | ORM | None. Raw SQL via `@neondatabase/serverless`. | pre-existing |
 | Payments provider | Stripe (follows from USD-first) | 2026-07-30 |
