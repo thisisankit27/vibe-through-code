@@ -12,11 +12,11 @@ export function Conduit({ isFirst = false, isLast = false, progress }: ConduitPr
     return (
         <div className="relative h-32 w-6 md:h-full md:w-10">
             {/* Rail */}
-            <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-white/20" />
+            <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-surface-hover" />
 
             {/* Emerald glow core */}
             <div
-                className="absolute left-1/2 w-px -translate-x-1/2 bg-emerald-500/60 blur-[1px]"
+                className="absolute left-1/2 w-px -translate-x-1/2 bg-accent/60 blur-[1px]"
                 style={{
                     top: 0,
                     height: `${progress * 100}%`,
@@ -47,7 +47,7 @@ function Junction({ rotation }: { rotation: number }) {
             <polygon
                 points="10,1 18,6 18,14 10,19 2,14 2,6"
                 fill="none"
-                stroke="rgba(255,255,255,0.35)"
+                stroke="var(--svg-line-35)"
                 strokeWidth="1"
                 style={{
                     transform: `rotate(${rotation}deg)`,
@@ -57,8 +57,8 @@ function Junction({ rotation }: { rotation: number }) {
             />
             <polygon
                 points="10,1 18,6 18,14 10,19 2,14 2,6"
-                fill="rgba(0,230,118,0.1)"
-                stroke="rgba(0,230,118,0.4)"
+                fill="var(--svg-signal-10)"
+                stroke="var(--svg-signal-40)"
                 strokeWidth="0.5"
                 style={{
                     transform: `rotate(${rotation}deg)`,

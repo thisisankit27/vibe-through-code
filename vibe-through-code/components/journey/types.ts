@@ -34,9 +34,3 @@ export interface CurrentStatusData {
   meta?: { label: string; value: string }[];
 }
 
-export interface JourneyTimelineProps {
-  status: CurrentStatusData;
-  events: JourneyEventData[];
-  cta: { label: string; href: string };
-  className?: string;
-}

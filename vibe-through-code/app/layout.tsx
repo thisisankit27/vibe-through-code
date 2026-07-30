@@ -40,14 +40,13 @@ export default function RootLayout({
     // Font variables live on <html> so they resolve at :root, where
     // globals.css maps them onto the semantic --face-* tokens.
     //
-    // The ground defaults to dark (see globals.css) while ~215 component
-    // usages still hardcode it. Adding "theme-paper" to this className
-    // flips the site to the paper ground — that one-word change IS the
-    // H1 test, valid once components consume tokens. See DESIGN.md.
+    // H1 resolved 2026-07-31: paper is the ground. Every component now
+    // consumes tokens, so this is a one-class decision rather than a
+    // repaint. `theme-dark` remains available for the dark theme.
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`theme-paper ${geistSans.variable} ${geistMono.variable}`}
     >
       <body>
         <Navbar />

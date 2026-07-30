@@ -56,7 +56,7 @@ export default function Explore() {
         <section className="py-24">
             <Container>
                 <div className="mb-16 text-center">
-                    <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-emerald-400">
+                    <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-accent">
                         Explore
                     </p>
 
@@ -64,7 +64,7 @@ export default function Explore() {
                         Explore the Journey
                     </h2>
 
-                    <p className="mx-auto mt-5 max-w-2xl text-lg text-zinc-400">
+                    <p className="mx-auto mt-5 max-w-2xl text-lg text-ink-secondary">
                         Everything related to Vibe Through Code, all in one place.
                     </p>
                 </div>
@@ -78,19 +78,19 @@ export default function Explore() {
                                 key={item.title}
                                 href={item.href}
                                 target={item.external ? "_blank" : undefined}
-                                className="group rounded-2xl border border-white/10 bg-zinc-950 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/40"
+                                className="group rounded-2xl border border-rule-standard bg-surface-raised p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40"
                             >
-                                <Icon className="mb-5 h-8 w-8 text-emerald-400" />
+                                <Icon className="mb-5 h-8 w-8 text-accent" />
 
                                 <h3 className="text-xl font-semibold">
                                     {item.title}
                                 </h3>
 
-                                <p className="mt-3 text-sm leading-7 text-zinc-400">
+                                <p className="mt-3 text-sm leading-7 text-ink-secondary">
                                     {item.description}
                                 </p>
 
-                                <div className="mt-8 flex items-center text-sm font-medium text-emerald-400">
+                                <div className="mt-8 flex items-center text-sm font-medium text-accent">
                                     Explore
 
                                     <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />

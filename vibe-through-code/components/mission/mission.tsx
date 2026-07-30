@@ -45,7 +45,7 @@ export default function Mission() {
             <Container>
 
                 <div className="mb-16 text-center">
-                    <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-emerald-400">
+                    <p className="mb-3 text-sm font-medium uppercase tracking-[0.3em] text-accent">
                         Mission
                     </p>
 
@@ -53,7 +53,7 @@ export default function Mission() {
                         Build. Learn. Share.
                     </h2>
 
-                    <p className="mx-auto mt-5 max-w-2xl text-lg text-zinc-400">
+                    <p className="mx-auto mt-5 max-w-2xl text-lg text-ink-secondary">
                         Everything created throughout this journey follows three simple
                         principles.
                     </p>
@@ -66,17 +66,17 @@ export default function Mission() {
                         return (
                             <div
                                 key={card.title}
-                                className="rounded-2xl border border-white/10 bg-zinc-950 p-8 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/40"
+                                className="rounded-2xl border border-rule-standard bg-surface-raised p-8 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40"
                             >
-                                <Icon className="mb-6 h-8 w-8 text-emerald-400" />
+                                <Icon className="mb-6 h-8 w-8 text-accent" />
 
                                 <h3 className="text-2xl font-semibold">
                                     {card.title}
                                 </h3>
 
-                                <div className="my-6 h-px w-full bg-white/10" />
+                                <div className="my-6 h-px w-full bg-surface-hover" />
 
-                                <p className="leading-8 text-zinc-400">
+                                <p className="leading-8 text-ink-secondary">
                                     {card.description}
                                 </p>
                             </div>

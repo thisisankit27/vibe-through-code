@@ -73,22 +73,22 @@ Full detail in `DATA-INTEGRITY.md`. Summarized here for tracking.
 All confirmed by grep: zero importers.
 
 - [x] **[verified]** `components/hero/hero-buttons.tsx` — **0 bytes**, empty file, never imported
-- [ ] **[verified]** `components/support/TerminalCommitBar.tsx` — 62 lines, not imported, not exported from `components/support/index.ts`. Abandoned earlier CTA treatment.
+- [x] **[verified]** `components/support/TerminalCommitBar.tsx` — 62 lines, not imported, not exported from `components/support/index.ts`. Abandoned earlier CTA treatment.
 - [x] **[verified]** `components/journey/demo-data.ts` — see §1
-- [ ] **[verified]** `.hero-grid` class in `app/globals.css` — defined, zero usages. Contains the only two gradients in the codebase.
+- [x] **[verified]** `.hero-grid` class in `app/globals.css` — defined, zero usages. Contains the only two gradients in the codebase.
 - [ ] **[verified]** `--font-heading` in `app/globals.css` — zero usages. No longer broken as of M1, but still unreferenced.
 - [x] ~~`--font-geist-sans` in `app/layout.tsx` — published, zero consumers~~ — **resolved in M1**: `--font-sans` now maps to it, so it has a consumer and Geist renders. Do not delete.
 - [ ] **[verified]** `getStatusLabel()` in `components/project/project-card.tsx` — defined, unused, duplicates `capitalize()` from `lib/utils.ts`
 - [ ] **[verified]** `isActive` in `components/support/useChapterProgress.ts` — computed and returned, never consumed. Removing it halves the scroll re-render rate.
-- [ ] **[verified]** `~40 of 65` color variables in `app/globals.css` — `bg-card`, `bg-popover`, `bg-accent`, all `chart-*`, the entire 9-variable `sidebar-*` block, plus their `.dark` twins. Zero references.
-- [ ] **[verified]** The `.dark` class block (32 variables) — never applied to any element.
+- [x] **[verified]** `~40 of 65` color variables in `app/globals.css` — `bg-card`, `bg-popover`, `bg-accent`, all `chart-*`, the entire 9-variable `sidebar-*` block, plus their `.dark` twins. Zero references.
+- [x] **[verified]** The `.dark` class block (32 variables) — never applied to any element.
 - [ ] **[verified]** `SectionHeading` — the `eyebrow` prop branch and the `centered={false}` branch are never exercised (one call site, which omits `eyebrow`).
 - [ ] **[verify]** `@import "shadcn/tailwind.css"` in `globals.css` — 629 lines, 24 utilities, reportedly zero used. Confirm before removing.
 - [ ] **[verify]** `tw-animate-css` dependency — reportedly contributes zero used utilities.
 
 ### Deliberate exception
 
-- [ ] **[decision]** `components/ui/button.tsx` — 6 variants × 9 sizes, **zero imports**. Do **not** delete. It is well-built and is the intended foundation; the fix is to trim it to 4 variants / 3 sizes and *adopt* it. See `DESIGN.md`.
+- [x] **[decision]** `components/ui/button.tsx` — 6 variants × 9 sizes, **zero imports**. Do **not** delete. It is well-built and is the intended foundation; the fix is to trim it to 4 variants / 3 sizes and *adopt* it. See `DESIGN.md`.
 
 ---
 
@@ -96,23 +96,23 @@ All confirmed by grep: zero importers.
 
 The core visual debt. Do not resolve by hand — resolve by building the token layer first (P1), then migrating.
 
-- [ ] **[verified]** **Three page blacks** → one `--surface-base`. `#050505` (`globals.css:139`), `#0A0A0A` (8 uses across 6 files), unused `--background`.
-- [ ] **[verified]** **Two grey families** → one. `neutral` (72 uses, 13 files) and `zinc` (22 uses, 7 files). They collide inside `components/about/PersonCard.tsx` and across `/about`.
-- [ ] **[verified]** **18 white-opacity steps in 2 notations** → three rule tokens. 11 Tailwind (`/5`, `/10`, `/[0.06]`…) + 7 raw `rgba`.
-- [ ] **[verified]** **Three greens** → one. `emerald-400`, `emerald-500`, and `rgba(0,230,118)` (Material Green A400, 6 uses in the support SVGs — visibly a different green from the Tailwind emeralds beside it).
+- [x] **[verified]** **Three page blacks** → one `--surface-base`. `#050505` (`globals.css:139`), `#0A0A0A` (8 uses across 6 files), unused `--background`.
+- [x] **[verified]** **Two grey families** → one. `neutral` (72 uses, 13 files) and `zinc` (22 uses, 7 files). They collide inside `components/about/PersonCard.tsx` and across `/about`.
+- [x] **[verified]** **18 white-opacity steps in 2 notations** → three rule tokens. 11 Tailwind (`/5`, `/10`, `/[0.06]`…) + 7 raw `rgba`.
+- [x] **[verified]** **Three greens** → one. `emerald-400`, `emerald-500`, and `rgba(0,230,118)` (Material Green A400, 6 uses in the support SVGs — visibly a different green from the Tailwind emeralds beside it).
 - [ ] **[verified]** **Three card systems** → one row primitive plus one card primitive. Opaque zinc + `border-white/10` + hover-lift (4 instances); glass `border-white/[0.06]` + `bg-white/[0.02]` (8); glass controls `/[0.08]` + `/[0.03]` (13).
-- [ ] **[verified]** **11 single-use accent hues** in `components/journey/JourneyEvent.tsx` → 3 semantic colors plus glyphs.
+- [x] **[verified]** **11 single-use accent hues** in `components/journey/JourneyEvent.tsx` → 3 semantic colors plus glyphs.
 - [ ] **[verified]** **Four status palettes** that don't agree — `JourneyEvent`, `project-card`, `status-badge`, and an inline reimplementation in `current-project.tsx`.
-- [ ] **[verified]** **The glow motif duplicated 6×** at 3 heights and 3 opacities → one `Glow` primitive.
-- [ ] **[verified]** **15 text sizes** (incl. `text-[10px]`, `text-[11px]`, `text-[0.8rem]`) → 6 scale tokens.
-- [ ] **[verified]** **7 radii** (3 for cards alone) → `sm` / `md` / `full`.
+- [x] **[verified]** **The glow motif duplicated 6×** at 3 heights and 3 opacities → one `Glow` primitive.
+- [x] **[verified]** **15 text sizes** (incl. `text-[10px]`, `text-[11px]`, `text-[0.8rem]`) → 6 scale tokens.
+- [x] **[verified]** **7 radii** (3 for cards alone) → `sm` / `md` / `full`.
 - [ ] **[verified]** **6 section paddings** across 11 sections (only 2 agree) → 2.
 - [ ] **[verified]** **4 container widths** → 3, all via `Container`. `JourneyTimeline` and `app/admin/page.tsx` bypass it; `/support` visibly jumps width mid-scroll.
-- [ ] **[verified]** **10 motion durations** → 4 tokens. 56 of 80 transitions specify none.
+- [x] **[verified]** **10 motion durations** → 4 tokens. 56 of 80 transitions specify none.
 - [ ] **[verified]** **`transition` vs `transition-all`** — same thing, two spellings, split 25/19.
 - [ ] **[verified]** **5 focus patterns across 3 mechanisms** → one ring token. One references `ring-offset-zinc-950`, which is not the page background.
 - [ ] **[verified]** **Two card hover models** — 4 cards lift, 8 don't.
-- [ ] **[verified]** **The entire shadcn token layer is bypassed** — 36 references, all inside the unused `button.tsx`; `body { background: #050505 }` overrides the one base rule that consumed a token.
+- [x] **[verified]** **The entire shadcn token layer is bypassed** — 36 references, all inside the unused `button.tsx`; `body { background: #050505 }` overrides the one base rule that consumed a token.
 
 ---
 

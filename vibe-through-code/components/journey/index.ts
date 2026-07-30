@@ -1,8 +1,5 @@
-export { JourneyTimeline } from "./JourneyTimeline";
-export { JourneyEvent } from "./JourneyEvent";
-export { CurrentStatus } from "./CurrentStatus";
+export { Bench } from "./bench";
 export type {
-    JourneyTimelineProps,
     JourneyEventData,
     CurrentStatusData,
     EventType,

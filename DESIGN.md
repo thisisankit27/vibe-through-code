@@ -130,15 +130,25 @@ Recency must be **computed from a timestamp, never hand-applied.** If a componen
 - Motion reports state; the counter never animates upward on load
 - Colour is semantic — time and money are the only things hue exists to show
 
-### Under test — reversible until the first homepage review
+### Hypotheses — resolved on the Journey rebuild, 2026-07-31
 
-The leading configuration is **paper ground, text serif for prose, ruled rows.** These are hypotheses, not commitments. The recency rule is orthogonal to all three, so none of them can invalidate the direction.
-
-| | Claim | If wrong |
+| | Claim | Outcome |
 |---|---|---|
-| **H1** ground polarity | Light differentiates and enforces honesty better than dark | Flip polarity; everything else survives |
-| **H2** prose face | A text serif signals *document* rather than *product page* | Keep a sans; the mono/prose split survives |
-| **H3** entry container | Ruled rows scale to ~800 entries where cards do not | Render entries as cards; the hierarchy survives |
+| **H1** ground polarity | Light differentiates and enforces honesty better than dark | **Paper.** Validated on the rebuilt Journey page. Dark ships as a designed theme via `.theme-dark`. |
+| **H3** entry container | Ruled rows scale where cards do not | **Rows.** Note the scale review found rows and cards produce *byte-identical* HTML — the entry owns no container — so this was a design judgement, not a performance one. `presentation="cards"` stays in `Ledger` as the documented counterfactual. |
+| **H2** prose face | A text serif signals *document* rather than *product page* | **Open, and untested.** `--face-prose` is still Geist Sans. No serif has been rendered. Do not treat as settled. |
+
+**What the scale review actually showed** (25 / 250 / 800 synthetic entries, via `/lab/ledger`):
+
+| Entries | HTML | Lit edge | Archive | Lit share |
+|---|---|---|---|---|
+| 25 | 91 KB | 14 | 11 | 56% |
+| 250 | 658 KB | 14 | 236 | 5.6% |
+| 800 | 2074 KB | 14 | 786 | 1.7% |
+
+The lit edge stays constant while the archive grows around it. That ratio is the identity, and it confirmed the reason the direction was chosen: it gets *more* distinctive with volume.
+
+**One caveat it also surfaced:** the design scales but the delivery does not. 2 MB of HTML at 800 entries is too much for one document — the ledger needs pagination or virtualization past roughly 250 entries. At ~1.5 entries/day that is about five months out.
 
 **Reversibility is a requirement on the token system, not a hope.** Three rules make it cheap:
 

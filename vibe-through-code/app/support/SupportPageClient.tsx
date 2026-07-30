@@ -35,17 +35,17 @@ export default function SupportPageClient({
     };
 
     return (
-        <main className="min-h-screen bg-[#0A0A0A]">
+        <main className="min-h-screen bg-surface-base">
             <Container>
                 {/* Page header */}
                 <div className="pt-20 pb-10 text-center md:pt-24 md:pb-14">
-                    <p className="text-sm uppercase tracking-[0.3em] text-emerald-400">
+                    <p className="text-sm uppercase tracking-[0.3em] text-accent">
                         Support
                     </p>
-                    <h1 className="mt-3 text-5xl font-bold tracking-tight text-white">
+                    <h1 className="mt-3 text-5xl font-bold tracking-tight text-ink-primary">
                         The Conduit
                     </h1>
-                    <p className="mt-6 text-neutral-400">
+                    <p className="mt-6 text-ink-secondary">
                         Help keep the journey moving.
                     </p>
                 </div>

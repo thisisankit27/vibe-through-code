@@ -60,13 +60,13 @@ export function SupportChapter({
 
                 {/* Right: Narrative */}
                 <div className="px-4 md:px-0">
-                    <p className="text-sm uppercase tracking-[0.3em] text-emerald-400">
+                    <p className="text-sm uppercase tracking-[0.3em] text-accent">
                         {tier.label}
                     </p>
-                    <h2 className="mt-3 text-4xl font-bold tracking-tight text-white md:text-5xl">
+                    <h2 className="mt-3 text-4xl font-bold tracking-tight text-ink-primary md:text-5xl">
                         {tier.title}
                     </h2>
-                    <p className="mt-4 text-lg text-neutral-400">
+                    <p className="mt-4 text-lg text-ink-secondary">
                         {tier.description}
                     </p>
 
@@ -78,8 +78,8 @@ export function SupportChapter({
                                 className={cn(
                                     "text-sm leading-relaxed transition-colors duration-700",
                                     progress > (i + 1) * 0.25
-                                        ? "text-neutral-200"
-                                        : "text-neutral-500"
+                                        ? "text-ink-primary"
+                                        : "text-ink-tertiary"
                                 )}
                             >
                                 {line}
@@ -98,15 +98,15 @@ export function SupportChapter({
                         type="button"
                         onClick={() => onSelect(tier)}
                         className={cn(
-                            "group mt-10 inline-flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.03] px-5 py-2.5",
-                            "text-sm font-medium text-neutral-300 transition-all duration-200",
-                            "hover:border-emerald-500/30 hover:bg-emerald-500/5 hover:text-emerald-400",
-                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+                            "group mt-10 inline-flex items-center gap-2 rounded-lg border border-rule-standard bg-surface-raised px-5 py-2.5",
+                            "text-sm font-medium text-ink-secondary transition-all duration-200",
+                            "hover:border-accent/30 hover:bg-accent/5 hover:text-accent",
+                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30"
                         )}
                     >
                         <span>
                             Support {tier.id === "builder" ? "this journey" : "this session"} — {tier.currency}{tier.price}
-                            {tier.frequency && <span className="text-neutral-500">{tier.frequency}</span>}
+                            {tier.frequency && <span className="text-ink-tertiary">{tier.frequency}</span>}
                         </span>
                         <svg
                             width="16"

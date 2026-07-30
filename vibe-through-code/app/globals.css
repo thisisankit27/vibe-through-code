@@ -190,6 +190,46 @@
 }
 
 /*
+  ── SVG illustration palette ──────────────────────────────────────
+
+  The support capsules are hand-drawn SVG and cannot use Tailwind
+  utilities. This is the documented token set AGENTS.md exempts — the
+  only place raw colour is permitted, and only here.
+
+  Line work derives from --ink-primary so the drawings invert with the
+  ground; previously they were rgba(255,255,255,…), which would have
+  rendered them invisible on paper.
+
+  Object colours (coffee, heat) are deliberately literal: coffee is
+  brown on any ground. They are named rather than inlined so they are
+  greppable and reviewable.
+*/
+:root,
+.theme-paper {
+  --svg-line-10: color-mix(in srgb, var(--ink-primary) 10%, transparent);
+  --svg-line-15: color-mix(in srgb, var(--ink-primary) 15%, transparent);
+  --svg-line-20: color-mix(in srgb, var(--ink-primary) 20%, transparent);
+  --svg-line-25: color-mix(in srgb, var(--ink-primary) 25%, transparent);
+  --svg-line-30: color-mix(in srgb, var(--ink-primary) 30%, transparent);
+  --svg-line-35: color-mix(in srgb, var(--ink-primary) 35%, transparent);
+  --svg-line-50: color-mix(in srgb, var(--ink-primary) 50%, transparent);
+
+  --svg-signal-10: color-mix(in srgb, var(--accent-signal) 10%, transparent);
+  --svg-signal-25: color-mix(in srgb, var(--accent-signal) 25%, transparent);
+  --svg-signal-40: color-mix(in srgb, var(--accent-signal) 40%, transparent);
+  --svg-signal-50: color-mix(in srgb, var(--accent-signal) 50%, transparent);
+  --svg-signal-80: color-mix(in srgb, var(--accent-signal) 80%, transparent);
+
+  --svg-scrim-50: color-mix(in srgb, var(--surface-base) 50%, transparent);
+
+  /* Object colours — not themed. */
+  --svg-coffee: rgb(139 90 60 / 0.9);
+  --svg-coffee-dim: rgb(139 90 60 / 0.8);
+  --svg-coffee-light: rgb(160 110 70 / 0.4);
+  --svg-heat: rgb(251 191 36 / 0.3);
+}
+
+/*
   Recency — the organizing rule of Direction D.
 
   Set `data-recency` from the utility in lib/recency.ts. Never compute
