@@ -25,11 +25,16 @@
   --color-surface-base: var(--surface-base);
   --color-surface-raised: var(--surface-raised);
   --color-surface-sunk: var(--surface-sunk);
+  --color-surface-hover: var(--surface-hover);
 
   /* ── Ink ───────────────────────────────────────────────────────── */
   --color-ink-primary: var(--ink-primary);
   --color-ink-secondary: var(--ink-secondary);
   --color-ink-tertiary: var(--ink-tertiary);
+  --color-ink-on-accent: var(--ink-on-accent);
+
+  /* ── Scrim — dims the page behind an overlay on either ground ──── */
+  --color-scrim: var(--scrim);
 
   /* ── Rules — the primary structural device ─────────────────────── */
   --color-rule-hairline: var(--rule-hairline);
@@ -112,10 +117,16 @@
   --surface-base: #0b0b0d;
   --surface-raised: #141417;
   --surface-sunk: #08080a;
+  /* One step more prominent than raised — on dark that means lighter. */
+  --surface-hover: #1e1e22;
 
   --ink-primary: #f4f4f2;
   --ink-secondary: #a8a8a4;
   --ink-tertiary: #868682;
+  /* Sits on --accent. Bright amber needs dark ink. */
+  --ink-on-accent: #0b0b0d;
+
+  --scrim: rgb(0 0 0 / 0.7);
 
   --rule-hairline: #1f1f23;
   --rule-standard: #2c2c31;
@@ -146,11 +157,18 @@
   --surface-base: #fafaf8;
   --surface-raised: #ffffff;
   --surface-sunk: #f1f0ec;
+  /* Designed, not inverted: on paper "more prominent" reads as a tint,
+     not as lighter — there is nowhere lighter to go than white. */
+  --surface-hover: #f2f1ec;
 
   --ink-primary: #16161a;
   --ink-secondary: #5a5a5f;
   /* 4.85:1 — #74747a read nicer but landed at 4.44:1. */
   --ink-tertiary: #6e6e74;
+  /* Sits on --accent. Dark ochre needs light ink. */
+  --ink-on-accent: #fafaf8;
+
+  --scrim: rgb(0 0 0 / 0.5);
 
   --rule-hairline: #e4e3de;
   --rule-standard: #d5d4ce;
@@ -200,6 +218,73 @@
   --entry-ink: var(--ink-secondary);
   --entry-rule: var(--rule-hairline);
   --entry-signal: transparent;
+}
+
+/*
+  ── The ledger ────────────────────────────────────────────────────
+
+  H3 IS RUN FROM HERE. `LedgerEntry` renders content only — it groups
+  date / type / body / meta and owns none of its container. Both
+  presentations are defined below, and switching is one word on the
+  parent: <Ledger presentation="rows" | "cards">.
+
+  Density is a function of recency, which is the identity in miniature:
+  archive rows drop their description and tighten, so a long record
+  stays scannable while the live edge stays generous.
+*/
+@layer components {
+  .ledger-entry {
+    --entry-pad-y: --spacing(3);
+  }
+
+  /* Rows — the leading presentation. Scales to hundreds of entries. */
+  [data-ledger="rows"] .ledger-entry {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: --spacing(1) --spacing(4);
+    padding-block: var(--entry-pad-y);
+    border-bottom: 1px solid var(--entry-rule);
+  }
+
+  @media (width >= 48rem) {
+    [data-ledger="rows"] .ledger-entry {
+      grid-template-columns: 7.5rem 8.5rem 1fr auto;
+      align-items: baseline;
+    }
+  }
+
+  /* Cards — the H3 counterfactual. */
+  [data-ledger="cards"] .ledger-entry {
+    display: flex;
+    flex-direction: column;
+    gap: --spacing(2);
+    padding: --spacing(5);
+    border: 1px solid var(--entry-rule);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface-raised);
+  }
+
+  [data-ledger="cards"] {
+    display: grid;
+    gap: --spacing(4);
+  }
+
+  @media (width >= 48rem) {
+    [data-ledger="cards"] {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* Archive is denser — the record compacts as it ages. The description
+     is omitted in the component, not hidden here; see LedgerEntry. */
+  .ledger-entry[data-recency="archive"] {
+    --entry-pad-y: --spacing(2);
+  }
+
+  /* The live edge is the only place the signal colour appears. */
+  .ledger-entry[data-recency="live"] .ledger-entry__marker {
+    color: var(--entry-signal);
+  }
 }
 
 @layer base {

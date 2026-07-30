@@ -7,6 +7,19 @@ import type {
     JourneyEventData,
 } from "@/components/journey";
 
+/**
+ * A Postgres DATE column arrives from the driver as a JS `Date`, but
+ * `JourneyEventData.date` is typed `string` and is rendered directly.
+ * Normalising here keeps the type honest — rendering the raw value threw
+ * "Objects are not valid as a React child" at runtime while type-checking
+ * cleanly, because the type was lying about the shape.
+ */
+function toISODate(value: unknown): string {
+    if (value instanceof Date) return value.toISOString().slice(0, 10);
+    if (typeof value === "string") return value.slice(0, 10);
+    return "";
+}
+
 export async function getJourneyEvents(): Promise<JourneyEventData[]> {
     const rows = await sql`
         SELECT *
@@ -19,8 +32,8 @@ export async function getJourneyEvents(): Promise<JourneyEventData[]> {
         type: row.type,
         title: row.title,
         description: row.description,
-        date: row.date,
-        time: row.time ?? undefined,
+        date: toISODate(row.date),
+        time: row.time ? String(row.time).slice(0, 5) : undefined,
         href: row.href ?? undefined,
         badge: row.badge ?? undefined,
         meta: row.meta ?? [],
