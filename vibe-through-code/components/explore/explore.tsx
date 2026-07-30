@@ -16,14 +16,14 @@ const items = [
     {
         title: "Projects",
         description: "Every project built during the journey.",
-        href: "#",
+        href: "/projects",
         icon: FolderKanban,
         external: false,
     },
     {
         title: "Journey",
         description: "Follow the path from $0 to $1,000,000.",
-        href: "#",
+        href: "/journey",
         icon: Route,
         external: false,
     },
@@ -91,7 +91,7 @@ export default function Explore() {
                                 </p>
 
                                 <div className="mt-8 flex items-center text-sm font-medium text-emerald-400">
-                                    {item.href === "#" ? "Coming Soon" : "Explore"}
+                                    Explore
 
                                     <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                                 </div>

@@ -71,10 +71,10 @@ export function ReceiptPanel({ isOpen, onClose, tier }: ReceiptPanelProps) {
                     <div className="rounded border border-emerald-500/20 bg-emerald-500/5 p-4">
                         <p className="text-xs text-emerald-400">Status</p>
                         <p className="mt-1 text-sm text-neutral-300">
-                            Payment integration coming soon.
+                            Not charged. Checkout is not wired yet.
                         </p>
                         <p className="mt-2 text-[10px] text-neutral-500">
-                            This receipt is a placeholder. Real checkout will be wired here.
+                            This receipt records an intent, not a payment.
                         </p>
                     </div>
                     <div className="my-6 border-t border-dashed border-white/10" />

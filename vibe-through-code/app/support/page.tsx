@@ -1,21 +1,35 @@
 import { sql } from "@/lib/db";
+import { getSiteState } from "@/lib/site";
 import type {
     SupportTier,
     BuilderBenefit,
-    SessionManifest,
 } from "@/types/support";
 
 import SupportPageClient from "./SupportPageClient";
 
 export const dynamic = "force-dynamic";
 
-export default async function SupportPage() {
-    const rows = await sql`SELECT * FROM support_tiers ORDER BY price`;
+interface SupportTierRow {
+    id: string;
+    title: string;
+    price: number;
+    currency: string;
+    frequency: string | null;
+    label: string;
+    description: string;
+    narrative: string[] | string | null;
+}
 
-    const supportTiers: SupportTier[] = rows.map((row: any) => ({
+export default async function SupportPage() {
+    const [rows, state] = await Promise.all([
+        sql`SELECT * FROM support_tiers ORDER BY price`,
+        getSiteState(),
+    ]);
+
+    const supportTiers: SupportTier[] = (rows as SupportTierRow[]).map((row) => ({
         id: row.id,
         title: row.title,
-        price: row.price / 100,                 // paise → rupees
+        price: row.price / 100,                 // minor units → major units
         currency: row.currency === "INR" ? "₹" : row.currency,
         frequency: row.frequency ?? undefined,
         label: row.label,
@@ -48,15 +62,12 @@ export default async function SupportPage() {
         },
     ];
 
-    const sessionManifest: SessionManifest = {
-        coffee: 12,
-        stream: 3,
-        builders: 1,
-    };
-
+    // No `payments` table exists yet, so there are provably zero supporters.
+    // `sessionManifest` stays absent until it can be derived from a real
+    // query — the terminus renders its honest zero state meanwhile.
     return <SupportPageClient
         supportTiers={supportTiers}
         builderBenefits={builderBenefits}
-        sessionManifest={sessionManifest}
+        currentDay={Number(state.current_day ?? 0)}
     />;
 }

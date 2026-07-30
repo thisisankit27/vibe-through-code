@@ -72,7 +72,7 @@ export const streamHistory = [
         url: "https://youtube.com/live/...", // update me
         date: "2026-07-16",
         duration: "3h 45m",
-        viewers: 280,
+        viewers: 0,
         revenue: 0,
         commits: 9,
         focus: "Design the Journey timeline",
@@ -84,7 +84,7 @@ export const streamHistory = [
         url: "https://youtube.com/live/...", // update me
         date: "2026-07-15",
         duration: "4h 10m",
-        viewers: 310,
+        viewers: 0,
         revenue: 0,
         commits: 11,
         focus: "Build the Projects page",
@@ -96,7 +96,7 @@ export const streamHistory = [
         url: "https://youtube.com/live/...", // update me
         date: "2026-07-14",
         duration: "3h 30m",
-        viewers: 250,
+        viewers: 0,
         revenue: 0,
         commits: 8,
         focus: "Set up Next.js + Tailwind + shadcn/ui",
@@ -108,7 +108,7 @@ export const streamHistory = [
         url: "https://youtube.com/live/...", // update me
         date: "2026-07-13",
         duration: "5h 00m",
-        viewers: 400,
+        viewers: 0,
         revenue: 0,
         commits: 7,
         focus: "Launch vibethroughcode.com",
