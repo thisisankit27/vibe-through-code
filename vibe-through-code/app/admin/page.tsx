@@ -303,6 +303,26 @@ function Modal({ tab, editing, onClose, onSaved }: {
                 }
             }
 
+            // Number inputs hand back strings — coerce so integer columns
+            // receive integers rather than relying on Postgres to cast.
+            for (const field of getFormFields(tab)) {
+                if (field.type !== "number") continue;
+
+                const val = payload[field.name];
+                if (typeof val !== "string") continue;
+
+                if (val.trim() === "") {
+                    payload[field.name] = null;
+                    continue;
+                }
+
+                const num = Number(val);
+                if (Number.isNaN(num)) {
+                    throw new Error(`"${field.label}" must be a number.`);
+                }
+                payload[field.name] = num;
+            }
+
             // Auto-generate event ID
             if (tab === "events" && !editing) {
                 const rand = Math.floor(Math.random() * 900) + 100;
@@ -359,6 +379,18 @@ function Modal({ tab, editing, onClose, onSaved }: {
                                         onChange={(v) => setForm({ ...form, [f.name]: v })}
                                     />
                                 </div>
+                            ) : f.type === "boolean" ? (
+                                <label className="mt-1 flex cursor-pointer items-center gap-2">
+                                    <input
+                                        type="checkbox"
+                                        checked={form[f.name] === true}
+                                        onChange={(e) => setForm({ ...form, [f.name]: e.target.checked })}
+                                        className="h-4 w-4 cursor-pointer accent-emerald-500"
+                                    />
+                                    <span className="text-sm text-neutral-300">
+                                        {form[f.name] === true ? "Yes" : "No"}
+                                    </span>
+                                </label>
                             ) : f.type === "textarea" ? (
                                 <textarea
                                     value={form[f.name] ?? ""}
@@ -471,7 +503,9 @@ function getFormFields(tab: Tab): { name: string; label: string; type: string; o
             { name: "duration", label: "Duration", type: "text" },
             { name: "viewers", label: "Viewers", type: "number" },
             { name: "commits", label: "Commits", type: "number" },
+            { name: "revenue", label: "Revenue (cents)", type: "number" },
             { name: "focus", label: "Focus", type: "text" },
+            { name: "isLive", label: "Streaming live", type: "boolean" },
         ];
         case "people": return [
             { name: "id", label: "ID", type: "text" },
@@ -482,6 +516,7 @@ function getFormFields(tab: Tab): { name: string; label: string; type: string; o
             { name: "github", label: "GitHub", type: "text" },
             { name: "linkedin", label: "LinkedIn", type: "text" },
             { name: "website", label: "Website", type: "text" },
+            { name: "isFounder", label: "Founder", type: "boolean" },
         ];
         case "projects": return [
             { name: "id", label: "ID", type: "text" },

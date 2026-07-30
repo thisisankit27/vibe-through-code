@@ -3,9 +3,34 @@
 import { sql } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
+/* ── Row shape ──────────────────────────────────────────── */
+
+/**
+ * Postgres returns snake_case column names, but the admin UI and every write
+ * action below address fields in camelCase (`data.isLive`, `data.isFounder`,
+ * `data.startedOn`). Reading a row without normalising left those keys
+ * undefined, so saving an unmodified row silently wrote `is_live = false`,
+ * `is_founder = false` and `started_on = null`.
+ *
+ * Every read goes through `camelize` so one convention holds end to end.
+ */
+type Row = Record<string, unknown>;
+
+function toCamelCase(key: string): string {
+    return key.replace(/_([a-z0-9])/g, (_, char: string) => char.toUpperCase());
+}
+
+function camelize(rows: Row[]): Row[] {
+    return rows.map((row) =>
+        Object.fromEntries(
+            Object.entries(row).map(([key, val]) => [toCamelCase(key), val])
+        )
+    );
+}
+
 /* ── Events ─────────────────────────────────────────────── */
 export async function getEvents() {
-    return sql`SELECT * FROM events ORDER BY date DESC`;
+    return camelize(await sql`SELECT * FROM events ORDER BY date DESC`);
 }
 export async function createEvent(data: any) {
     await sql`
@@ -36,7 +61,7 @@ export async function deleteEvent(id: string) {
 
 /* ── Streams ────────────────────────────────────────────── */
 export async function getStreams() {
-    return sql`SELECT * FROM streams ORDER BY date DESC`;
+    return camelize(await sql`SELECT * FROM streams ORDER BY date DESC`);
 }
 export async function createStream(data: any) {
     await sql`
@@ -69,7 +94,7 @@ export async function deleteStream(id: string) {
 
 /* ── People ─────────────────────────────────────────────── */
 export async function getPeople() {
-    return sql`SELECT * FROM people ORDER BY name`;
+    return camelize(await sql`SELECT * FROM people ORDER BY name`);
 }
 export async function createPerson(data: any) {
     await sql`
@@ -100,7 +125,7 @@ export async function deletePerson(id: string) {
 
 /* ── Projects ───────────────────────────────────────────── */
 export async function getProjects() {
-    return sql`SELECT * FROM projects ORDER BY title`;
+    return camelize(await sql`SELECT * FROM projects ORDER BY title`);
 }
 export async function createProject(data: any) {
     await sql`
@@ -130,7 +155,7 @@ export async function deleteProject(id: string) {
 
 /* ── Support Tiers ──────────────────────────────────────── */
 export async function getTiers() {
-    return sql`SELECT * FROM support_tiers ORDER BY price`;
+    return camelize(await sql`SELECT * FROM support_tiers ORDER BY price`);
 }
 export async function createTier(data: any) {
     await sql`
@@ -160,7 +185,7 @@ export async function deleteTier(id: string) {
 
 /* ── Site State ─────────────────────────────────────────── */
 export async function getSiteState() {
-    return sql`SELECT * FROM site_state ORDER BY key`;
+    return camelize(await sql`SELECT * FROM site_state ORDER BY key`);
 }
 export async function updateSiteState(key: string, value: string) {
     await sql`

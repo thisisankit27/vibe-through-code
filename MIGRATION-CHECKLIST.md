@@ -133,7 +133,17 @@ The core visual debt. Do not resolve by hand — resolve by building the token l
 - [ ] **[verified]** Auth is bypassed entirely when `NODE_ENV === "development"` unless `FORCE_ADMIN_AUTH` is set. Intentional, but worth a second look given `.env.local` sits beside a production database URL.
 - [ ] **[verified]** `atob(authValue)` is unguarded — a malformed `Authorization: Basic !!!` header throws inside middleware.
 - [ ] **[verified]** Credentials compared with `===` rather than a timing-safe comparison. Minor, but it is a password check.
-- [ ] **[verified]** `app/admin/actions.ts` writes `revenue` and `is_live` on both insert and update (`revenue = ${data.revenue ?? 0}`, `is_live = ${data.isLive ?? false}`), but **`getFormFields("streams")` omits both** — it exposes only `id`, `day`, `title`, `url`, `date`, `duration`, `viewers`, `commits`, `focus`. Consequences: a stream created via admin always gets `revenue = 0` and `is_live = false`, and neither column can ever be changed through the UI. `is_live` is the flag that drives the live indicator on `/journey`, so **the live state cannot currently be toggled from admin at all** — it is only settable via `site_state.is_live` or direct SQL. Add both fields (`is_live` as a boolean/select).
+- [x] **[verified]** `app/admin/actions.ts` writes `revenue` and `is_live` but `getFormFields("streams")` omitted both, so neither could be set from the UI. **Fixed** — added `revenue` (number) and `isLive` (boolean) fields, plus an `isFounder` boolean for people, plus a checkbox renderer and submit-time numeric coercion.
+
+- [x] **[verified] snake_case / camelCase mismatch — silent data loss on every edit.** Found while fixing the above, and worse than it. The `get*` actions used `SELECT *`, returning snake_case keys, while every write action reads camelCase (`data.isLive`, `data.isFounder`, `data.startedOn`). Those keys were therefore `undefined`, so the `?? false` / `?? null` fallbacks fired and **saving an otherwise-untouched row wiped the column**:
+
+  | Column | Verified effect of any edit |
+  |---|---|
+  | `people.is_founder` | `true` → `false` — would have blanked the `/about` founder card |
+  | `projects.started_on` | `2026-07-26` → `null` — breaks `/projects` ordering and the displayed date |
+  | `streams.is_live` | → `false` |
+
+  It also explains why the admin people table rendered `—` in the `isFounder` column for every row. **Fixed** by normalising all six reads through a `camelize()` helper in `actions.ts`, so one naming convention holds end to end. Verified against live rows: `ankit` now round-trips `is_founder = true` and project `2` retains `started_on`.
 
 ---
 
