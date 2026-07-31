@@ -452,3 +452,63 @@
     }
   }
 }
+
+/*
+  ── Capsule idle motion ───────────────────────────────────────────
+
+  The /support illustrations used to interpolate every part of
+  themselves from a 0→1 `progress` value mapped to scroll position, so
+  all three were build-up animations with the reader as the motor: the
+  cup filled, the reels spun up, the building rose. That reads as a
+  loading bar wearing a costume, and it made the reader responsible for
+  driving it.
+
+  These drawings now render at rest, complete, and carry exactly one
+  slow loop each — the machine is running whether or not anyone is
+  watching, which is what makes it feel drawn rather than triggered.
+
+  Durations are deliberately long. Anything quick enough to notice is
+  quick enough to compete with the text beside it, and the whole point
+  of this section is that it supports reading rather than interrupting
+  it. These are outside the four transition-duration tokens on purpose:
+  those govern state changes responding to a user, and nothing here
+  responds to anything.
+
+  All three are CSS rather than SMIL, so the reduced-motion block above
+  reaches them. SMIL is not styleable and silently ignored that rule.
+*/
+
+@keyframes capsule-steam {
+  0%   { opacity: 0;    transform: translateY(0)      scale(0.9); }
+  25%  { opacity: 0.35; }
+  100% { opacity: 0;    transform: translateY(-18px)  scale(1.25); }
+}
+
+@keyframes capsule-reel {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes capsule-beacon {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 1; }
+}
+
+.capsule-steam {
+  animation: capsule-steam 5s ease-out infinite;
+}
+/* Staggered so the three plumes never pulse in unison. */
+.capsule-steam-b { animation-delay: 1.7s; }
+.capsule-steam-c { animation-delay: 3.4s; }
+
+/* One revolution every 20s. A reel that turns fast is a spinner, and a
+   spinner means "wait", which is the opposite of the intent. */
+.capsule-reel {
+  animation: capsule-reel 20s linear infinite;
+}
+.capsule-reel-reverse {
+  animation: capsule-reel 20s linear infinite reverse;
+}
+
+.capsule-beacon {
+  animation: capsule-beacon 4s ease-in-out infinite;
+}

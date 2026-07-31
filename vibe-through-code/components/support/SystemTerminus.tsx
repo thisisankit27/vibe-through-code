@@ -29,7 +29,10 @@ export function SystemTerminus({
 
     return (
         <section className="relative pb-24 pt-16 md:pb-32 md:pt-24">
-            <div className="mx-auto max-w-2xl px-6 text-center">
+            {/* No `px-*` — the page's Container already supplies the
+                horizontal inset, and setting it again here stacked the
+                padding. */}
+            <div className="mx-auto max-w-2xl text-center">
                 {/*
                     The endpoint. A ringed marker rather than a bloom —
                     depth is rules and surface steps in both themes, so

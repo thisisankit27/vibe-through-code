@@ -1,123 +1,119 @@
 "use client";
 
-import { useRef } from "react";
-import { useChapterProgress } from "./useChapterProgress";
-import { Conduit } from "./Conduit";
+import { actionFor } from "./tier-actions";
 import { CoffeeCapsule } from "./CoffeeCapsule";
 import { FilmCapsule } from "./FilmCapsule";
 import { BuildCapsule } from "./BuildCapsule";
-import { BlueprintSchematic } from "./BlueprintSchematic";
-import type {
-    SupportTier,
-    BuilderBenefit,
-} from "@/types/support";
-import { cn } from "@/lib/utils";
+import type { SupportTier } from "@/types/support";
 
 interface SupportChapterProps {
     tier: SupportTier;
-    index: number;
-    total: number;
-    builderBenefits: BuilderBenefit[];
+    /** `site_state.first_builder_on`; changes the recurring tier's action. */
+    firstBuilderOn?: string;
     onSelect: (tier: SupportTier) => void;
 }
 
+/**
+ * One entry in "What each one funds": a drawing, its notes, and a way
+ * to act on it.
+ *
+ * Nothing here responds to scroll. The chapter used to hold a
+ * `useInViewProgress` hook feeding a 0→1 value into the capsule, the
+ * conduit and a schematic, so the whole section assembled itself as you
+ * moved down the page. The drawings now render at rest and carry their
+ * own slow idle loops (see `globals.css`), which is what makes them feel
+ * drawn rather than triggered.
+ *
+ * The capsule also no longer sticks. `md:sticky md:top-1/3` pinned the
+ * illustration while the narrative scrolled past it, which is another
+ * scroll effect and the reason each chapter needed `py-20` of height to
+ * work at all. Without it the drawing simply sits beside its notes and
+ * the section loses roughly a third of its length.
+ *
+ * `BlueprintSchematic` is gone. It listed the same four benefits the
+ * decision zone already compares, and its only distinct contribution was
+ * revealing them on scroll. With the reveal removed it was a restatement
+ * in a box — and it was the reason the Builder chapter had a fourth
+ * element the other two did not, which is what made the section read as
+ * uneven.
+ */
 export function SupportChapter({
     tier,
-    index,
-    total,
-    builderBenefits,
+    firstBuilderOn,
     onSelect,
 }: SupportChapterProps) {
-    const ref = useRef<HTMLElement>(null);
-    const { progress } = useChapterProgress(ref);
-
-    const isFirst = index === 0;
-    const isLast = index === total - 1;
-
-    const CapsuleComponent =
+    const Capsule =
         tier.id === "coffee"
             ? CoffeeCapsule
             : tier.id === "stream"
-                ? FilmCapsule
-                : BuildCapsule;
+              ? FilmCapsule
+              : BuildCapsule;
 
     return (
-        <section ref={ref} className="relative">
-            <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 py-20 md:grid-cols-[260px_1fr] md:gap-12">
-                {/* Left: Capsule (mobile) / Conduit + Capsule (desktop) */}
-                <div className="flex justify-center md:block">
-                    <div className="flex flex-col items-center md:sticky md:top-1/3">
-                        {/* Capsule wrapper: explicit min-height prevents Safari flex collapse */}
-                        <div className="flex shrink-0 items-center justify-center md:absolute md:left-1/2 md:top-0 md:-translate-x-1/2 md:pt-8">
-                            <CapsuleComponent progress={progress} />
-                        </div>
-                        {/* Conduit: hidden on mobile, visible rail on desktop */}
-                        <div className="hidden md:block">
-                            <Conduit isFirst={isFirst} isLast={isLast} progress={progress} />
-                        </div>
-                    </div>
+        <section className="relative border-b border-rule-hairline py-10 last:border-b-0 md:py-12">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-[13rem_1fr] md:gap-10">
+                {/*
+                    Drawing.
+
+                    The `Conduit` that used to sit here — a vertical rail
+                    with a scroll-driven glow and a counter-rotating
+                    hexagon at each end — is gone entirely. Stripped of
+                    the glow and the hexagons it was a bare hairline, and
+                    a hairline behind a transparent drawing runs straight
+                    through it. The horizontal rule between chapters
+                    already does the connecting work, in the grammar the
+                    ledger uses.
+                */}
+                <div className="flex items-start justify-center md:justify-start">
+                    <Capsule />
                 </div>
 
-                {/* Right: Narrative */}
-                <div className="px-4 md:px-0">
-                    <p className="text-sm uppercase tracking-[0.3em] text-accent">
-                        {tier.label}
-                    </p>
-                    <h2 className="mt-3 text-4xl font-bold tracking-tight text-ink-primary md:text-5xl">
+                {/* Notes */}
+                <div className="max-w-prose">
+                    <h3 className="text-section font-bold tracking-tight text-ink-primary">
                         {tier.title}
-                    </h2>
-                    <p className="mt-4 text-lg text-ink-secondary">
-                        {tier.description}
-                    </p>
+                    </h3>
 
-                    {/* Narrative lines */}
-                    <div className="mt-8 space-y-4">
+                    {/* `body` 16px in the serif prose face. DESIGN.md names
+                        14px secondary copy as why the site reads cramped,
+                        and cramped reads cold on the page that is asking
+                        someone for something. */}
+                    <div className="mt-4 space-y-3">
                         {tier.narrative.map((line, i) => (
-                            <p
-                                key={i}
-                                className={cn(
-                                    "text-sm leading-relaxed transition-colors duration-700",
-                                    progress > (i + 1) * 0.25
-                                        ? "text-ink-primary"
-                                        : "text-ink-tertiary"
-                                )}
-                            >
+                            <p key={i} className="text-body text-ink-secondary">
                                 {line}
                             </p>
                         ))}
                     </div>
 
-                    {/* Builder blueprint */}
-                    {tier.id === "builder" && <BlueprintSchematic
-                        progress={progress}
-                        builderBenefits={builderBenefits}
-                    />}
+                    {/*
+                        A link, not a button. The ruled controls in the
+                        decision zone above are where this action lives;
+                        repeating them at equal weight here would put six
+                        competing controls on one page. But a reader who
+                        has just finished the argument for this tier should
+                        not have to scroll back to act.
 
-                    {/* Inline CTA button */}
+                        The price is deliberately absent — it is a field,
+                        and it belongs in the aligned slot above where it
+                        can be compared, not restated inside prose.
+                    */}
                     <button
                         type="button"
                         onClick={() => onSelect(tier)}
-                        className={cn(
-                            "group mt-10 inline-flex items-center gap-2 rounded-lg border border-rule-standard bg-surface-raised px-5 py-2.5",
-                            "text-sm font-medium text-ink-secondary transition-all duration-200",
-                            "hover:border-accent/30 hover:bg-accent/5 hover:text-accent",
-                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30"
-                        )}
+                        className="mt-5 inline-flex items-center gap-1.5 text-meta font-medium text-ink-secondary underline-offset-4 transition-colors duration-100 ease-out hover:text-accent hover:underline"
                     >
-                        <span>
-                            Support {tier.id === "builder" ? "this journey" : "this session"} — {tier.currency}{tier.price}
-                            {tier.frequency && <span className="text-ink-tertiary">{tier.frequency}</span>}
-                        </span>
+                        {actionFor(tier, firstBuilderOn)}
                         <svg
-                            width="16"
-                            height="16"
+                            width="14"
+                            height="14"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="2"
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            className="transition-transform duration-200 group-hover:translate-x-0.5"
+                            aria-hidden="true"
                         >
                             <path d="M5 12h14" />
                             <path d="m12 5 7 7-7 7" />
