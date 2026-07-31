@@ -92,6 +92,8 @@ All confirmed by grep: zero importers.
 
 - [x] **[decision]** `components/ui/button.tsx` — 6 variants × 9 sizes, **zero imports**. Do **not** delete. It is well-built and is the intended foundation; the fix is to trim it to 4 variants / 3 sizes and *adopt* it. See `DESIGN.md`.
 
+  ⚠️ **Fix before adopting:** the `ruled` variant (line 32) uses `border-rule-standard`, which measures **1.42:1 against `--surface-base` in both themes** — under the 3:1 WCAG 1.4.11 asks of a control boundary. A ruled button whose rule is invisible renders as plain text. Found 2026-07-31 while building the `/support` tier controls, which hit the same problem and now use `border-ink-tertiary` (4.85:1 paper / 5.14:1 dark). The rule tokens are for separating *content*; they are too quiet to bound a *control*. Currently harmless because nothing imports this file — but adopting it as-is would propagate the defect to every button on the site.
+
 ---
 
 ## 4. Duplicated design systems

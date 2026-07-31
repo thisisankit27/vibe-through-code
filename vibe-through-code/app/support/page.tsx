@@ -1,11 +1,8 @@
 import { sql } from "@/lib/db";
 import { getSiteState } from "@/lib/site";
-import type {
-    SupportTier,
-    BuilderBenefit,
-} from "@/types/support";
+import type { SupportTier, BuilderBenefit } from "@/types/support";
 
-import SupportPageClient from "./SupportPageClient";
+import SupportPageClient from "./support-page-client";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +36,17 @@ export default async function SupportPage() {
             : JSON.parse(row.narrative ?? "[]"),
     }));
 
+    // Cadence is the one axis on which these rows genuinely differ in
+    // kind, so it is what the decision zone groups by. `frequency` is
+    // null for a one-time contribution and "/month" for a membership.
+    const oneTime = supportTiers.filter((tier) => !tier.frequency);
+    const ongoing = supportTiers.filter((tier) => tier.frequency);
+
+    // Still hardcoded, and still a violation of DATA-INTEGRITY.md:31
+    // ("Hardcoding in a server component is still hardcoding").
+    // M4.2b moves these to a `tier_benefits` table with an /admin tab.
+    // Kept here for one milestone so the architecture change stays
+    // reviewable on its own.
     const builderBenefits: BuilderBenefit[] = [
         {
             id: "priority",
@@ -62,12 +70,21 @@ export default async function SupportPage() {
         },
     ];
 
-    // No `payments` table exists yet, so there are provably zero supporters.
-    // `sessionManifest` stays absent until it can be derived from a real
-    // query — the terminus renders its honest zero state meanwhile.
-    return <SupportPageClient
-        supportTiers={supportTiers}
-        builderBenefits={builderBenefits}
-        currentDay={Number(state.current_day ?? 0)}
-    />;
+    const benefitsByTier: Record<string, BuilderBenefit[]> = {
+        builder: builderBenefits,
+    };
+
+    // No `payments` table exists yet, so there are provably zero
+    // supporters. `sessionManifest` stays absent until it can be derived
+    // from a real query — the terminus renders its honest zero state.
+    return (
+        <SupportPageClient
+            supportTiers={supportTiers}
+            oneTime={oneTime}
+            ongoing={ongoing}
+            benefitsByTier={benefitsByTier}
+            builderBenefits={builderBenefits}
+            currentDay={Number(state.current_day ?? 0)}
+        />
+    );
 }

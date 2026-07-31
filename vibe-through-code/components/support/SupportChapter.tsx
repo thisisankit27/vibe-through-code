@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { useChapterProgress } from "./useChapterProgress";
+import { useInViewProgress } from "./use-in-view-progress";
+import { actionFor } from "./tier-actions";
 import { Conduit } from "./Conduit";
 import { CoffeeCapsule } from "./CoffeeCapsule";
 import { FilmCapsule } from "./FilmCapsule";
@@ -29,7 +30,7 @@ export function SupportChapter({
     onSelect,
 }: SupportChapterProps) {
     const ref = useRef<HTMLElement>(null);
-    const { progress } = useChapterProgress(ref);
+    const { progress } = useInViewProgress(ref);
 
     const isFirst = index === 0;
     const isLast = index === total - 1;
@@ -60,23 +61,32 @@ export function SupportChapter({
 
                 {/* Right: Narrative */}
                 <div className="px-4 md:px-0">
-                    <p className="text-sm uppercase tracking-[0.3em] text-accent">
+                    {/* The eyebrow stays. On /projects and /about it was
+                        generic decoration and went; here it carries
+                        `tier.label` — "Fuel a session", "Keep the camera
+                        rolling" — which is the warmest copy on the page.
+                        `tracking-eyebrow` is the token DESIGN.md already
+                        specified; the arbitrary 0.3em never adopted it. */}
+                    <p className="text-micro font-medium uppercase tracking-eyebrow text-accent">
                         {tier.label}
                     </p>
-                    <h2 className="mt-3 text-4xl font-bold tracking-tight text-ink-primary md:text-5xl">
+                    <h2 className="mt-3 text-section font-bold tracking-tight text-ink-primary">
                         {tier.title}
                     </h2>
-                    <p className="mt-4 text-lg text-ink-secondary">
+                    <p className="mt-4 text-body text-ink-secondary">
                         {tier.description}
                     </p>
 
-                    {/* Narrative lines */}
+                    {/* Narrative lines, at `body` 16px in the serif prose
+                        face. DESIGN.md names 14px secondary copy as why
+                        the site reads cramped, and cramped reads cold on
+                        the page that is asking someone for something. */}
                     <div className="mt-8 space-y-4">
                         {tier.narrative.map((line, i) => (
                             <p
                                 key={i}
                                 className={cn(
-                                    "text-sm leading-relaxed transition-colors duration-700",
+                                    "text-body transition-colors duration-700",
                                     progress > (i + 1) * 0.25
                                         ? "text-ink-primary"
                                         : "text-ink-tertiary"
@@ -93,31 +103,35 @@ export function SupportChapter({
                         builderBenefits={builderBenefits}
                     />}
 
-                    {/* Inline CTA button */}
+                    {/*
+                        A link, not a button. The ruled controls in the
+                        decision zone above are where this action lives;
+                        repeating them at equal weight here would put six
+                        competing controls on one page. But a reader who
+                        has just finished the argument for this tier
+                        should not have to scroll back to act, so the same
+                        `onSelect` is offered at link weight.
+
+                        The price is deliberately absent — it is a field,
+                        and it belongs in the aligned slot above where it
+                        can be compared, not restated inside prose.
+                    */}
                     <button
                         type="button"
                         onClick={() => onSelect(tier)}
-                        className={cn(
-                            "group mt-10 inline-flex items-center gap-2 rounded-lg border border-rule-standard bg-surface-raised px-5 py-2.5",
-                            "text-sm font-medium text-ink-secondary transition-all duration-200",
-                            "hover:border-accent/30 hover:bg-accent/5 hover:text-accent",
-                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30"
-                        )}
+                        className="group mt-10 inline-flex items-center gap-1.5 text-meta font-medium text-ink-secondary underline-offset-4 transition-colors duration-100 ease-out hover:text-accent hover:underline"
                     >
-                        <span>
-                            Support {tier.id === "builder" ? "this journey" : "this session"} — {tier.currency}{tier.price}
-                            {tier.frequency && <span className="text-ink-tertiary">{tier.frequency}</span>}
-                        </span>
+                        {actionFor(tier)}
                         <svg
-                            width="16"
-                            height="16"
+                            width="14"
+                            height="14"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="2"
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            className="transition-transform duration-200 group-hover:translate-x-0.5"
+                            aria-hidden="true"
                         >
                             <path d="M5 12h14" />
                             <path d="m12 5 7 7-7 7" />
