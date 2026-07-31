@@ -81,6 +81,7 @@
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
 
+
   /* ── Easing. Motion decelerating into place reads as arriving. ─── */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -477,6 +478,35 @@
   All three are CSS rather than SMIL, so the reduced-motion block above
   reaches them. SMIL is not styleable and silently ignored that rule.
 */
+
+/*
+  The chapter grid — notes on the spine, figure in the margin.
+
+  Named rather than written inline. `grid-cols-[13rem_1fr]` was an
+  arbitrary value, and the proportion between a note and its figure is a
+  decision worth stating once rather than repeating in a class string.
+
+  22rem is ~48 characters of 16px prose. That is narrow for continuous
+  prose and right for this: every tier's narrative is three short
+  declarative sentences, none of which reaches 300px, so a wider column
+  buys nothing and pushes the figure away from the words it belongs to.
+  It is fixed rather than `auto` so the figure lands at the same x in all
+  three chapters — with `auto` the drawing would drift left and right
+  with the length of the copy above it.
+
+  The figure column is `auto`, so it is exactly the width of the drawing
+  — which is why all three capsules had to be squared to the same viewBox
+  first. An `auto` column over three differently-shaped drawings is what
+  produced the gutter that changed width from one chapter to the next.
+
+  `@utility`, not `@theme`: grid-template-columns is not one of Tailwind
+  v4's theme namespaces, so a `--grid-template-columns-*` variable
+  compiles to nothing at all — silently, with the class still in the
+  markup and the layout falling back to one column.
+*/
+@utility grid-cols-chapter {
+  grid-template-columns: minmax(0, 22rem) auto;
+}
 
 @keyframes capsule-steam {
   0%   { opacity: 0;    transform: translateY(0)      scale(0.9); }

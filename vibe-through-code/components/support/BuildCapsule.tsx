@@ -16,6 +16,14 @@
  * The single motion is the crane's beacon on a 4s breath. A crane light
  * blinks on an empty site all night; nothing else here should move.
  *
+ * Two elements were removed when the capsule dropped from 160px to
+ * 128px, because neither survived the size. The lattice crane's mast
+ * bracing — six 0.6-wide diagonals over 36 units — rendered as a
+ * zigzag ribbon that read as a rope or a drawing error rather than as
+ * bracing. The setting-out ticks at `--svg-line-10` were invisible, and
+ * redundant besides: the dashed floors already mark the levels they were
+ * marking. Detail that cannot be resolved is not detail, it is texture.
+ *
  * Primary structure is `--svg-line-50` rather than `-35`. Measured over
  * `--surface-base` the register runs 1.7–3.0:1 — under the 3:1 bar for a
  * graphic — and dropping the old wall and roof fills made this drawing in
@@ -31,18 +39,10 @@ export function BuildCapsule() {
             width="150"
             height="150"
             viewBox="0 0 150 150"
-            className="h-32 w-auto md:h-40"
+            className="h-32 w-32"
             role="img"
             aria-label="A structure part built, the upper floors still drawn as plans"
         >
-            {/* Setting-out ticks — the marks a drawing carries, not the
-                building. Faintest thing here. */}
-            <g stroke="var(--svg-line-10)" strokeWidth="0.75">
-                <line x1="18" y1="92" x2="26" y2="92" />
-                <line x1="18" y1="70" x2="26" y2="70" />
-                <line x1="18" y1="48" x2="26" y2="48" />
-            </g>
-
             {/* Ground */}
             <line x1="16" y1="130" x2="134" y2="130" stroke="var(--svg-line-50)" strokeWidth="1.5" />
 
@@ -84,17 +84,6 @@ export function BuildCapsule() {
             </g>
             <path d="M92 34 L92 52" stroke="var(--svg-line-20)" strokeWidth="1" fill="none" />
             <path d="M88 52 L96 52" stroke="var(--svg-line-30)" strokeWidth="1.5" fill="none" />
-
-            {/* Mast lacing — the diagonal bracing a lattice crane carries */}
-            <g stroke="var(--svg-line-15)" strokeWidth="0.6">
-                <path d="M124 118 l0 0" />
-                <line x1="121" y1="118" x2="127" y2="106" />
-                <line x1="127" y1="118" x2="121" y2="106" />
-                <line x1="121" y1="106" x2="127" y2="94" />
-                <line x1="127" y1="106" x2="121" y2="94" />
-                <line x1="121" y1="94" x2="127" y2="82" />
-                <line x1="127" y1="94" x2="121" y2="82" />
-            </g>
 
             {/* The beacon. The only thing on this page that moves on its
                 own, and the only colour in the drawing. */}

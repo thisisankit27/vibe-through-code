@@ -23,7 +23,7 @@ export function FilmCapsule() {
             width="150"
             height="150"
             viewBox="0 0 150 150"
-            className="h-32 w-auto md:h-40"
+            className="h-32 w-32"
             role="img"
             aria-label="A film projector, threaded and running"
         >
@@ -33,13 +33,13 @@ export function FilmCapsule() {
                 style={{ transformOrigin: "42px 44px" }}
             >
                 <circle cx="42" cy="44" r="26" fill="none" stroke="var(--svg-line-50)" strokeWidth="1.5" />
-                <circle cx="42" cy="44" r="20" fill="none" stroke="var(--svg-line-15)" strokeWidth="0.5" />
+                <circle cx="42" cy="44" r="20" fill="none" stroke="var(--svg-line-15)" strokeWidth="0.9" />
                 <circle cx="42" cy="44" r="5" fill="none" stroke="var(--svg-line-30)" strokeWidth="1.5" />
                 {/* Spokes */}
                 <line x1="42" y1="20" x2="42" y2="68" stroke="var(--svg-line-25)" strokeWidth="1" />
                 <line x1="18" y1="44" x2="66" y2="44" stroke="var(--svg-line-25)" strokeWidth="1" />
-                <line x1="25" y1="27" x2="59" y2="61" stroke="var(--svg-line-15)" strokeWidth="0.75" />
-                <line x1="59" y1="27" x2="25" y2="61" stroke="var(--svg-line-15)" strokeWidth="0.75" />
+                <line x1="25" y1="27" x2="59" y2="61" stroke="var(--svg-line-15)" strokeWidth="0.9" />
+                <line x1="59" y1="27" x2="25" y2="61" stroke="var(--svg-line-15)" strokeWidth="0.9" />
             </g>
 
             {/* Take-up reel, smaller, turning the other way */}

@@ -14,28 +14,35 @@ interface SupportChapterProps {
 }
 
 /**
- * One entry in "What each one funds": a drawing, its notes, and a way
- * to act on it.
+ * One entry in "What each one funds": a note, and a figure in the margin.
  *
- * Nothing here responds to scroll. The chapter used to hold a
- * `useInViewProgress` hook feeding a 0→1 value into the capsule, the
- * conduit and a schematic, so the whole section assembled itself as you
- * moved down the page. The drawings now render at rest and carry their
- * own slow idle loops (see `globals.css`), which is what makes them feel
- * drawn rather than triggered.
+ * **The figure moved to the right, and that is the substantive change.**
+ * It previously took the container's left edge — the page's spine, where
+ * every heading, rule and eyebrow above it begins — and pushed the words
+ * 250px inboard. So the section abandoned the left edge the decision zone
+ * establishes, and the eye lost the document's structure exactly where
+ * the reading is supposed to be calmest. It also put the drawing in the
+ * most authoritative position on the page, which is what made the
+ * illustrations read as dominant: they were not too large so much as too
+ * important. A figure is an annotation to a note, not its header.
  *
- * The capsule also no longer sticks. `md:sticky md:top-1/3` pinned the
- * illustration while the narrative scrolled past it, which is another
- * scroll effect and the reason each chapter needed `py-20` of height to
- * work at all. Without it the drawing simply sits beside its notes and
- * the section loses roughly a third of its length.
+ * With the note back on the spine, the entry reads as one object and the
+ * previously dead right third of the band carries the drawing.
  *
- * `BlueprintSchematic` is gone. It listed the same four benefits the
- * decision zone already compares, and its only distinct contribution was
- * revealing them on scroll. With the reveal removed it was a restatement
- * in a box — and it was the reason the Builder chapter had a fourth
- * element the other two did not, which is what made the section read as
- * uneven.
+ * DOM order is notes-then-figure, so a screen reader hears "Support a
+ * Coffee" before "A full cup of coffee, steaming" — the reverse of what
+ * it heard before. `order-first md:order-none` puts the figure back on
+ * top for the single-column layout without touching that order.
+ *
+ * **The narrative is a stanza, not prose.** Every tier's `narrative` is
+ * three short declarative sentences, each one line at any width this
+ * page uses. Rendering them with `space-y-3` on top of 1.6 leading put
+ * 37.6px between them and made three related lines read as three
+ * unrelated ones. `space-y-2` groups them into a block while staying
+ * unambiguous if a longer line ever wraps.
+ *
+ * Nothing here responds to scroll — the drawings render at rest and
+ * carry their own slow idle loops (see `globals.css`).
  */
 export function SupportChapter({
     tier,
@@ -50,26 +57,10 @@ export function SupportChapter({
               : BuildCapsule;
 
     return (
-        <section className="relative border-b border-rule-hairline py-10 last:border-b-0 md:py-12">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-[13rem_1fr] md:gap-10">
-                {/*
-                    Drawing.
-
-                    The `Conduit` that used to sit here — a vertical rail
-                    with a scroll-driven glow and a counter-rotating
-                    hexagon at each end — is gone entirely. Stripped of
-                    the glow and the hexagons it was a bare hairline, and
-                    a hairline behind a transparent drawing runs straight
-                    through it. The horizontal rule between chapters
-                    already does the connecting work, in the grammar the
-                    ledger uses.
-                */}
-                <div className="flex items-start justify-center md:justify-start">
-                    <Capsule />
-                </div>
-
+        <section className="border-b border-rule-hairline py-8 last:border-b-0">
+            <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-chapter md:gap-8">
                 {/* Notes */}
-                <div className="max-w-prose">
+                <div>
                     <h3 className="text-section font-bold tracking-tight text-ink-primary">
                         {tier.title}
                     </h3>
@@ -78,7 +69,7 @@ export function SupportChapter({
                         14px secondary copy as why the site reads cramped,
                         and cramped reads cold on the page that is asking
                         someone for something. */}
-                    <div className="mt-4 space-y-3">
+                    <div className="mt-4 space-y-1">
                         {tier.narrative.map((line, i) => (
                             <p key={i} className="text-body text-ink-secondary">
                                 {line}
@@ -101,7 +92,7 @@ export function SupportChapter({
                     <button
                         type="button"
                         onClick={() => onSelect(tier)}
-                        className="mt-5 inline-flex items-center gap-1.5 text-meta font-medium text-ink-secondary underline-offset-4 transition-colors duration-100 ease-out hover:text-accent hover:underline"
+                        className="mt-6 inline-flex items-center gap-1.5 text-meta font-medium text-ink-secondary underline-offset-4 transition-colors duration-100 ease-out hover:text-accent hover:underline"
                     >
                         {actionFor(tier, firstBuilderOn)}
                         <svg
@@ -119,6 +110,19 @@ export function SupportChapter({
                             <path d="m12 5 7 7-7 7" />
                         </svg>
                     </button>
+                </div>
+
+                {/*
+                    Figure. All three capsules now draw into a square
+                    150×150 viewBox at a fixed `h-32 w-32`, so every
+                    chapter reserves an identical footprint. They did not
+                    before: the coffee cup's box was 120 wide against the
+                    other two at 150, which rendered it 128px against
+                    their 160px and left a gutter that changed width from
+                    one chapter to the next.
+                */}
+                <div className="order-first flex justify-start md:order-none">
+                    <Capsule />
                 </div>
             </div>
         </section>
