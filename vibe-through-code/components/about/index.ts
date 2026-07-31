@@ -1,2 +1,2 @@
-export { PersonCard } from "./PersonCard";
-export { ContributionCTA } from "./ContributionCTA";
+export { PersonCard } from "./person-card";
+export { ContributionCTA } from "./contribution-cta";

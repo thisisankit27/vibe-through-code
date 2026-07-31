@@ -1,75 +1,80 @@
-
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import type { Project } from "@/types/project";
-import { capitalize } from "@/lib/utils";
 
+import type { Project } from "@/types/project";
+import { ProjectStatusTag } from "./project-status";
+
+/**
+ * One project in the catalog at /projects.
+ *
+ * A card rather than a ruled row on purpose: DESIGN.md reserves cards for
+ * "genuinely independent, comparable, self-contained objects — a project,
+ * a person. That is the complete list." Everything else on the site is a
+ * row. If a third card type appears, one of us is wrong.
+ *
+ * Deliberately does NOT lift, glow, or scale on hover. Motion reports
+ * state; a card that rises when the pointer passes is reporting nothing.
+ *
+ * Focus is left to the global `:focus-visible` rule in globals.css. The
+ * hand-rolled ring here previously carried `ring-offset-zinc-950`, which
+ * survived the token migration because the sweep only looked for
+ * `bg-`/`text-`/`border-` prefixes — so on the paper ground the site's
+ * keyboard affordance drew a near-black halo.
+ */
 interface ProjectCardProps {
     project: Project;
 }
 
-function getStatusColor(status: Project["status"]) {
-    switch (status) {
-        case "active":
-            return "text-accent bg-accent/10 border-accent/20";
-        case "planned":
-            return "text-accent bg-accent/10 border-accent/20";
-        case "completed":
-            return "text-info bg-info/10 border-info/20";
-        default:
-            return "text-ink-secondary bg-surface-hover border-rule-standard";
-    }
-}
-
-function getStatusLabel(status: Project["status"]) {
-    return status.charAt(0).toUpperCase() + status.slice(1);
-}
-
 export function ProjectCard({ project }: ProjectCardProps) {
     return (
-        <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-rule-standard bg-surface-raised p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40">
-            <header className="mb-4 flex items-center justify-between">
-                <span
-                    className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${getStatusColor(project.status)}`}
-                >
-                    {capitalize(project.status)}
-                </span>
-                <time className="text-xs text-ink-tertiary" dateTime={project.startedOn}>
-                    {project.startedOn}
-                </time>
+        <article className="flex h-full flex-col rounded-md border border-rule-standard bg-surface-raised p-6">
+            <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
+                <ProjectStatusTag status={project.status} />
+
+                {project.startedOn && (
+                    <time
+                        className="text-micro text-ink-tertiary"
+                        dateTime={project.startedOn}
+                    >
+                        {project.startedOn}
+                    </time>
+                )}
             </header>
 
-            <div className="mb-4 flex-1">
-                <h3 className="mb-3 text-xl font-bold tracking-tight text-ink-primary">
-                    {project.title}
-                </h3>
-                <p className="text-sm leading-7 text-ink-secondary">
-                    {project.description}
-                </p>
-            </div>
+            <h3 className="mt-4 text-section font-bold tracking-tight text-ink-primary">
+                {project.title}
+            </h3>
 
-            <div className="mb-5 flex flex-wrap gap-2">
-                {project.technologies.map((tech) => (
-                    <span
-                        key={tech}
-                        className="inline-flex items-center rounded-lg border border-rule-standard bg-surface-sunk px-3 py-1.5 text-xs font-medium text-ink-secondary"
+            <p className="mt-3 flex-1 text-meta text-ink-secondary">
+                {project.description}
+            </p>
+
+            {project.technologies.length > 0 && (
+                <ul className="mt-5 flex flex-wrap gap-2">
+                    {project.technologies.map((tech) => (
+                        <li
+                            key={tech}
+                            className="rounded-sm border border-rule-hairline bg-surface-sunk px-2 py-1 text-micro text-ink-secondary"
+                        >
+                            {tech}
+                        </li>
+                    ))}
+                </ul>
+            )}
+
+            {project.repository && (
+                <footer className="mt-6 border-t border-rule-hairline pt-5">
+                    <Link
+                        href={project.repository}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-meta font-medium text-ink-secondary underline-offset-4 transition-colors duration-100 ease-out hover:text-accent hover:underline"
                     >
-                        {tech}
-                    </span>
-                ))}
-            </div>
-
-            <footer className="mt-auto border-t border-rule-hairline pt-5">
-                <Link
-                    href={project.repository}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-secondary transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded-md"
-                >
-                    View Repository
-                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                </Link>
-            </footer>
+                        Repository
+                        <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                    </Link>
+                </footer>
+            )}
         </article>
     );
 }

@@ -55,8 +55,10 @@ Full detail in `DATA-INTEGRITY.md`. Summarized here for tracking.
 ## 2. Broken and dead-end UI — P0
 
 - [x] **[verified]** `components/explore/explore.tsx` — two cards read `"Coming Soon"` and link to `"#"` for `/projects` and `/journey`, which are built, DB-wired, and in the navbar. Worst trust defect on the site. (This section is slated for removal in P2; fix or remove now.)
-- [x] **[verified]** `components/about/PersonCard.tsx` — founder badge reads `"Youtube Face"`. → `Founder`.
-- [x] **[verified]** `components/about/ContributionCTA.tsx` — `"Get in touch"` is `href="#"`. No email or contact form exists anywhere in the codebase.
+- [x] **[decision]** ~~`components/about/person-card.tsx` — founder badge reads `"Youtube Face"`. → `Founder`.~~ **Not a defect. Closed 2026-07-31 as intended copy.** It was read as leftover placeholder text, changed to `Founder`, and changed back the same day at the operator's direction: `Founder` asserts an employment status that is not true, and this site does not get to be loose about claims. The badge is a credit for who is on camera. Rendered as `YouTube Face` in the source — the CSS uppercases it, so the display is unchanged while assistive tech gets the correct brand name. `person.role` renders beneath it either way, so the real role from the record is never replaced by the badge.
+
+  *Lesson for this document: "looks like placeholder text" is a hypothesis, not a finding. Copy that reads oddly may be deliberate, and the operator is the only one who knows. Mark it `[decision]`, not `[verified]`.*
+- [x] **[verified]** `components/about/contribution-cta.tsx` — `"Get in touch"` is `href="#"`. No email or contact form exists anywhere in the codebase. **Also marked done on 2026-07-30 without being done.** Resolved 2026-07-31 by *removing* the button: a site whose premise is verifiability cannot ship an affordance that pretends to have a destination. Returns as a `mailto:` when a real address exists.
 - [x] **[verified]** `components/support/SystemTerminus.tsx` — the `Sign` button has no `onClick` and the input is uncontrolled. The site's only capture element silently does nothing.
 - [x] **[verified]** `app/page.tsx` — homepage has **no `<h1>`**; `SectionHeading` hardcodes `<h2>`.
 - [x] **[verified]** `components/journey/JourneyTimeline.tsx` — page title is an `<h2>`; `/journey` has no `<h1>`.
@@ -78,11 +80,11 @@ All confirmed by grep: zero importers.
 - [x] **[verified]** `.hero-grid` class in `app/globals.css` — defined, zero usages. Contains the only two gradients in the codebase.
 - [ ] **[verified]** `--font-heading` in `app/globals.css` — zero usages. No longer broken as of M1, but still unreferenced.
 - [x] ~~`--font-geist-sans` in `app/layout.tsx` — published, zero consumers~~ — **resolved in M1**: `--font-sans` now maps to it, so it has a consumer and Geist renders. Do not delete.
-- [ ] **[verified]** `getStatusLabel()` in `components/project/project-card.tsx` — defined, unused, duplicates `capitalize()` from `lib/utils.ts`
+- [x] **[verified]** `getStatusLabel()` in `components/project/project-card.tsx` — defined, unused, duplicates `capitalize()` from `lib/utils.ts`. **Deleted 2026-07-31**, along with `getStatusColor()` beside it.
 - [ ] **[verified]** `isActive` in `components/support/useChapterProgress.ts` — computed and returned, never consumed. Removing it halves the scroll re-render rate.
 - [x] **[verified]** `~40 of 65` color variables in `app/globals.css` — `bg-card`, `bg-popover`, `bg-accent`, all `chart-*`, the entire 9-variable `sidebar-*` block, plus their `.dark` twins. Zero references.
 - [x] **[verified]** The `.dark` class block (32 variables) — never applied to any element.
-- [ ] **[verified]** `SectionHeading` — the `eyebrow` prop branch and the `centered={false}` branch are never exercised (one call site, which omits `eyebrow`).
+- [x] **[verified]** `SectionHeading` — the `eyebrow` prop branch and the `centered={false}` branch are never exercised (one call site, which omits `eyebrow`). **Deleted 2026-07-31** — the M3 homepage rebuild removed its last call site, leaving zero. `components/ui/status-badge.tsx` was found in the same state and deleted with it.
 - [ ] **[verify]** `@import "shadcn/tailwind.css"` in `globals.css` — 629 lines, 24 utilities, reportedly zero used. Confirm before removing.
 - [ ] **[verify]** `tw-animate-css` dependency — reportedly contributes zero used utilities.
 
@@ -102,7 +104,7 @@ The core visual debt. Do not resolve by hand — resolve by building the token l
 - [x] **[verified]** **Three greens** → one. `emerald-400`, `emerald-500`, and `rgba(0,230,118)` (Material Green A400, 6 uses in the support SVGs — visibly a different green from the Tailwind emeralds beside it).
 - [ ] **[verified]** **Three card systems** → one row primitive plus one card primitive. Opaque zinc + `border-white/10` + hover-lift (4 instances); glass `border-white/[0.06]` + `bg-white/[0.02]` (8); glass controls `/[0.08]` + `/[0.03]` (13).
 - [x] **[verified]** **11 single-use accent hues** in `components/journey/JourneyEvent.tsx` → 3 semantic colors plus glyphs.
-- [ ] **[verified]** **Four status palettes** that don't agree — `JourneyEvent`, `project-card`, `status-badge`, and an inline reimplementation in `current-project.tsx`.
+- [x] **[verified]** **Four status palettes** that don't agree — `JourneyEvent`, `project-card`, `status-badge`, and an inline reimplementation in `current-project.tsx`. **Collapsed 2026-07-31** into one `ProjectStatusTag` (`components/project/project-status.tsx`), consumed by both `project-card` and `current-project`; `status-badge` deleted; `JourneyEvent` was already replaced by `EventGlyph` in the ledger rebuild. State is carried by dot fill rather than by hue, so only `active` spends the accent.
 - [x] **[verified]** **The glow motif duplicated 6×** at 3 heights and 3 opacities → one `Glow` primitive.
 - [x] **[verified]** **15 text sizes** (incl. `text-[10px]`, `text-[11px]`, `text-[0.8rem]`) → 6 scale tokens.
 - [x] **[verified]** **7 radii** (3 for cards alone) → `sm` / `md` / `full`.
@@ -126,7 +128,7 @@ The core visual debt. Do not resolve by hand — resolve by building the token l
 
 ### Admin security
 
-- [ ] **[verify]** `middleware.ts` matcher is `["/admin/:path*"]`. In path-to-regexp, `:path*` means *zero or more* segments, so bare `/admin` should match — but this is security-critical and must be confirmed empirically rather than reasoned about: `curl -I https://<host>/admin` should return `401`.
+- [x] **[verified]** `middleware.ts` matcher is `["/admin/:path*"]`. In path-to-regexp, `:path*` means *zero or more* segments, so bare `/admin` should match — but this is security-critical and must be confirmed empirically rather than reasoned about: `curl -I https://<host>/admin` should return `401`. **Confirmed 2026-07-31** against a local `next start` (production mode, so the `NODE_ENV === "development"` bypass is inactive): bare `/admin` returns `401`. Re-confirm against the deployed host, since this was a local check.
 
   *Correction to the strategy document: this was listed there as a probable unauthenticated-admin risk. On inspection the matcher is most likely correct. The confirmed issues are the three below.*
 
