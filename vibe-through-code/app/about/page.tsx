@@ -5,71 +5,75 @@ import type { Person } from "@/types/person";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * Who is building this.
+ *
+ * Same header grammar as /projects and the homepage. The "Contributors"
+ * divider is the ruled section label used on the homepage, not a second
+ * centred eyebrow — one heading style per site.
+ */
 export default async function AboutPage() {
-    const rows = await sql`SELECT * FROM people ORDER BY is_founder DESC, name ASC`;
+    const rows = await sql`
+        SELECT * FROM people ORDER BY is_founder DESC, name ASC
+    `;
 
-    const people: Person[] = rows.map((row: any) => ({
-        id: row.id,
-        name: row.name,
-        role: row.role,
-        bio: row.bio,
-        avatar: row.avatar,
-        github: row.github,
-        linkedin: row.linkedin,
-        website: row.website,
-        isFounder: row.is_founder,
+    const people: Person[] = rows.map((row: Record<string, unknown>) => ({
+        id: String(row.id),
+        name: String(row.name),
+        role: String(row.role ?? ""),
+        bio: String(row.bio ?? ""),
+        avatar: (row.avatar as string) ?? "",
+        github: (row.github as string) ?? undefined,
+        linkedin: (row.linkedin as string) ?? undefined,
+        website: (row.website as string) ?? undefined,
+        isFounder: Boolean(row.is_founder),
     }));
 
     const founder = people.find((p) => p.isFounder);
     const contributors = people.filter((p) => !p.isFounder);
 
     return (
-        <Container>
-            <section className="pt-14 pb-24 md:pt-20 md:pb-28">
-                {/* Header */}
-                <div className="mb-16 text-center">
-                    <p className="text-sm uppercase tracking-[0.3em] text-accent">
-                        Who is building this
-                    </p>
-                    <h1 className="mt-3 text-5xl font-bold tracking-tight text-ink-primary">
-                        About
-                    </h1>
-                    <p className="mt-6 text-ink-secondary">
-                        One engineer. One mission. Building in public.
-                    </p>
+        <Container className="max-w-5xl pb-24 pt-14 md:pb-32 md:pt-20">
+            <header className="max-w-2xl">
+                <h1 className="text-title font-bold tracking-tight text-ink-primary">
+                    About
+                </h1>
+                <p className="mt-5 text-body text-ink-secondary">
+                    One engineer, building a software company in public. Every
+                    project is developed live on stream.
+                </p>
+            </header>
+
+            {founder ? (
+                <div className="mt-12 max-w-2xl">
+                    <PersonCard person={founder} featured />
                 </div>
+            ) : (
+                /* The page previously rendered nothing at all here when no
+                   row carried is_founder — silently, so a wiped column
+                   looked like a design choice. */
+                <p className="mt-12 border-t border-rule-strong pt-6 text-meta text-ink-tertiary">
+                    No founder recorded.
+                </p>
+            )}
 
-                {/* Founder — featured */}
-                {founder && (
-                    <div className="mx-auto max-w-lg">
-                        <PersonCard person={founder} featured />
+            {contributors.length > 0 && (
+                <section aria-label="Contributors" className="mt-16">
+                    <h2 className="border-b border-rule-strong pb-2 text-micro font-medium uppercase tracking-wider text-ink-tertiary">
+                        Contributors
+                    </h2>
+
+                    <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        {contributors.map((person) => (
+                            <PersonCard key={person.id} person={person} />
+                        ))}
                     </div>
-                )}
+                </section>
+            )}
 
-                {/* Contributors */}
-                {contributors.length > 0 && (
-                    <div className="mt-20">
-                        <div className="mb-10 text-center">
-                            <p className="text-sm uppercase tracking-[0.3em] text-accent">
-                                Contributors
-                            </p>
-                            <h2 className="mt-3 text-3xl font-bold tracking-tight text-ink-primary">
-                                Building alongside
-                            </h2>
-                        </div>
-                        <div className="mx-auto grid max-w-5xl gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                            {contributors.map((person) => (
-                                <PersonCard key={person.id} person={person} />
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {/* CTA */}
-                <div className="mx-auto mt-20 max-w-2xl">
-                    <ContributionCTA />
-                </div>
-            </section>
+            <div className="mt-16">
+                <ContributionCTA />
+            </div>
         </Container>
     );
 }

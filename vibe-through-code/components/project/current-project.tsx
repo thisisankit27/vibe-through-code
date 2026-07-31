@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 
 import type { Project } from "@/types/project";
 import type { LatestLivestream } from "@/lib/journey";
-import { capitalize } from "@/lib/utils";
+import { ProjectStatusTag } from "./project-status";
 
 interface CurrentProjectProps {
     project: Project;
@@ -31,10 +31,7 @@ export default function CurrentProject({
                     {project.title}
                 </h3>
 
-                <span className="inline-flex items-center gap-2 text-micro font-medium uppercase tracking-wider text-accent">
-                    <span className="h-1.5 w-1.5 rounded-full bg-accent-signal" />
-                    {capitalize(project.status)}
-                </span>
+                <ProjectStatusTag status={project.status} />
             </div>
 
             <p className="mt-3 max-w-2xl text-meta text-ink-secondary">

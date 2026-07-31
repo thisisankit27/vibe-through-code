@@ -397,7 +397,10 @@ function Modal({ tab, editing, onClose, onSaved }: {
                                         type="checkbox"
                                         checked={form[f.name] === true}
                                         onChange={(e) => setForm({ ...form, [f.name]: e.target.checked })}
-                                        className="h-4 w-4 cursor-pointer accent-emerald-500"
+                                        // `accent-emerald-500` here put green in
+                                        // the UI, which is the one hue reserved
+                                        // for recorded revenue.
+                                        className="h-4 w-4 cursor-pointer accent-accent"
                                     />
                                     <span className="text-sm text-ink-secondary">
                                         {form[f.name] === true ? "Yes" : "No"}
