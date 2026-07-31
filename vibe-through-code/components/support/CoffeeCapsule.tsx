@@ -1,115 +1,72 @@
-"use client";
-
-interface CoffeeCapsuleProps {
-    progress: number;
-}
-
-export function CoffeeCapsule({ progress }: CoffeeCapsuleProps) {
-    const fillHeight = Math.min(100, progress * 130);
-    const isPouring = progress < 0.55;
-    const steamOpacity = progress > 0.6 ? Math.min(1, (progress - 0.6) * 2.5) : 0;
-
+/**
+ * A cup, poured, still warm.
+ *
+ * Drawn at rest rather than assembling itself. The previous version
+ * interpolated fill height, pour stream, steam opacity and a heating
+ * glow from a scroll-derived `progress` value, which made it a loading
+ * bar in a costume and put the reader in charge of driving it.
+ *
+ * The only motion is steam, on a 5s loop that runs whether or not anyone
+ * is looking. Server Component — no props, no hooks, no state.
+ */
+export function CoffeeCapsule() {
     return (
-        <div className="relative flex items-center justify-center">
-            <svg width="120" height="160" viewBox="0 0 120 160" className="md:h-48 md:w-36">
-                {/* Cup body */}
-                <path
-                    d="M30 60 L35 130 Q35 140 45 140 L75 140 Q85 140 85 130 L90 60 Z"
-                    fill="none"
-                    stroke="var(--svg-line-35)"
-                    strokeWidth="1.5"
-                />
-                {/* Cup rim highlight */}
-                <path
-                    d="M30 60 Q60 55 90 60"
-                    fill="none"
-                    stroke="var(--svg-line-20)"
-                    strokeWidth="1"
-                />
-                {/* Cup handle */}
-                <path
-                    d="M90 75 Q110 75 110 95 Q110 115 90 115"
-                    fill="none"
-                    stroke="var(--svg-line-35)"
-                    strokeWidth="1.5"
-                />
-                {/* Liquid */}
-                <defs>
-                    <clipPath id="cup-clip">
-                        <path d="M32 62 L36.5 128 Q36.5 138 45 138 L75 138 Q83.5 138 83.5 128 L88 62 Z" />
-                    </clipPath>
-                </defs>
-                <rect
-                    x="30"
-                    y={140 - fillHeight * 0.78}
-                    width="60"
-                    height={fillHeight * 0.78}
-                    fill="var(--svg-coffee)"
-                    clipPath="url(#cup-clip)"
-                    style={{ transition: "y 0.1s linear, height 0.1s linear" }}
-                />
-                {/* Liquid surface highlight */}
-                <ellipse
-                    cx="60"
-                    cy={140 - fillHeight * 0.78}
-                    rx="26"
-                    ry="3"
-                    fill="var(--svg-coffee-light)"
-                    clipPath="url(#cup-clip)"
-                    style={{ transition: "cy 0.1s linear" }}
-                />
-                {/* Pour stream */}
-                {isPouring && (
-                    <rect
-                        x="56"
-                        y="20"
-                        width="8"
-                        height={progress < 0.5 ? 40 + progress * 80 : 80}
-                        fill="var(--svg-coffee-dim)"
-                        rx="4"
-                        style={{ opacity: isPouring ? 1 : 0, transition: "opacity 0.2s" }}
-                    />
-                )}
-                {/* Steam particles */}
-                <g style={{ opacity: steamOpacity }}>
-                    <SteamParticle cx="50" cy="30" delay="0s" />
-                    <SteamParticle cx="60" cy="25" delay="0.8s" />
-                    <SteamParticle cx="70" cy="32" delay="1.5s" />
-                </g>
-                {/* Heating element glow */}
-                <ellipse
-                    cx="60"
-                    cy="142"
-                    rx="20"
-                    ry="4"
-                    fill="var(--svg-heat)"
-                    style={{
-                        opacity: progress > 0.3 ? 0.3 + progress * 0.3 : 0,
-                        transition: "opacity 0.3s",
-                    }}
-                />
-            </svg>
-        </div>
-    );
-}
+        <svg
+            width="120"
+            height="150"
+            viewBox="0 0 120 150"
+            className="h-32 w-auto md:h-40"
+            role="img"
+            aria-label="A full cup of coffee, steaming"
+        >
+            {/* Steam. Three plumes, staggered, drawn as open curves
+                rather than dots — a notebook would draw it this way. */}
+            <g fill="none" stroke="var(--svg-line-25)" strokeWidth="1.25" strokeLinecap="round">
+                <path className="capsule-steam" d="M48 46 q-4 -8 0 -14 q4 -6 0 -12" />
+                <path className="capsule-steam capsule-steam-b" d="M60 42 q-4 -8 0 -14 q4 -6 0 -12" />
+                <path className="capsule-steam capsule-steam-c" d="M72 46 q-4 -8 0 -14 q4 -6 0 -12" />
+            </g>
 
-function SteamParticle({ cx, cy, delay }: { cx: string; cy: string; delay: string }) {
-    return (
-        <circle cx={cx} cy={cy} r="3" fill="var(--svg-line-35)">
-            <animate
-                attributeName="cy"
-                values={`${cy};${parseInt(cy) - 20}`}
-                dur="3s"
-                repeatCount="indefinite"
-                begin={delay}
+            {/* Saucer */}
+            <path
+                d="M22 132 q38 8 76 0"
+                fill="none"
+                stroke="var(--svg-line-25)"
+                strokeWidth="1.25"
             />
-            <animate
-                attributeName="opacity"
-                values="0.35;0;0.35"
-                dur="3s"
-                repeatCount="indefinite"
-                begin={delay}
+
+            {/* Cup body */}
+            <path
+                d="M30 62 L35 122 Q35 130 45 130 L75 130 Q85 130 85 122 L90 62 Z"
+                fill="none"
+                stroke="var(--svg-line-50)"
+                strokeWidth="1.5"
             />
-        </circle>
+
+            {/* Handle */}
+            <path
+                d="M89 74 Q108 74 108 92 Q108 110 87 110"
+                fill="none"
+                stroke="var(--svg-line-50)"
+                strokeWidth="1.5"
+            />
+
+            {/* Coffee. Full, because the cup is poured — not filling. */}
+            <clipPath id="coffee-cup-bowl">
+                <path d="M32 64 L36.5 120 Q36.5 128 45 128 L75 128 Q83.5 128 83.5 120 L88 64 Z" />
+            </clipPath>
+            <g clipPath="url(#coffee-cup-bowl)">
+                <rect x="28" y="70" width="64" height="62" fill="var(--svg-coffee)" />
+                <ellipse cx="60" cy="70" rx="28" ry="3.5" fill="var(--svg-coffee-light)" />
+            </g>
+
+            {/* Rim, drawn over the liquid so the ellipse reads as surface */}
+            <path
+                d="M30 62 Q60 57 90 62"
+                fill="none"
+                stroke="var(--svg-line-50)"
+                strokeWidth="1.5"
+            />
+        </svg>
     );
 }

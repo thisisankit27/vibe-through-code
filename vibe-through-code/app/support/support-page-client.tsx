@@ -20,7 +20,6 @@ interface SupportPageClientProps {
     oneTime: SupportTier[];
     ongoing: SupportTier[];
     benefitsByTier: Record<string, BuilderBenefit[]>;
-    builderBenefits: BuilderBenefit[];
     currentDay: number;
     /** `site_state.first_builder_on`; absent until it happens. */
     firstBuilderOn?: string;
@@ -48,7 +47,6 @@ export default function SupportPageClient({
     oneTime,
     ongoing,
     benefitsByTier,
-    builderBenefits,
     currentDay,
     firstBuilderOn,
     sessionManifest,
@@ -102,14 +100,11 @@ export default function SupportPageClient({
                     </h2>
 
                     <div className="relative">
-                        {supportTiers.map((tier, index) => (
+                        {supportTiers.map((tier) => (
                             <SupportChapter
                                 key={tier.id}
                                 tier={tier}
-                                index={index}
-                                total={supportTiers.length}
                                 onSelect={handleSelect}
-                                builderBenefits={builderBenefits}
                                 firstBuilderOn={firstBuilderOn}
                             />
                         ))}

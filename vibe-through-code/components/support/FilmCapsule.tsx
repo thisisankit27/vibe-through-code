@@ -1,123 +1,105 @@
-"use client";
-
-interface FilmCapsuleProps {
-    progress: number;
-}
-
-export function FilmCapsule({ progress }: FilmCapsuleProps) {
-    const reelRotation = progress * 720;
-    const apertureOpen = progress > 0.25 ? Math.min(1, (progress - 0.25) * 4) : 0;
-    const isRecording = progress > 0.75;
-    const filmVisible = progress > 0.5 ? Math.min(1, (progress - 0.5) * 4) : 0;
-
+/**
+ * A projector, threaded and running.
+ *
+ * Redrawn. The previous version stacked two reels on top of a camera
+ * body with a lens in the middle, which read as neither a camera nor a
+ * projector — and every part of it (aperture, film strip, reel spin,
+ * REC light) was interpolated from scroll position.
+ *
+ * Now it is one clear object at rest, with the reels turning on a 20s
+ * loop and a single running light breathing. Both are slow enough to be
+ * noticed only if you look for them.
+ *
+ * The old REC light used `--color-failure`, which is reserved for bugs
+ * and failed builds. Spending a reserved semantic colour on decoration
+ * is the same class of mistake as spending `--revenue` on a hover state.
+ * It is now the signal amber the rest of the site uses for live state.
+ *
+ * Server Component — no props, no hooks, no state.
+ */
+export function FilmCapsule() {
     return (
-        <div className="relative flex items-center justify-center">
-            <svg width="140" height="140" viewBox="0 0 140 140" className="md:h-48 md:w-48">
-                {/* Camera body */}
-                <rect
-                    x="30"
-                    y="50"
-                    width="80"
-                    height="55"
-                    rx="6"
-                    fill="none"
-                    stroke="var(--svg-line-35)"
-                    strokeWidth="1.5"
-                />
-                {/* Body top highlight */}
-                <path
-                    d="M30 56 Q30 50 36 50 L104 50 Q110 50 110 56"
-                    fill="none"
-                    stroke="var(--svg-line-15)"
-                    strokeWidth="1"
-                />
-                {/* Lens outer */}
-                <circle
-                    cx="70"
-                    cy="77"
-                    r="18"
-                    fill="none"
-                    stroke="var(--svg-line-35)"
-                    strokeWidth="1.5"
-                />
-                {/* Lens inner ring */}
-                <circle
-                    cx="70"
-                    cy="77"
-                    r="14"
-                    fill="none"
-                    stroke="var(--svg-line-15)"
-                    strokeWidth="0.5"
-                />
-                {/* Aperture blades */}
-                <g style={{ opacity: apertureOpen, transition: "opacity 0.3s" }}>
-                    <circle cx="70" cy="77" r="12" fill="var(--svg-scrim-50)" />
-                    <circle cx="70" cy="77" r="6" fill="var(--svg-line-10)" />
-                </g>
-                {/* Left reel */}
-                <g
-                    style={{
-                        transform: `rotate(${reelRotation}deg)`,
-                        transformOrigin: "40px 40px",
-                        transition: "transform 0.1s linear",
-                    }}
-                >
-                    <circle cx="40" cy="40" r="16" fill="none" stroke="var(--svg-line-35)" strokeWidth="1.5" />
-                    <circle cx="40" cy="40" r="4" fill="var(--svg-line-20)" />
-                    <line x1="40" y1="24" x2="40" y2="56" stroke="var(--svg-line-30)" strokeWidth="1" />
-                    <line x1="24" y1="40" x2="56" y2="40" stroke="var(--svg-line-30)" strokeWidth="1" />
-                    {/* Cross spokes */}
-                    <line x1="28.7" y1="28.7" x2="51.3" y2="51.3" stroke="var(--svg-line-20)" strokeWidth="0.5" />
-                    <line x1="51.3" y1="28.7" x2="28.7" y2="51.3" stroke="var(--svg-line-20)" strokeWidth="0.5" />
-                </g>
-                {/* Right reel */}
-                <g
-                    style={{
-                        transform: `rotate(${-reelRotation}deg)`,
-                        transformOrigin: "100px 40px",
-                        transition: "transform 0.1s linear",
-                    }}
-                >
-                    <circle cx="100" cy="40" r="16" fill="none" stroke="var(--svg-line-35)" strokeWidth="1.5" />
-                    <circle cx="100" cy="40" r="4" fill="var(--svg-line-20)" />
-                    <line x1="100" y1="24" x2="100" y2="56" stroke="var(--svg-line-30)" strokeWidth="1" />
-                    <line x1="84" y1="40" x2="116" y2="40" stroke="var(--svg-line-30)" strokeWidth="1" />
-                    {/* Cross spokes */}
-                    <line x1="88.7" y1="28.7" x2="111.3" y2="51.3" stroke="var(--svg-line-20)" strokeWidth="0.5" />
-                    <line x1="111.3" y1="28.7" x2="88.7" y2="51.3" stroke="var(--svg-line-20)" strokeWidth="0.5" />
-                </g>
-                {/* Film strip between reels */}
-                <path
-                    d="M40 56 Q55 65 70 60 Q85 55 100 56"
-                    fill="none"
-                    stroke="var(--svg-line-30)"
-                    strokeWidth="2"
-                    strokeDasharray="4 2"
-                    style={{ opacity: filmVisible, transition: "opacity 0.3s" }}
-                />
-                {/* Recording LED */}
-                <circle
-                    cx="100"
-                    cy="92"
-                    r="4"
-                    fill={isRecording ? "var(--color-failure)" : "var(--svg-line-20)"}
-                    style={{
-                        opacity: isRecording ? undefined : 0.4,
-                        transition: "fill 0.3s",
-                    }}
-                >
-                    {isRecording && (
-                        <animate
-                            attributeName="opacity"
-                            values="1;0.3;1"
-                            dur="2s"
-                            repeatCount="indefinite"
-                        />
-                    )}
-                </circle>
-                {/* Viewfinder bump */}
-                <rect x="55" y="42" width="30" height="8" rx="2" fill="none" stroke="var(--svg-line-25)" strokeWidth="1" />
-            </svg>
-        </div>
+        <svg
+            width="150"
+            height="150"
+            viewBox="0 0 150 150"
+            className="h-32 w-auto md:h-40"
+            role="img"
+            aria-label="A film projector, threaded and running"
+        >
+            {/* Feed reel */}
+            <g
+                className="capsule-reel"
+                style={{ transformOrigin: "42px 44px" }}
+            >
+                <circle cx="42" cy="44" r="26" fill="none" stroke="var(--svg-line-50)" strokeWidth="1.5" />
+                <circle cx="42" cy="44" r="20" fill="none" stroke="var(--svg-line-15)" strokeWidth="0.5" />
+                <circle cx="42" cy="44" r="5" fill="none" stroke="var(--svg-line-30)" strokeWidth="1.5" />
+                {/* Spokes */}
+                <line x1="42" y1="20" x2="42" y2="68" stroke="var(--svg-line-25)" strokeWidth="1" />
+                <line x1="18" y1="44" x2="66" y2="44" stroke="var(--svg-line-25)" strokeWidth="1" />
+                <line x1="25" y1="27" x2="59" y2="61" stroke="var(--svg-line-15)" strokeWidth="0.75" />
+                <line x1="59" y1="27" x2="25" y2="61" stroke="var(--svg-line-15)" strokeWidth="0.75" />
+            </g>
+
+            {/* Take-up reel, smaller, turning the other way */}
+            <g
+                className="capsule-reel-reverse"
+                style={{ transformOrigin: "112px 52px" }}
+            >
+                <circle cx="112" cy="52" r="18" fill="none" stroke="var(--svg-line-50)" strokeWidth="1.5" />
+                <circle cx="112" cy="52" r="4" fill="none" stroke="var(--svg-line-30)" strokeWidth="1.5" />
+                <line x1="112" y1="36" x2="112" y2="68" stroke="var(--svg-line-25)" strokeWidth="1" />
+                <line x1="96" y1="52" x2="128" y2="52" stroke="var(--svg-line-25)" strokeWidth="1" />
+            </g>
+
+            {/* Film path, threaded between the reels and through the gate */}
+            <path
+                d="M42 70 Q46 92 62 96 L92 96 Q108 94 112 70"
+                fill="none"
+                stroke="var(--svg-line-30)"
+                strokeWidth="2"
+                strokeDasharray="5 3"
+            />
+
+            {/* Gate and lamp housing */}
+            <rect
+                x="58"
+                y="88"
+                width="40"
+                height="26"
+                rx="3"
+                fill="none"
+                stroke="var(--svg-line-50)"
+                strokeWidth="1.5"
+            />
+
+            {/* Lens barrel, projecting left */}
+            <path
+                d="M58 96 L44 100 L44 110 L58 112"
+                fill="none"
+                stroke="var(--svg-line-50)"
+                strokeWidth="1.5"
+            />
+
+            {/* Running light. The one element carrying colour. */}
+            <circle
+                className="capsule-beacon"
+                cx="90"
+                cy="106"
+                r="3"
+                fill="var(--svg-signal-80)"
+            />
+
+            {/* Base */}
+            <path
+                d="M52 122 L104 122"
+                fill="none"
+                stroke="var(--svg-line-25)"
+                strokeWidth="1.25"
+            />
+            <line x1="66" y1="114" x2="62" y2="122" stroke="var(--svg-line-25)" strokeWidth="1.25" />
+            <line x1="90" y1="114" x2="94" y2="122" stroke="var(--svg-line-25)" strokeWidth="1.25" />
+        </svg>
     );
 }

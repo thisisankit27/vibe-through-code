@@ -83,7 +83,6 @@ export default async function SupportPage() {
             oneTime={oneTime}
             ongoing={ongoing}
             benefitsByTier={benefitsByTier}
-            builderBenefits={builderBenefits}
             currentDay={Number(state.current_day ?? 0)}
             // Absent until the first Builder joins. `site_state` is a
             // key/value table, so "has not happened" is the absence of a
