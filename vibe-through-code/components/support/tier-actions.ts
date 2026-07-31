@@ -13,15 +13,29 @@ import type { SupportTier } from "@/types/support";
  * is the cold option even when the layout is right. Each label says what
  * the money does, in that tier's own voice.
  *
- * Falls back to the tier title so a row added in /admin is never
- * actionless.
+ * None of these may restate the tier's own title. "Become a Builder" did,
+ * so the words appeared under a heading that already said them.
  */
 const ACTIONS: Record<string, string> = {
     coffee: "Buy the coffee",
     stream: "Keep it rolling",
-    builder: "Become a Builder",
 };
 
-export function actionFor(tier: SupportTier): string {
+/**
+ * The recurring tier's action is the one thing on this page that changes
+ * permanently, once, when the first Builder joins.
+ *
+ * Before: "Lay the first stone" — literally true, and only ever true for
+ * one person. After: "Build together", which is the promise the stone was
+ * laid on. Nothing about it counts or grows; it is a single binary
+ * transition tied to `site_state.first_builder_on`, the same key the
+ * foundation stone reads.
+ */
+function ongoingAction(laid: boolean): string {
+    return laid ? "Build together" : "Lay the first stone";
+}
+
+export function actionFor(tier: SupportTier, firstBuilderOn?: string): string {
+    if (tier.frequency) return ongoingAction(Boolean(firstBuilderOn));
     return ACTIONS[tier.id] ?? tier.title;
 }

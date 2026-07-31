@@ -9,6 +9,8 @@ interface TierDecisionProps {
     ongoing: SupportTier[];
     /** Keyed by tier id. Only `builder` carries any today. */
     benefitsByTier: Record<string, BuilderBenefit[]>;
+    /** `site_state.first_builder_on`; absent until it happens. */
+    firstBuilderOn?: string;
     onSelect: (tier: SupportTier) => void;
 }
 
@@ -35,11 +37,13 @@ function Group({
     heading,
     tiers,
     benefitsByTier,
+    firstBuilderOn,
     onSelect,
 }: {
     heading: string;
     tiers: SupportTier[];
     benefitsByTier: Record<string, BuilderBenefit[]>;
+    firstBuilderOn?: string;
     onSelect: (tier: SupportTier) => void;
 }) {
     // An empty group renders nothing at all — not a heading over a gap.
@@ -57,7 +61,11 @@ function Group({
                         key={tier.id}
                         tier={tier}
                         benefits={benefitsByTier[tier.id]}
-                        action={actionFor(tier)}
+                        action={actionFor(tier, firstBuilderOn)}
+                        // A one-time contribution has no beginning to
+                        // mark; only a recurring commitment does.
+                        foundation={Boolean(tier.frequency)}
+                        firstBuilderOn={firstBuilderOn}
                         onSelect={onSelect}
                     />
                 ))}
@@ -70,6 +78,7 @@ export function TierDecision({
     oneTime,
     ongoing,
     benefitsByTier,
+    firstBuilderOn,
     onSelect,
 }: TierDecisionProps) {
     if (oneTime.length === 0 && ongoing.length === 0) {
@@ -86,12 +95,14 @@ export function TierDecision({
                 heading="One-time"
                 tiers={oneTime}
                 benefitsByTier={benefitsByTier}
+                firstBuilderOn={firstBuilderOn}
                 onSelect={onSelect}
             />
             <Group
                 heading="Ongoing"
                 tiers={ongoing}
                 benefitsByTier={benefitsByTier}
+                firstBuilderOn={firstBuilderOn}
                 onSelect={onSelect}
             />
         </div>

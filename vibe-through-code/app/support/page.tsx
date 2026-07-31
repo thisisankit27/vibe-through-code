@@ -85,6 +85,12 @@ export default async function SupportPage() {
             benefitsByTier={benefitsByTier}
             builderBenefits={builderBenefits}
             currentDay={Number(state.current_day ?? 0)}
+            // Absent until the first Builder joins. `site_state` is a
+            // key/value table, so "has not happened" is the absence of a
+            // row rather than a null column — which is the right shape
+            // for a site that records what has happened. Written once,
+            // never edited; see components/support/foundation-stone.tsx.
+            firstBuilderOn={state.first_builder_on}
         />
     );
 }

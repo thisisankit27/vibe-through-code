@@ -164,7 +164,9 @@ Applies to `ReceiptPanel` and the admin modal:
 - [ ] Keyboard-only pass: every control reachable, visible focus throughout
 - [ ] One `<h1>`, no skipped levels
 - [ ] New colors checked against the contrast table
-- [ ] **Text checked against the surface it actually sits on**, not just `--surface-base`. This has now failed twice: a navbar wrongly given `bg-scrim` dropped its links to **1.66:1**, and a tinted badge put `--ink-tertiary` on `--surface-sunk` at **4.44:1**. Verifying tokens against the page ground is necessary but not sufficient — any element that paints its own background creates a new pair that nothing has checked.
+- [ ] **Text checked against the surface it actually sits on**, not just `--surface-base`. This has now failed **three** times: a navbar wrongly given `bg-scrim` dropped its links to **1.66:1**; a tinted badge put `--ink-tertiary` on `--surface-sunk` at **4.44:1**; and on 2026-07-31 the support page's foundation stone did the identical thing — `--ink-tertiary` on a `bg-surface-sunk` block, again **4.44:1** — *with this line already written down*. Verifying tokens against the page ground is necessary but not sufficient: any element that paints its own background creates a new pair that nothing has checked.
+
+  **The underlying property, since the anecdote clearly is not enough:** `--ink-tertiary` is tuned to sit exactly at **4.85:1 on `--surface-base`** — roughly 0.35 of headroom over AA. *Any* surface darker than the page ground breaks it. Treat `--ink-tertiary` as valid on `--surface-base` only. On a self-painted surface, step up to `--ink-secondary` (6.56:1 base / 6.01:1 sunk) or do not paint the surface. The stone took the second option, which also removed a panel.
 - [ ] New animation respects `prefers-reduced-motion`
 - [ ] New SVG labelled or hidden
 - [ ] No non-functional focusable controls

@@ -1,6 +1,7 @@
 "use client";
 
 import type { SupportTier, BuilderBenefit } from "@/types/support";
+import { FoundationStone } from "./foundation-stone";
 
 interface TierOptionProps {
     tier: SupportTier;
@@ -8,6 +9,14 @@ interface TierOptionProps {
     benefits?: BuilderBenefit[];
     /** Label for the action. Says what the money does, in the tier's voice. */
     action: string;
+    /**
+     * Renders the foundation stone beneath the benefits. Set for the
+     * recurring tier only — a one-time contribution has no beginning to
+     * mark, and putting a stone on all three would make it decoration.
+     */
+    foundation?: boolean;
+    /** `site_state.first_builder_on`; absent until it happens. */
+    firstBuilderOn?: string;
     onSelect: (tier: SupportTier) => void;
 }
 
@@ -31,6 +40,8 @@ export function TierOption({
     tier,
     benefits,
     action,
+    foundation = false,
+    firstBuilderOn,
     onSelect,
 }: TierOptionProps) {
     return (
@@ -79,6 +90,14 @@ export function TierOption({
                         </li>
                     ))}
                 </ul>
+            )}
+
+            {/* The stone sits last before the action, so the beat lands
+                on the decision rather than after it. */}
+            {foundation && (
+                <div className="mt-6">
+                    <FoundationStone laidOn={firstBuilderOn} />
+                </div>
             )}
 
             <div className="mt-auto pt-6">

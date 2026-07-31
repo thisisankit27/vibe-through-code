@@ -19,6 +19,8 @@ interface SupportChapterProps {
     index: number;
     total: number;
     builderBenefits: BuilderBenefit[];
+    /** `site_state.first_builder_on`; changes the recurring tier's action. */
+    firstBuilderOn?: string;
     onSelect: (tier: SupportTier) => void;
 }
 
@@ -27,6 +29,7 @@ export function SupportChapter({
     index,
     total,
     builderBenefits,
+    firstBuilderOn,
     onSelect,
 }: SupportChapterProps) {
     const ref = useRef<HTMLElement>(null);
@@ -44,7 +47,10 @@ export function SupportChapter({
 
     return (
         <section ref={ref} className="relative">
-            <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 py-20 md:grid-cols-[260px_1fr] md:gap-12">
+            {/* No `mx-auto max-w-*` — the page supplies one Container and
+                one width. This component setting its own was half of why
+                /support visibly jumped width mid-scroll. */}
+            <div className="grid grid-cols-1 gap-8 py-20 md:grid-cols-[260px_1fr] md:gap-12">
                 {/* Left: Capsule (mobile) / Conduit + Capsule (desktop) */}
                 <div className="flex justify-center md:block">
                     <div className="flex flex-col items-center md:sticky md:top-1/3">
@@ -60,28 +66,35 @@ export function SupportChapter({
                 </div>
 
                 {/* Right: Narrative */}
-                <div className="px-4 md:px-0">
-                    {/* The eyebrow stays. On /projects and /about it was
-                        generic decoration and went; here it carries
-                        `tier.label` — "Fuel a session", "Keep the camera
-                        rolling" — which is the warmest copy on the page.
-                        `tracking-eyebrow` is the token DESIGN.md already
-                        specified; the arbitrary 0.3em never adopted it. */}
-                    <p className="text-micro font-medium uppercase tracking-eyebrow text-accent">
-                        {tier.label}
-                    </p>
-                    <h2 className="mt-3 text-section font-bold tracking-tight text-ink-primary">
+                <div className="max-w-prose">
+                    {/*
+                        Title only — no eyebrow, no description.
+
+                        Both live in the decision zone above, and rendering
+                        them again here made the page say `tier.label` and
+                        `tier.description` verbatim twice. The zones
+                        partition the fields rather than duplicating them:
+                        decide carries label, price, frequency, description
+                        and benefits; understand carries the narrative. The
+                        title appears in both only because a reader
+                        scrolling into a chapter needs to know which tier
+                        they are reading about.
+
+                        h3, not h2 — the chapter sits inside a section that
+                        carries the h2, and this string is already an h3 in
+                        the decision zone. The same text at two heading
+                        levels gives screen-reader users two entries with
+                        nothing to distinguish them.
+                    */}
+                    <h3 className="text-section font-bold tracking-tight text-ink-primary">
                         {tier.title}
-                    </h2>
-                    <p className="mt-4 text-body text-ink-secondary">
-                        {tier.description}
-                    </p>
+                    </h3>
 
                     {/* Narrative lines, at `body` 16px in the serif prose
                         face. DESIGN.md names 14px secondary copy as why
                         the site reads cramped, and cramped reads cold on
                         the page that is asking someone for something. */}
-                    <div className="mt-8 space-y-4">
+                    <div className="mt-6 space-y-4">
                         {tier.narrative.map((line, i) => (
                             <p
                                 key={i}
@@ -121,7 +134,7 @@ export function SupportChapter({
                         onClick={() => onSelect(tier)}
                         className="group mt-10 inline-flex items-center gap-1.5 text-meta font-medium text-ink-secondary underline-offset-4 transition-colors duration-100 ease-out hover:text-accent hover:underline"
                     >
-                        {actionFor(tier)}
+                        {actionFor(tier, firstBuilderOn)}
                         <svg
                             width="14"
                             height="14"

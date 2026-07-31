@@ -22,6 +22,8 @@ interface SupportPageClientProps {
     benefitsByTier: Record<string, BuilderBenefit[]>;
     builderBenefits: BuilderBenefit[];
     currentDay: number;
+    /** `site_state.first_builder_on`; absent until it happens. */
+    firstBuilderOn?: string;
     sessionManifest?: SessionManifest;
 }
 
@@ -48,6 +50,7 @@ export default function SupportPageClient({
     benefitsByTier,
     builderBenefits,
     currentDay,
+    firstBuilderOn,
     sessionManifest,
 }: SupportPageClientProps) {
     const [selectedTier, setSelectedTier] = useState<SupportTier | null>(null);
@@ -63,33 +66,42 @@ export default function SupportPageClient({
     };
 
     return (
-        <main className="bg-surface-base">
-            <Container className="max-w-5xl pt-14 md:pt-20">
-                <header className="max-w-2xl">
-                    <h1 className="text-title font-bold tracking-tight text-ink-primary">
-                        Support
-                    </h1>
-                    <p className="mt-5 text-body text-ink-secondary">
-                        Every session is streamed start to finish, and every
-                        number on this site is real. If any of that is worth
-                        something to you, here is how to keep it going.
-                    </p>
-                </header>
+        // One Container, one width, top to bottom. `app/layout.tsx`
+        // already supplies the <main> landmark — this component rendering
+        // its own put two on the page.
+        <Container className="max-w-5xl pt-14 md:pt-20">
+            <header className="max-w-2xl">
+                <h1 className="text-title font-bold tracking-tight text-ink-primary">
+                    Support
+                </h1>
+                <p className="mt-5 text-body text-ink-secondary">
+                    This is one person building a company in the open, funded
+                    by whoever thinks it should keep happening. Pick whichever
+                    of these is worth it to you.
+                </p>
+            </header>
 
-                <TierDecision
-                    oneTime={oneTime}
-                    ongoing={ongoing}
-                    benefitsByTier={benefitsByTier}
-                    onSelect={handleSelect}
-                />
-            </Container>
+            <TierDecision
+                oneTime={oneTime}
+                ongoing={ongoing}
+                benefitsByTier={benefitsByTier}
+                firstBuilderOn={firstBuilderOn}
+                onSelect={handleSelect}
+            />
 
             {/* UNDERSTAND — the chapters keep their full scale, conduit
-                and narrative. They now answer "why this amount", which is
-                the question a reader has *after* seeing the prices. */}
+                and narrative. They answer "why this amount", which is the
+                question a reader has *after* seeing the prices. */}
             {supportTiers.length > 0 && (
-                <Container>
-                    <div className="relative mt-8">
+                <section aria-labelledby="what-it-funds" className="mt-20">
+                    <h2
+                        id="what-it-funds"
+                        className="border-b border-rule-strong pb-2 text-micro font-medium uppercase tracking-wider text-ink-tertiary"
+                    >
+                        What each one funds
+                    </h2>
+
+                    <div className="relative">
                         {supportTiers.map((tier, index) => (
                             <SupportChapter
                                 key={tier.id}
@@ -98,24 +110,23 @@ export default function SupportPageClient({
                                 total={supportTiers.length}
                                 onSelect={handleSelect}
                                 builderBenefits={builderBenefits}
+                                firstBuilderOn={firstBuilderOn}
                             />
                         ))}
                     </div>
-                </Container>
+                </section>
             )}
 
-            <Container>
-                <SystemTerminus
-                    currentDay={currentDay}
-                    sessionManifest={sessionManifest}
-                />
-            </Container>
+            <SystemTerminus
+                currentDay={currentDay}
+                sessionManifest={sessionManifest}
+            />
 
             <ReceiptPanel
                 isOpen={isReceiptOpen}
                 onClose={handleClose}
                 tier={selectedTier}
             />
-        </main>
+        </Container>
     );
 }
