@@ -13,10 +13,15 @@ import { cn } from "@/lib/utils";
  * A Server Component — it carried `"use client"` while containing no hook
  * and no event handler, so its markup shipped to the browser twice.
  *
- * The founder badge read "Youtube Face" until 2026-07-31, having been
- * marked fixed in MIGRATION-CHECKLIST.md without being fixed. It is now
- * a marker beside the name; `person.role` still renders the real role
- * from the record rather than being replaced by the badge.
+ * The badge beside the primary person's name reads "YouTube Face", which
+ * is deliberate and is not placeholder text — it was briefly changed to
+ * "Founder" on 2026-07-31 and changed back the same day. "Founder" makes
+ * a claim about employment status that is not true here, and this site
+ * does not get to be loose about claims. The badge is a credit for who
+ * is on camera, nothing more.
+ *
+ * `person.role` renders beneath it either way, so the real role from the
+ * record is never replaced by the badge.
  */
 interface PersonCardProps {
     person: Person;
@@ -107,7 +112,7 @@ export function PersonCard({ person, featured = false }: PersonCardProps) {
 
                         {person.isFounder && (
                             <span className="text-micro font-medium uppercase tracking-wider text-accent">
-                                Founder
+                                YouTube Face
                             </span>
                         )}
                     </div>
