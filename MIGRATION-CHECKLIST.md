@@ -81,7 +81,7 @@ All confirmed by grep: zero importers.
 - [ ] **[verified]** `--font-heading` in `app/globals.css` — zero usages. No longer broken as of M1, but still unreferenced.
 - [x] ~~`--font-geist-sans` in `app/layout.tsx` — published, zero consumers~~ — **resolved in M1**: `--font-sans` now maps to it, so it has a consumer and Geist renders. Do not delete.
 - [x] **[verified]** `getStatusLabel()` in `components/project/project-card.tsx` — defined, unused, duplicates `capitalize()` from `lib/utils.ts`. **Deleted 2026-07-31**, along with `getStatusColor()` beside it.
-- [ ] **[verified]** `isActive` in `components/support/useChapterProgress.ts` — computed and returned, never consumed. Removing it halves the scroll re-render rate.
+- [x] **[verified]** `isActive` in `components/support/useChapterProgress.ts` — computed and returned, never consumed. **Resolved by deletion:** the hook is gone (`b31b0bd`). The capsules no longer take a progress value at all.
 - [x] **[verified]** `~40 of 65` color variables in `app/globals.css` — `bg-card`, `bg-popover`, `bg-accent`, all `chart-*`, the entire 9-variable `sidebar-*` block, plus their `.dark` twins. Zero references.
 - [x] **[verified]** The `.dark` class block (32 variables) — never applied to any element.
 - [x] **[verified]** `SectionHeading` — the `eyebrow` prop branch and the `centered={false}` branch are never exercised (one call site, which omits `eyebrow`). **Deleted 2026-07-31** — the M3 homepage rebuild removed its last call site, leaving zero. `components/ui/status-badge.tsx` was found in the same state and deleted with it.
@@ -111,7 +111,7 @@ The core visual debt. Do not resolve by hand — resolve by building the token l
 - [x] **[verified]** **15 text sizes** (incl. `text-[10px]`, `text-[11px]`, `text-[0.8rem]`) → 6 scale tokens.
 - [x] **[verified]** **7 radii** (3 for cards alone) → `sm` / `md` / `full`.
 - [ ] **[verified]** **6 section paddings** across 11 sections (only 2 agree) → 2.
-- [ ] **[verified]** **4 container widths** → 3, all via `Container`. `JourneyTimeline` and `app/admin/page.tsx` bypass it; `/support` visibly jumps width mid-scroll.
+- [ ] **[verified]** **4 container widths** → 3, all via `Container`. `JourneyTimeline` and `app/admin/page.tsx` bypass it. **`/support` is done** — one `Container className="max-w-5xl"` top to bottom; the mid-scroll jump is gone.
 - [x] **[verified]** **10 motion durations** → 4 tokens. 56 of 80 transitions specify none.
 - [ ] **[verified]** **`transition` vs `transition-all`** — same thing, two spellings, split 25/19.
 - [ ] **[verified]** **5 focus patterns across 3 mechanisms** → one ring token. One references `ring-offset-zinc-950`, which is not the page background.
@@ -190,13 +190,13 @@ The core visual debt. Do not resolve by hand — resolve by building the token l
 
 Full detail in `ACCESSIBILITY.md`.
 
-- [ ] **[verified]** `components/support/useChapterProgress.ts` — no `rAF` throttle. Two `setState` calls per scroll event × 3 mounted instances, each re-rendering an SVG subtree of up to 20 animated elements. Three forced reflows per tick. The site's most expensive runtime path.
-- [ ] **[verified]** `prefers-reduced-motion` — **zero occurrences** sitewide, alongside 51 animated SVG properties and infinite SMIL loops.
-- [ ] **[verified]** No capsule SVG has `role="img"` or `aria-label` — the best work on the site is invisible to screen readers.
-- [ ] **[verified]** `CoffeeCapsule.tsx` uses a non-unique SVG `id="cup-clip"` — collides if rendered twice.
-- [ ] **[verified]** `components/support/BlueprintSchematic.tsx` hardcodes a 4-element threshold array indexed by `builderBenefits.length` — breaks if the benefit count changes.
-- [ ] **[verified]** `0.1s linear` transitions on scroll-driven properties fight the scroll position, adding lag rather than smoothing.
-- [ ] **[verified]** `/support` has no empty or error state — if `support_tiers` returns nothing, the page renders a header and nothing else.
+- [x] **[verified]** `components/support/useChapterProgress.ts` — no `rAF` throttle; the site's most expensive runtime path. **Resolved by deletion** (`b31b0bd`). `/support` now registers no scroll listener at all: the drawings render at rest and carry CSS idle loops instead. The three capsules are Server Components with no props.
+- [x] **[verified]** `prefers-reduced-motion` — **zero occurrences** sitewide, alongside 51 animated SVG properties and infinite SMIL loops. A global `@layer base` block now zeroes animation and transition durations, and **all SMIL was removed** so that block can actually reach the illustrations — CSS cannot stop `<animate>`. Asserted at 1e-05s on all 7 idle-motion elements.
+- [x] **[verified]** No capsule SVG has `role="img"` or `aria-label` — the best work on the site is invisible to screen readers. All three now carry both, and DOM order puts the note before the figure so the tier title is announced first.
+- [ ] **[verified]** `CoffeeCapsule.tsx` uses a non-unique SVG id — collides if rendered twice. Now `id="coffee-cup-bowl"` (renamed, still hardcoded); needs `useId()`. Note the component is a Server Component with no props, so adopting `useId` makes it a Client Component — pass the id in from the caller instead.
+- [x] **[verified]** `components/support/BlueprintSchematic.tsx` hardcodes a 4-element threshold array indexed by `builderBenefits.length`. **Resolved by deletion** (`b31b0bd`) — the component restated the benefits the decision zone already compares, and its only distinct contribution was a scroll reveal.
+- [x] **[verified]** `0.1s linear` transitions on scroll-driven properties fight the scroll position. **Resolved:** there are no scroll-driven properties on `/support` any more.
+- [x] **[verified]** `/support` has no empty or error state. `TierDecision` now renders "No support options are set up yet." and each cadence group renders nothing when its own list is empty.
 - [ ] **[verified]** `lib/db.ts` throws at module import if `DATABASE_URL` is unset. With every page `force-dynamic`, the whole site 500s rather than degrading.
 - [ ] **[verified]** Admin modal: no focus trap, no `role="dialog"`, no Escape-to-close; backdrop click discards in-progress edits.
 - [ ] **[verified]** `app/admin/page.tsx` — `data` and every row typed `any`; `confirm()`/`alert()` for destructive actions; `colSpan={99}`; no validation on the JSON textareas.
