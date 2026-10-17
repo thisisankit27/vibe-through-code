@@ -13,8 +13,10 @@ import type { ProjectStatus } from "@/types/project";
  *                                                earns the accent
  *   completed  filled tertiary dot               done, and quiet about it
  *   planned    hollow tertiary dot               visibly not yet filled in
+ *   paused     two tertiary bars                 started, and set down on
+ *                                                purpose — the pause glyph
  *
- * Active is separated by hue; the other two are separated by FILL, so the
+ * Active is separated by hue; the rest are separated by SHAPE, so the
  * accent stays scarce and shape does the rest of the work. `--revenue` is
  * never reachable from here — green means recorded money and nothing
  * else, so "completed" deliberately does not get it.
@@ -29,12 +31,14 @@ const DOT: Record<ProjectStatus, string> = {
     active: "bg-accent-signal",
     completed: "bg-ink-tertiary",
     planned: "border border-ink-tertiary",
+    paused: "",
 };
 
 const LABEL: Record<ProjectStatus, string> = {
     active: "text-accent",
     completed: "text-ink-tertiary",
     planned: "text-ink-tertiary",
+    paused: "text-ink-tertiary",
 };
 
 interface ProjectStatusTagProps {
@@ -51,10 +55,20 @@ export function ProjectStatusTag({ status, className }: ProjectStatusTagProps) {
                 className
             )}
         >
-            <span
-                className={cn("h-1.5 w-1.5 shrink-0 rounded-full", DOT[status])}
-                aria-hidden="true"
-            />
+            {status === "paused" ? (
+                <span
+                    className="flex h-1.5 shrink-0 gap-0.5"
+                    aria-hidden="true"
+                >
+                    <span className="w-0.5 bg-ink-tertiary" />
+                    <span className="w-0.5 bg-ink-tertiary" />
+                </span>
+            ) : (
+                <span
+                    className={cn("h-1.5 w-1.5 shrink-0 rounded-full", DOT[status])}
+                    aria-hidden="true"
+                />
+            )}
             {status}
         </span>
     );

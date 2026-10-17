@@ -1,4 +1,4 @@
-export type ProjectStatus = "active" | "completed" | "planned";
+export type ProjectStatus = "active" | "completed" | "planned" | "paused";
 
 export interface Project {
     id: string;
