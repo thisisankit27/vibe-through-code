@@ -605,7 +605,7 @@ function getFormFields(tab: Tab): { name: string; label: string; type: string; o
             { name: "slug", label: "Slug", type: "text" },
             { name: "title", label: "Title", type: "text" },
             { name: "description", label: "Description", type: "textarea" },
-            { name: "status", label: "Status", type: "select", options: ["active", "planned", "completed"] },
+            { name: "status", label: "Status", type: "select", options: ["active", "planned", "paused", "completed"] },
             { name: "repository", label: "Repository", type: "text" },
             { name: "technologies", label: "Technologies JSON", type: "textarea" },
             { name: "startedOn", label: "Started On", type: "date" },
