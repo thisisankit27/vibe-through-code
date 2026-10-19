@@ -24,6 +24,7 @@ export default async function ProjectsPage() {
         description: String(row.description ?? ""),
         status: row.status as Project["status"],
         repository: (row.repository as string) ?? "",
+        website: (row.website as string) ?? "",
         technologies: (row.technologies as string[]) ?? [],
         startedOn: (row.started_on as string) ?? "",
     }));

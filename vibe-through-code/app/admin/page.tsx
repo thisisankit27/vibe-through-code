@@ -558,7 +558,7 @@ function getDefaults(tab: Tab): any {
         case "events": return { type: "livestream", title: "", description: "", date: "", time: "", href: "", badge: "", meta: "[]", source: "manual" };
         case "streams": return { id: "", day: 1, title: "", url: "", date: "", duration: "", viewers: 0, revenue: 0, commits: 0, focus: "", isLive: false };
         case "people": return { id: "", name: "", role: "", bio: "", avatar: "", github: "", linkedin: "", website: "", isFounder: false };
-        case "projects": return { id: "", slug: "", title: "", description: "", status: "active", repository: "", technologies: "[]", startedOn: "" };
+        case "projects": return { id: "", slug: "", title: "", description: "", status: "active", repository: "", website: "", technologies: "[]", startedOn: "" };
         case "tiers": return { id: "", title: "", price: 0, currency: "INR", frequency: "", label: "", description: "", narrative: "[]" };
         default: return {};
     }
@@ -607,6 +607,7 @@ function getFormFields(tab: Tab): { name: string; label: string; type: string; o
             { name: "description", label: "Description", type: "textarea" },
             { name: "status", label: "Status", type: "select", options: ["active", "planned", "paused", "completed"] },
             { name: "repository", label: "Repository", type: "text" },
+            { name: "website", label: "Website", type: "text" },
             { name: "technologies", label: "Technologies JSON", type: "textarea" },
             { name: "startedOn", label: "Started On", type: "date" },
         ];

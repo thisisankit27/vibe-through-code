@@ -10,6 +10,8 @@ export interface Project {
     status: ProjectStatus;
 
     repository: string;
+    /** Live site or download page. Empty when the project has none. */
+    website: string;
 
     technologies: string[];
 
