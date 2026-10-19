@@ -52,6 +52,18 @@ export default function CurrentProject({
             )}
 
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
+                {project.website && (
+                    <Link
+                        href={project.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-meta font-medium text-ink-secondary underline-offset-4 transition-colors duration-100 ease-out hover:text-accent hover:underline"
+                    >
+                        Website
+                        <ArrowUpRight className="h-3.5 w-3.5" />
+                    </Link>
+                )}
+
                 {project.repository && (
                     <Link
                         href={project.repository}

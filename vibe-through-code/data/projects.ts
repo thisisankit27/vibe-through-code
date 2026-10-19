@@ -15,6 +15,8 @@ export const projects: Project[] = [
 
         repository: "https://github.com/thisisankit27/vibe-through-code",
 
+        website: "https://www.vibethroughcode.com",
+
         technologies: [
             "Next.js",
             "TypeScript",

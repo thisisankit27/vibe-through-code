@@ -129,8 +129,8 @@ export async function getProjects() {
 }
 export async function createProject(data: any) {
     await sql`
-    INSERT INTO projects (id, slug, title, description, status, repository, technologies, started_on)
-    VALUES (${data.id}, ${data.slug}, ${data.title}, ${data.description}, ${data.status}, ${data.repository ?? null}, ${data.technologies ? JSON.stringify(data.technologies) : null}, ${data.startedOn ?? null})
+    INSERT INTO projects (id, slug, title, description, status, repository, website, technologies, started_on)
+    VALUES (${data.id}, ${data.slug}, ${data.title}, ${data.description}, ${data.status}, ${data.repository ?? null}, ${data.website ?? null}, ${data.technologies ? JSON.stringify(data.technologies) : null}, ${data.startedOn ?? null})
   `;
     revalidatePath("/admin");
 }
@@ -142,6 +142,7 @@ export async function updateProject(id: string, data: any) {
       description = ${data.description},
       status = ${data.status},
       repository = ${data.repository ?? null},
+      website = ${data.website ?? null},
       technologies = ${data.technologies ? JSON.stringify(data.technologies) : null},
       started_on = ${data.startedOn ?? null}
     WHERE id = ${id}

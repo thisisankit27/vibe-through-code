@@ -19,6 +19,7 @@ export async function getCurrentProject(): Promise<Project | null> {
         description: row.description,
         status: row.status,
         repository: row.repository ?? "",
+        website: row.website ?? "",
         technologies: row.technologies ?? [],
         startedOn: row.started_on ?? "",
     };
